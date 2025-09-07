@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How a Hydrogen Fuel Cell Works - Heritage H2GP</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Heritage H2GP</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#projects" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#gallery" class="nav-link">Gallery</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#team" class="nav-link">Team</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hydrogen-fuel-cell.html" class="nav-link active">Fuel Cell Guide</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <button class="mobile-nav-toggle" id="mobileNavToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Menu -->
+    <div class="mobile-nav-menu" id="mobileNavMenu">
+        <div class="mobile-nav-content">
+            <a href="index.html" class="mobile-nav-link">Home</a>
+            <a href="index.html#about" class="mobile-nav-link">About</a>
+            <a href="index.html#projects" class="mobile-nav-link">Projects</a>
+            <a href="index.html#gallery" class="mobile-nav-link">Gallery</a>
+            <a href="index.html#team" class="mobile-nav-link">Team</a>
+            <a href="hydrogen-fuel-cell.html" class="mobile-nav-link active">Fuel Cell Guide</a>
+            <a href="index.html#contact" class="mobile-nav-link">Contact</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="fuel-cell-page">
+        <!-- Hero Section -->
+        <section class="fuel-cell-hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>How a Hydrogen Fuel Cell Works</h1>
+                    <p class="hero-subtitle">Understanding the electrochemical technology powering clean energy</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Basic Principle Section -->
+        <section class="basic-principle">
+            <div class="container">
+                <h2>Basic Principle</h2>
+                <div class="principle-content">
+                    <p class="principle-text">A hydrogen fuel cell generates electricity through an <strong>electrochemical reaction</strong> between hydrogen (H₂) and oxygen (O₂) <em>without combustion</em>.</p>
+                    
+                    <div class="principle-diagram">
+                        <div class="fuel-cell-visual">
+                            <div class="fuel-cell-component anode-side">
+                                <h4>Anode Side</h4>
+                                <p>H₂ → 2H⁺ + 2e⁻</p>
+                                <div class="gas-input">Hydrogen Gas (H₂)</div>
+                            </div>
+                            <div class="fuel-cell-component membrane">
+                                <h4>PEM</h4>
+                                <p>Proton Exchange Membrane</p>
+                                <div class="proton-flow">H⁺ →</div>
+                            </div>
+                            <div class="fuel-cell-component cathode-side">
+                                <h4>Cathode Side</h4>
+                                <p>½O₂ + 2H⁺ + 2e⁻ → H₂O</p>
+                                <div class="gas-input">Oxygen (O₂)</div>
+                            </div>
+                            <div class="electron-circuit">
+                                <i class="fas fa-bolt"></i>
+                                <span>Electricity</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Components Section -->
+        <section class="main-components">
+            <div class="container">
+                <h2>Main Components</h2>
+                <div class="components-grid">
+                    <div class="component-card">
+                        <div class="component-icon anode-icon">
+                            <i class="fas fa-minus-circle"></i>
+                        </div>
+                        <h3>Anode (Negative Electrode)</h3>
+                        <p><strong>Function:</strong> Entry point for hydrogen gas (H₂)</p>
+                        <ul>
+                            <li>Where hydrogen gas enters and is <strong>split into protons and electrons</strong> (oxidized)</li>
+                            <li><strong>Catalyst layer (platinum):</strong> Breaks hydrogen molecules into protons (H⁺) and electrons (e⁻)</li>
+                            <li>Electrons go to external circuit (producing electric current)</li>
+                            <li>Protons move through the PEM</li>
+                            <li>Starts the electrochemical reaction</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="component-card">
+                        <div class="component-icon cathode-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <h3>Cathode (Positive Electrode)</h3>
+                        <p><strong>Function:</strong> Where oxygen enters and combines with protons and electrons</p>
+                        <ul>
+                            <li>Entry point for <strong>oxygen (O₂) from air</strong></li>
+                            <li><strong>Catalyst layer:</strong> Facilitates reaction between protons (H⁺), electrons (e⁻), and oxygen (O₂)</li>
+                            <li>Where oxygen combines with protons and electrons to <strong>form water</strong> (reduced)</li>
+                            <li>Produces water (H₂O) and releases heat</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="component-card">
+                        <div class="component-icon electrolyte-icon">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <h3>Electrolyte (PEM)</h3>
+                        <p><strong>Function:</strong> Selective membrane allowing only protons to pass</p>
+                        <ul>
+                            <li><strong>Allows only protons to pass through</strong>, forcing electrons to travel through a circuit</li>
+                            <li>Separates the anode and cathode</li>
+                            <li>Enables proton flow while <strong>blocking gases and electrons</strong></li>
+                            <li>Generates electricity by forcing electron flow through external circuit</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Components Section -->
+        <section class="detailed-components">
+            <div class="container">
+                <h2>Detailed Component Analysis</h2>
+                
+                <!-- PEM Section -->
+                <div class="component-detail">
+                    <div class="component-header">
+                        <i class="fas fa-layer-group"></i>
+                        <h3>PEM (Proton Exchange Membrane)</h3>
+                    </div>
+                    <div class="component-info">
+                        <div class="info-section">
+                            <h4>What it is:</h4>
+                            <p>A <strong>polymer membrane (Nafion)</strong> that only allows protons (H⁺) to pass through</p>
+                        </div>
+                        <div class="info-section">
+                            <h4>Function:</h4>
+                            <ul>
+                                <li>Separates the anode and cathode</li>
+                                <li>Enables proton flow while blocking gases and electrons</li>
+                                <li><strong>Does not include catalysts or electrodes</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MEA Section -->
+                <div class="component-detail">
+                    <div class="component-header">
+                        <i class="fas fa-puzzle-piece"></i>
+                        <h3>MEA (Membrane Electrode Assembly)</h3>
+                    </div>
+                    <div class="component-info">
+                        <div class="info-section">
+                            <h4>What it is:</h4>
+                            <p>A <strong>multi-layered assembly</strong> that includes the PEM plus electrodes and catalyst layers</p>
+                        </div>
+                        <div class="info-section">
+                            <h4>Structure:</h4>
+                            <div class="mea-structure">
+                                <div class="mea-layer">Anode catalyst layer</div>
+                                <div class="mea-layer pem-core">PEM (core membrane)</div>
+                                <div class="mea-layer">Cathode catalyst layer</div>
+                                <div class="mea-note">+ Gas Diffusion Layers (GDLs) on both sides</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PEM Detailed Section -->
+                <div class="component-detail">
+                    <div class="component-header">
+                        <i class="fas fa-microscope"></i>
+                        <h3>Proton Exchange Membrane (Detailed)</h3>
+                    </div>
+                    <div class="component-info">
+                        <div class="info-section">
+                            <h4>Function:</h4>
+                            <p>The core layer that separates the anode and the cathode, allowing <strong>only protons (H⁺) to pass</strong></p>
+                        </div>
+                        <div class="info-section">
+                            <h4>Structure:</h4>
+                            <ul>
+                                <li><strong>Polymer Electrolyte Membrane (usually Nafion):</strong>
+                                    <ul>
+                                        <li>Semi-permeable, only lets protons through, not gases or electrons</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Gas Diffusion Layers (GDLs):</strong>
+                                    <ul>
+                                        <li>On the anode and cathode sides, helps distribute gases evenly and remove water</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Catalyst Layers:</strong>
+                                    <ul>
+                                        <li>Contains platinum that triggers reactions on both sides</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="info-section">
+                            <h4>Importance:</h4>
+                            <p>Only protons move across, creates the <strong>charge separation</strong> that allows current to flow</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step by Step Process -->
+        <section class="step-process">
+            <div class="container">
+                <h2>Step-by-Step Process</h2>
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Hydrogen enters the anode side</h3>
+                            <p>Hydrogen gas (H₂) is supplied to the anode through fuel channels</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Hydrogen molecules split</h3>
+                            <p>Hydrogen molecules (H₂) are <strong>split into protons (H⁺) and electrons (e⁻)</strong> using a catalyst</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Protons move through the electrolyte</h3>
+                            <p><strong>Only protons pass through the membrane</strong> to the cathode</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Electrons travel through external circuit</h3>
+                            <p>Electrons <strong>can't pass through the membrane</strong>, so they travel around it, <strong>powering a device</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3>Oxygen enters the cathode side</h3>
+                            <p><strong>Oxygen from the air</strong> combines with the incoming protons and electrons</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <h3>Water formation</h3>
+                            <p>This forms <strong>water (H₂O) and releases heat</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chemical Reactions Section -->
+        <section class="chemical-reactions">
+            <div class="container">
+                <h2>Chemical Reactions</h2>
+                <div class="reactions-content">
+                    <div class="reaction-box anode-reaction">
+                        <h3>At the Anode:</h3>
+                        <div class="equation">
+                            <span class="reactant">H₂</span>
+                            <span class="arrow">→</span>
+                            <span class="product">2H⁺ + 2e⁻</span>
+                        </div>
+                        <p>Hydrogen molecules are oxidized (split into protons and electrons)</p>
+                    </div>
+                    
+                    <div class="reaction-box cathode-reaction">
+                        <h3>At the Cathode:</h3>
+                        <div class="equation">
+                            <span class="reactant">½O₂ + 2H⁺ + 2e⁻</span>
+                            <span class="arrow">→</span>
+                            <span class="product">H₂O</span>
+                        </div>
+                        <p>Oxygen is reduced (combines with protons and electrons to form water)</p>
+                    </div>
+                    
+                    <div class="reaction-box overall-reaction">
+                        <h3>Overall Chemical Reaction:</h3>
+                        <div class="equation large">
+                            <span class="reactant">2H₂ + O₂</span>
+                            <span class="arrow">→</span>
+                            <span class="product">2H₂O + Electricity + Heat</span>
+                        </div>
+                        <p>The complete fuel cell reaction produces clean energy with only water as a byproduct</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="benefits">
+            <div class="container">
+                <h2>Why Hydrogen Fuel Cells?</h2>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <i class="fas fa-leaf"></i>
+                        <h3>Zero Harmful Emissions</h3>
+                        <p>Only produces water vapor and heat as byproducts - completely clean energy</p>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fas fa-bolt"></i>
+                        <h3>High Efficiency</h3>
+                        <p>More efficient than traditional combustion engines with direct energy conversion</p>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fas fa-recycle"></i>
+                        <h3>Renewable Source</h3>
+                        <p>Hydrogen can be produced from renewable sources like solar and wind power</p>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <h3>Quick Refueling</h3>
+                        <p>Hydrogen tanks can be refilled in minutes, unlike battery charging</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- H2GP Application Section -->
+        <section class="h2gp-application">
+            <div class="container">
+                <h2>Application in H2GP Racing</h2>
+                <div class="application-content">
+                    <div class="application-text">
+                        <p>In the <strong>Hydrogen Grand Prix (H2GP)</strong>, fuel cells provide the primary power source for our race cars, demonstrating the practical applications of this clean technology in transportation.</p>
+                        
+                        <div class="racing-advantages">
+                            <h3>Advantages in Racing:</h3>
+                            <ul>
+                                <li><strong>Consistent Power Output:</strong> Steady electrical supply throughout the race</li>
+                                <li><strong>Lightweight Design:</strong> More energy-dense than traditional batteries</li>
+                                <li><strong>Silent Operation:</strong> Minimal noise compared to combustion engines</li>
+                                <li><strong>Educational Value:</strong> Students learn clean energy while experiencing competitive racing</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="racing-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">60%</div>
+                            <div class="stat-label">Efficiency Rate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">0</div>
+                            <div class="stat-label">Harmful Emissions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">Minutes to Refuel</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Heritage H2GP</h3>
+                    <p>Advancing STEAM education through hydrogen-powered racing and sustainable technology.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="index.html#projects">Projects</a></li>
+                        <li><a href="hydrogen-fuel-cell.html">Fuel Cell Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: info@heritageh2gp.org</p>
+                    <p>Phone: (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Heritage H2GP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

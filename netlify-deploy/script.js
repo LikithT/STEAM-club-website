@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initVideoBackground();
     initScrollAnimations();
     initNavigation();
+    initMobileNavigation();
     initPhotoGallery();
     addDefaultPhotos();
     loadPhotos();
@@ -240,6 +241,114 @@ function initNavigation() {
             }
         });
     });
+}
+
+// Mobile Navigation
+function initMobileNavigation() {
+    const mobileToggle = document.getElementById('mobileNavToggle');
+    const mobileMenu = document.getElementById('mobileNavMenu');
+    const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+    let isMenuOpen = false;
+
+    if (!mobileToggle || !mobileMenu) return;
+
+    // Toggle mobile menu
+    mobileToggle.addEventListener('click', () => {
+        isMenuOpen = !isMenuOpen;
+        
+        // Toggle hamburger animation
+        mobileToggle.classList.toggle('active', isMenuOpen);
+        
+        // Toggle mobile menu
+        mobileMenu.classList.toggle('active', isMenuOpen);
+        
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = isMenuOpen ? 'hidden' : 'auto';
+        
+        console.log('Mobile menu toggled:', isMenuOpen ? 'OPEN' : 'CLOSED');
+    });
+
+    // Handle mobile nav link clicks
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                
+                // Close mobile menu first
+                closeMobileMenu();
+                
+                // Then scroll to target with a small delay
+                setTimeout(() => {
+                    const targetSection = document.querySelector(href);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }, 300);
+            }
+        });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (isMenuOpen && !mobileMenu.contains(e.target) && !mobileToggle.contains(e.target)) {
+            closeMobileMenu();
+        }
+    });
+
+    // Close mobile menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isMenuOpen) {
+            closeMobileMenu();
+        }
+    });
+
+    // Close mobile menu on window resize (if switching to desktop)
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && isMenuOpen) {
+            closeMobileMenu();
+        }
+    });
+
+    function closeMobileMenu() {
+        isMenuOpen = false;
+        mobileToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Handle orientation change on mobile devices
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            if (isMenuOpen) {
+                // Recalculate menu height after orientation change
+                mobileMenu.style.height = '100vh';
+            }
+        }, 100);
+    });
+
+    // Add touch event handling for better mobile experience
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    mobileMenu.addEventListener('touchstart', (e) => {
+        touchStartY = e.changedTouches[0].screenY;
+    });
+
+    mobileMenu.addEventListener('touchend', (e) => {
+        touchEndY = e.changedTouches[0].screenY;
+        
+        // Close menu if swiped up significantly
+        if (touchStartY - touchEndY > 100) {
+            closeMobileMenu();
+        }
+    });
+
+    console.log('Mobile navigation initialized');
 }
 
 // 3D Model Viewer Functions using Three.js

@@ -26,13 +26,32 @@
                 <a href="#home" class="nav-link">Home</a>
                 <a href="#about" class="nav-link">About</a>
                 <a href="#projects" class="nav-link">Projects</a>
+                <a href="#fuel-cell" class="nav-link">Fuel Cell Guide</a>
                 <a href="#gallery" class="nav-link">Gallery</a>
                 <a href="#team" class="nav-link">Team</a>
                 <a href="#model" class="nav-link">3D Model</a>
                 <a href="#contact" class="nav-button">Contact</a>
             </div>
+            <!-- Mobile Navigation Toggle -->
+            <button class="mobile-nav-toggle" id="mobileNavToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
+
+    <!-- Mobile Navigation Menu -->
+    <div class="mobile-nav-menu" id="mobileNavMenu">
+        <a href="#home" class="mobile-nav-link">Home</a>
+        <a href="#about" class="mobile-nav-link">About</a>
+        <a href="#projects" class="mobile-nav-link">Projects</a>
+        <a href="#fuel-cell" class="mobile-nav-link">Fuel Cell Guide</a>
+        <a href="#gallery" class="mobile-nav-link">Gallery</a>
+        <a href="#team" class="mobile-nav-link">Team</a>
+        <a href="#model" class="mobile-nav-link">3D Model</a>
+        <a href="#contact" class="mobile-nav-link">Contact</a>
+    </div>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
@@ -144,6 +163,163 @@
                     <div class="project-content">
                         <h3>STEAM Education</h3>
                         <p>We provide comprehensive hands-on learning experiences that integrate Science, Technology, Engineering, Arts, and Mathematics through practical application.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fuel Cell Education Section -->
+    <section id="fuel-cell" class="fuel-cell-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How a Hydrogen Fuel Cell Works</h2>
+                <p class="section-description">Understanding the electrochemical technology powering clean energy</p>
+            </div>
+            
+            <!-- Basic Principle -->
+            <div class="basic-principle">
+                <h3 class="section-subtitle">Basic Principle</h3>
+                <p class="principle-text">A hydrogen fuel cell generates electricity through an <strong>electrochemical reaction</strong> between hydrogen (H₂) and oxygen (O₂) <em>without combustion</em>.</p>
+                
+                <div class="fuel-cell-visual">
+                    <div class="fuel-cell-component anode-side">
+                        <h4>Anode Side</h4>
+                        <p>H₂ → 2H⁺ + 2e⁻</p>
+                        <div class="gas-input">Hydrogen Gas (H₂)</div>
+                    </div>
+                    <div class="fuel-cell-component membrane">
+                        <h4>PEM</h4>
+                        <p>Proton Exchange Membrane</p>
+                        <div class="proton-flow">H⁺ →</div>
+                    </div>
+                    <div class="fuel-cell-component cathode-side">
+                        <h4>Cathode Side</h4>
+                        <p>½O₂ + 2H⁺ + 2e⁻ → H₂O</p>
+                        <div class="gas-input">Oxygen (O₂)</div>
+                    </div>
+                    <div class="electron-circuit">
+                        <i class="fas fa-bolt"></i>
+                        <span>Electricity</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Components -->
+            <div class="main-components">
+                <h3 class="section-subtitle">Main Components</h3>
+                <div class="components-grid">
+                    <div class="component-card">
+                        <div class="component-icon anode-icon">
+                            <i class="fas fa-minus-circle"></i>
+                        </div>
+                        <h4>Anode (Negative Electrode)</h4>
+                        <p><strong>Function:</strong> Entry point for hydrogen gas (H₂)</p>
+                        <ul>
+                            <li>Where hydrogen gas enters and is <strong>split into protons and electrons</strong> (oxidized)</li>
+                            <li><strong>Catalyst layer (platinum):</strong> Breaks hydrogen molecules into protons (H⁺) and electrons (e⁻)</li>
+                            <li>Electrons go to external circuit (producing electric current)</li>
+                            <li>Protons move through the PEM</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="component-card">
+                        <div class="component-icon cathode-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <h4>Cathode (Positive Electrode)</h4>
+                        <p><strong>Function:</strong> Where oxygen enters and combines with protons and electrons</p>
+                        <ul>
+                            <li>Entry point for <strong>oxygen (O₂) from air</strong></li>
+                            <li><strong>Catalyst layer:</strong> Facilitates reaction between protons (H⁺), electrons (e⁻), and oxygen (O₂)</li>
+                            <li>Where oxygen combines with protons and electrons to <strong>form water</strong> (reduced)</li>
+                            <li>Produces water (H₂O) and releases heat</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="component-card">
+                        <div class="component-icon electrolyte-icon">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <h4>Electrolyte (PEM)</h4>
+                        <p><strong>Function:</strong> Selective membrane allowing only protons to pass</p>
+                        <ul>
+                            <li><strong>Allows only protons to pass through</strong>, forcing electrons to travel through a circuit</li>
+                            <li>Separates the anode and cathode</li>
+                            <li>Enables proton flow while <strong>blocking gases and electrons</strong></li>
+                            <li>Generates electricity by forcing electron flow through external circuit</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chemical Reactions -->
+            <div class="chemical-reactions">
+                <h3 class="section-subtitle">Chemical Reactions</h3>
+                <div class="reactions-content">
+                    <div class="reaction-box anode-reaction">
+                        <h4>At the Anode:</h4>
+                        <div class="equation">
+                            <span class="reactant">H₂</span>
+                            <span class="arrow">→</span>
+                            <span class="product">2H⁺ + 2e⁻</span>
+                        </div>
+                        <p>Hydrogen molecules are oxidized (split into protons and electrons)</p>
+                    </div>
+                    
+                    <div class="reaction-box cathode-reaction">
+                        <h4>At the Cathode:</h4>
+                        <div class="equation">
+                            <span class="reactant">½O₂ + 2H⁺ + 2e⁻</span>
+                            <span class="arrow">→</span>
+                            <span class="product">H₂O</span>
+                        </div>
+                        <p>Oxygen is reduced (combines with protons and electrons to form water)</p>
+                    </div>
+                    
+                    <div class="reaction-box overall-reaction">
+                        <h4>Overall Chemical Reaction:</h4>
+                        <div class="equation large">
+                            <span class="reactant">2H₂ + O₂</span>
+                            <span class="arrow">→</span>
+                            <span class="product">2H₂O + Electricity + Heat</span>
+                        </div>
+                        <p>The complete fuel cell reaction produces clean energy with only water as a byproduct</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- H2GP Application -->
+            <div class="h2gp-application">
+                <h3 class="section-subtitle">Application in H2GP Racing</h3>
+                <div class="application-content">
+                    <div class="application-text">
+                        <p>In the <strong>Hydrogen Grand Prix (H2GP)</strong>, fuel cells provide the primary power source for our race cars, demonstrating the practical applications of this clean technology in transportation.</p>
+                        
+                        <div class="racing-advantages">
+                            <h4>Advantages in Racing:</h4>
+                            <ul>
+                                <li><strong>Consistent Power Output:</strong> Steady electrical supply throughout the race</li>
+                                <li><strong>Lightweight Design:</strong> More energy-dense than traditional batteries</li>
+                                <li><strong>Silent Operation:</strong> Minimal noise compared to combustion engines</li>
+                                <li><strong>Educational Value:</strong> Students learn clean energy while experiencing competitive racing</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="racing-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">60%</div>
+                            <div class="stat-label">Efficiency Rate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">0</div>
+                            <div class="stat-label">Harmful Emissions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">Minutes to Refuel</div>
+                        </div>
                     </div>
                 </div>
             </div>
