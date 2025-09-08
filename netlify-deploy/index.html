@@ -16,6 +16,35 @@
     <!-- Custom Cursor -->
     <div class="cursor"></div>
 
+    <!-- Background Music Player -->
+    <div class="music-player" id="musicPlayer">
+        <div class="music-controls">
+            <button class="music-btn" id="playPauseBtn" onclick="toggleMusic()">
+                <span class="music-icon">🎵</span>
+            </button>
+            <div class="music-info">
+                <span class="music-title">Central Cee</span>
+                <span class="music-status" id="musicStatus">Click to play</span>
+            </div>
+            <button class="music-btn volume-btn" onclick="toggleVolume()">
+                <span class="volume-icon" id="volumeIcon">🔊</span>
+            </button>
+        </div>
+        <div class="volume-slider" id="volumeSlider" style="display: none;">
+            <input type="range" id="volumeRange" min="0" max="100" value="30" onchange="setVolume(this.value)">
+        </div>
+    </div>
+
+    <!-- Hidden YouTube Player for Background Music -->
+        <div id="musicPlayerContainer" style="display: none;">
+            <iframe id="backgroundMusic" 
+                src="https://www.youtube.com/embed/u6sg2aVc3lg?enablejsapi=1&autoplay=0&loop=1&playlist=u6sg2aVc3lg&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1"
+                frameborder="0" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
+        </div>
+
     <!-- Navigation -->
     <nav class="nav" id="navbar">
         <div class="nav-container">

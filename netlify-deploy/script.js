@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     addDefaultPhotos();
     loadPhotos();
     initModelViewer();
+    initMusicPlayer();
     
     // Load 3D model automatically when page loads
     setTimeout(() => {
@@ -1718,5 +1719,159 @@ window.addEventListener('click', (e) => {
     
     if (e.target === stlModal) {
         closeSTLModal();
+    }
+});
+
+// Video switching functionality
+let currentVideoIndex = 0;
+const videoIds = ['hero-video-1', 'hero-video-2'];
+
+function switchVideo() {
+    const currentVideo = document.getElementById(videoIds[currentVideoIndex]);
+    const nextVideoIndex = (currentVideoIndex + 1) % videoIds.length;
+    const nextVideo = document.getElementById(videoIds[nextVideoIndex]);
+    
+    if (currentVideo && nextVideo) {
+        // Fade out current video
+        currentVideo.classList.remove('active');
+        
+        // Fade in next video after a short delay
+        setTimeout(() => {
+            nextVideo.classList.add('active');
+            currentVideoIndex = nextVideoIndex;
+        }, 400);
+        
+        console.log(`Switched to video ${nextVideoIndex + 1}`);
+        showNotification(`Switched to video ${nextVideoIndex + 1}`, 'success');
+    }
+}
+
+// Auto-switch videos every 30 seconds
+setInterval(() => {
+    switchVideo();
+}, 30000);
+
+// Music Player Functions
+let musicPlayer = null;
+let isPlaying = false;
+let currentVolume = 30;
+
+function toggleMusic() {
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const musicStatus = document.getElementById('musicStatus');
+    const musicIcon = playPauseBtn.querySelector('.music-icon');
+    const iframe = document.getElementById('backgroundMusic');
+    
+    if (!isPlaying) {
+        // Start playing
+        iframe.src = iframe.src.replace('autoplay=0', 'autoplay=1');
+        isPlaying = true;
+        musicIcon.textContent = '⏸️';
+        musicStatus.textContent = 'Playing';
+        playPauseBtn.classList.add('playing');
+        showNotification('Music started playing', 'success');
+        console.log('Music started playing');
+    } else {
+        // Pause/stop playing
+        iframe.src = iframe.src.replace('autoplay=1', 'autoplay=0');
+        isPlaying = false;
+        musicIcon.textContent = '🎵';
+        musicStatus.textContent = 'Paused';
+        playPauseBtn.classList.remove('playing');
+        showNotification('Music paused', 'info');
+        console.log('Music paused');
+    }
+}
+
+function toggleVolume() {
+    const volumeSlider = document.getElementById('volumeSlider');
+    const isVisible = volumeSlider.style.display === 'block';
+    
+    if (isVisible) {
+        volumeSlider.style.display = 'none';
+    } else {
+        volumeSlider.style.display = 'block';
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            volumeSlider.style.display = 'none';
+        }, 5000);
+    }
+}
+
+function setVolume(value) {
+    currentVolume = value;
+    const volumeIcon = document.getElementById('volumeIcon');
+    
+    // Update volume icon based on level
+    if (value == 0) {
+        volumeIcon.textContent = '🔇';
+    } else if (value < 30) {
+        volumeIcon.textContent = '🔉';
+    } else {
+        volumeIcon.textContent = '🔊';
+    }
+    
+    // Note: YouTube iframe doesn't allow direct volume control from external JavaScript
+    // This is a limitation of YouTube's embed API for security reasons
+    console.log('Volume set to:', value + '%');
+    showNotification(`Volume: ${value}%`, 'info');
+}
+
+
+function initMusicPlayer() {
+    const musicPlayer = document.getElementById('musicPlayer');
+    const volumeSlider = document.getElementById('volumeSlider');
+    
+    // Set initial volume
+    const volumeRange = document.getElementById('volumeRange');
+    if (volumeRange) {
+        volumeRange.value = currentVolume;
+        setVolume(currentVolume);
+    }
+    
+    // Hide volume slider initially
+    if (volumeSlider) {
+        volumeSlider.style.display = 'none';
+    }
+    
+    // Add hover effects for music player
+    if (musicPlayer) {
+        musicPlayer.addEventListener('mouseenter', () => {
+            musicPlayer.classList.add('hover');
+        });
+        
+        musicPlayer.addEventListener('mouseleave', () => {
+            musicPlayer.classList.remove('hover');
+            // Hide volume slider when leaving music player area
+            setTimeout(() => {
+                if (volumeSlider) {
+                    volumeSlider.style.display = 'none';
+                }
+            }, 1000);
+        });
+    }
+    
+    console.log('Music player initialized');
+}
+
+// Add keyboard shortcuts for music control
+document.addEventListener('keydown', (e) => {
+    // Only trigger if no modal is open and not typing in an input
+    const isModalOpen = document.querySelector('.modal[style*="display: block"]') || 
+                       document.querySelector('.stl-modal[style*="display: block"]');
+    const isTyping = document.activeElement.tagName === 'INPUT' || 
+                    document.activeElement.tagName === 'TEXTAREA';
+    
+    if (!isModalOpen && !isTyping) {
+        switch(e.key.toLowerCase()) {
+            case 'm':
+                e.preventDefault();
+                toggleMusic();
+                break;
+            case 'v':
+                e.preventDefault();
+                toggleVolume();
+                break;
+        }
     }
 });
