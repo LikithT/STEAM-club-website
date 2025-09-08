@@ -12,14 +12,18 @@ document.addEventListener('DOMContentLoaded', function() {
     initVideoBackground();
     initScrollAnimations();
     initNavigation();
+    initMobileNavigation();
     initPhotoGallery();
     addDefaultPhotos();
     loadPhotos();
     initModelViewer();
+    initMusicPlayer();
     
     // Load 3D model automatically when page loads
     setTimeout(() => {
         loadModel();
+        // Always load the Heritage H2GP model
+        loadHeritageH2GPModel();
     }, 1000);
     
     // Add smooth scrolling for navigation links
@@ -240,6 +244,114 @@ function initNavigation() {
     });
 }
 
+// Mobile Navigation
+function initMobileNavigation() {
+    const mobileToggle = document.getElementById('mobileNavToggle');
+    const mobileMenu = document.getElementById('mobileNavMenu');
+    const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+    let isMenuOpen = false;
+
+    if (!mobileToggle || !mobileMenu) return;
+
+    // Toggle mobile menu
+    mobileToggle.addEventListener('click', () => {
+        isMenuOpen = !isMenuOpen;
+        
+        // Toggle hamburger animation
+        mobileToggle.classList.toggle('active', isMenuOpen);
+        
+        // Toggle mobile menu
+        mobileMenu.classList.toggle('active', isMenuOpen);
+        
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = isMenuOpen ? 'hidden' : 'auto';
+        
+        console.log('Mobile menu toggled:', isMenuOpen ? 'OPEN' : 'CLOSED');
+    });
+
+    // Handle mobile nav link clicks
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                
+                // Close mobile menu first
+                closeMobileMenu();
+                
+                // Then scroll to target with a small delay
+                setTimeout(() => {
+                    const targetSection = document.querySelector(href);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }, 300);
+            }
+        });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (isMenuOpen && !mobileMenu.contains(e.target) && !mobileToggle.contains(e.target)) {
+            closeMobileMenu();
+        }
+    });
+
+    // Close mobile menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isMenuOpen) {
+            closeMobileMenu();
+        }
+    });
+
+    // Close mobile menu on window resize (if switching to desktop)
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && isMenuOpen) {
+            closeMobileMenu();
+        }
+    });
+
+    function closeMobileMenu() {
+        isMenuOpen = false;
+        mobileToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Handle orientation change on mobile devices
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            if (isMenuOpen) {
+                // Recalculate menu height after orientation change
+                mobileMenu.style.height = '100vh';
+            }
+        }, 100);
+    });
+
+    // Add touch event handling for better mobile experience
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    mobileMenu.addEventListener('touchstart', (e) => {
+        touchStartY = e.changedTouches[0].screenY;
+    });
+
+    mobileMenu.addEventListener('touchend', (e) => {
+        touchEndY = e.changedTouches[0].screenY;
+        
+        // Close menu if swiped up significantly
+        if (touchStartY - touchEndY > 100) {
+            closeMobileMenu();
+        }
+    });
+
+    console.log('Mobile navigation initialized');
+}
+
 // 3D Model Viewer Functions using Three.js
 let scene, camera, renderer, carModel, controls;
 let isWireframe = false;
@@ -424,227 +536,164 @@ function createJapaneseStreet() {
     // Create Japanese street environment group
     const streetGroup = new THREE.Group();
     
-    // Main street surface
-    const streetGeometry = new THREE.PlaneGeometry(16, 8);
+    // Main street surface with Japanese-style asphalt
+    const streetGeometry = new THREE.PlaneGeometry(20, 8);
     const streetMaterial = new THREE.MeshLambertMaterial({ 
-        color: 0x333333,
+        color: 0x2a2a2a,
         transparent: true,
-        opacity: 0.9
+        opacity: 0.95
     });
     const street = new THREE.Mesh(streetGeometry, streetMaterial);
     street.rotation.x = -Math.PI / 2;
     street.receiveShadow = true;
     streetGroup.add(street);
     
-    // Street lane markings (Japanese style)
-    const laneGeometry = new THREE.PlaneGeometry(14, 0.15);
-    const laneMaterial = new THREE.MeshBasicMaterial({ 
+    // Japanese-style lane markings (white dashed lines)
+    const dashGeometry = new THREE.PlaneGeometry(1, 0.08);
+    const dashMaterial = new THREE.MeshBasicMaterial({ 
         color: 0xffffff,
         transparent: true,
         opacity: 0.9
     });
     
-    // Center line (dashed style)
-    for (let i = -6; i <= 6; i += 2) {
-        const dashGeometry = new THREE.PlaneGeometry(1.5, 0.15);
-        const centerDash = new THREE.Mesh(dashGeometry, laneMaterial);
-        centerDash.rotation.x = -Math.PI / 2;
-        centerDash.position.set(i, 0.01, 0);
-        streetGroup.add(centerDash);
+    // Center dashed line
+    for (let i = -8; i <= 8; i += 2) {
+        const dash = new THREE.Mesh(dashGeometry, dashMaterial);
+        dash.rotation.x = -Math.PI / 2;
+        dash.position.set(i, 0.01, 0);
+        streetGroup.add(dash);
     }
     
-    // Side lines
-    const leftLine = new THREE.Mesh(laneGeometry, laneMaterial);
-    leftLine.rotation.x = -Math.PI / 2;
-    leftLine.position.set(0, 0.01, -3.5);
-    streetGroup.add(leftLine);
+    // Side lane markings
+    const sideLineGeometry = new THREE.PlaneGeometry(16, 0.1);
+    const sideLineMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.7
+    });
     
-    const rightLine = new THREE.Mesh(laneGeometry, laneMaterial);
-    rightLine.rotation.x = -Math.PI / 2;
-    rightLine.position.set(0, 0.01, 3.5);
-    streetGroup.add(rightLine);
+    const leftSideLine = new THREE.Mesh(sideLineGeometry, sideLineMaterial);
+    leftSideLine.rotation.x = -Math.PI / 2;
+    leftSideLine.position.set(0, 0.01, -3.5);
+    streetGroup.add(leftSideLine);
+    
+    const rightSideLine = new THREE.Mesh(sideLineGeometry, sideLineMaterial);
+    rightSideLine.rotation.x = -Math.PI / 2;
+    rightSideLine.position.set(0, 0.01, 3.5);
+    streetGroup.add(rightSideLine);
+    
+    // Japanese-style buildings (simplified)
+    const buildingMaterial = new THREE.MeshPhongMaterial({ color: 0x4a4a4a });
+    const buildingMaterial2 = new THREE.MeshPhongMaterial({ color: 0x5a5a5a });
+    
+    // Left side buildings
+    for (let i = 0; i < 3; i++) {
+        const buildingGeometry = new THREE.BoxGeometry(4, 6 + Math.random() * 4, 3);
+        const building = new THREE.Mesh(buildingGeometry, i % 2 === 0 ? buildingMaterial : buildingMaterial2);
+        building.position.set(-12 + i * 4, 3, -8);
+        building.castShadow = true;
+        streetGroup.add(building);
+        
+        // Add some windows (glowing rectangles)
+        const windowMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0xffff88,
+            transparent: true,
+            opacity: 0.6
+        });
+        
+        for (let j = 0; j < 3; j++) {
+            const windowGeometry = new THREE.PlaneGeometry(0.8, 1.2);
+            const window = new THREE.Mesh(windowGeometry, windowMaterial);
+            window.position.set(-12 + i * 4, 2 + j * 2, -6.5);
+            streetGroup.add(window);
+        }
+    }
+    
+    // Right side buildings
+    for (let i = 0; i < 3; i++) {
+        const buildingGeometry = new THREE.BoxGeometry(4, 5 + Math.random() * 3, 3);
+        const building = new THREE.Mesh(buildingGeometry, i % 2 === 0 ? buildingMaterial2 : buildingMaterial);
+        building.position.set(-12 + i * 4, 2.5, 8);
+        building.castShadow = true;
+        streetGroup.add(building);
+        
+        // Add windows
+        const windowMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0xffaa44,
+            transparent: true,
+            opacity: 0.5
+        });
+        
+        for (let j = 0; j < 2; j++) {
+            const windowGeometry = new THREE.PlaneGeometry(0.8, 1.2);
+            const window = new THREE.Mesh(windowGeometry, windowMaterial);
+            window.position.set(-12 + i * 4, 1.5 + j * 2, 6.5);
+            streetGroup.add(window);
+        }
+    }
+    
+    // Japanese-style street lamps
+    const lampPostMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
+    const lampLightMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0xffffaa,
+        transparent: true,
+        opacity: 0.8
+    });
+    
+    // Left side lamp
+    const lampPostGeometry = new THREE.CylinderGeometry(0.1, 0.1, 4);
+    const leftLampPost = new THREE.Mesh(lampPostGeometry, lampPostMaterial);
+    leftLampPost.position.set(-6, 2, -5);
+    streetGroup.add(leftLampPost);
+    
+    const lampGeometry = new THREE.SphereGeometry(0.3);
+    const leftLamp = new THREE.Mesh(lampGeometry, lampLightMaterial);
+    leftLamp.position.set(-6, 4, -5);
+    streetGroup.add(leftLamp);
+    
+    // Right side lamp
+    const rightLampPost = new THREE.Mesh(lampPostGeometry, lampPostMaterial);
+    rightLampPost.position.set(6, 2, 5);
+    streetGroup.add(rightLampPost);
+    
+    const rightLamp = new THREE.Mesh(lampGeometry, lampLightMaterial);
+    rightLamp.position.set(6, 4, 5);
+    streetGroup.add(rightLamp);
+    
+    // Add some Japanese-style details (vending machines)
+    const vendingMachineMaterial = new THREE.MeshPhongMaterial({ color: 0x0066cc });
+    const vendingMachineGeometry = new THREE.BoxGeometry(1, 2, 0.8);
+    const vendingMachine = new THREE.Mesh(vendingMachineGeometry, vendingMachineMaterial);
+    vendingMachine.position.set(-8, 1, -6);
+    vendingMachine.castShadow = true;
+    streetGroup.add(vendingMachine);
+    
+    // Vending machine screen
+    const screenMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x00aaff,
+        transparent: true,
+        opacity: 0.7
+    });
+    const screenGeometry = new THREE.PlaneGeometry(0.6, 0.8);
+    const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+    screen.position.set(-8, 1.5, -5.6);
+    streetGroup.add(screen);
     
     // Sidewalks
-    const sidewalkGeometry = new THREE.PlaneGeometry(16, 1.5);
-    const sidewalkMaterial = new THREE.MeshLambertMaterial({ color: 0x888888 });
+    const sidewalkMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
+    const sidewalkGeometry = new THREE.PlaneGeometry(20, 1.5);
     
     const leftSidewalk = new THREE.Mesh(sidewalkGeometry, sidewalkMaterial);
     leftSidewalk.rotation.x = -Math.PI / 2;
-    leftSidewalk.position.set(0, 0.02, -4.75);
+    leftSidewalk.position.set(0, 0.02, -5.25);
     leftSidewalk.receiveShadow = true;
     streetGroup.add(leftSidewalk);
     
     const rightSidewalk = new THREE.Mesh(sidewalkGeometry, sidewalkMaterial);
     rightSidewalk.rotation.x = -Math.PI / 2;
-    rightSidewalk.position.set(0, 0.02, 4.75);
+    rightSidewalk.position.set(0, 0.02, 5.25);
     rightSidewalk.receiveShadow = true;
     streetGroup.add(rightSidewalk);
-    
-    // Japanese-style buildings
-    const buildingPositions = [
-        { x: -6, z: -7, width: 3, height: 4, depth: 2 },
-        { x: -2, z: -7, width: 2.5, height: 3, depth: 2 },
-        { x: 2, z: -7, width: 3.5, height: 5, depth: 2 },
-        { x: 6, z: -7, width: 2, height: 3.5, depth: 2 },
-        { x: -6, z: 7, width: 2.5, height: 3.5, depth: 2 },
-        { x: -2, z: 7, width: 3, height: 4.5, depth: 2 },
-        { x: 2, z: 7, width: 2, height: 3, depth: 2 },
-        { x: 6, z: 7, width: 3.5, height: 4, depth: 2 }
-    ];
-    
-    buildingPositions.forEach(pos => {
-        // Building base
-        const buildingGeometry = new THREE.BoxGeometry(pos.width, pos.height, pos.depth);
-        const buildingMaterial = new THREE.MeshLambertMaterial({ 
-            color: new THREE.Color().setHSL(0.1, 0.2, 0.4 + Math.random() * 0.3)
-        });
-        const building = new THREE.Mesh(buildingGeometry, buildingMaterial);
-        building.position.set(pos.x, pos.height / 2, pos.z);
-        building.castShadow = true;
-        building.receiveShadow = true;
-        streetGroup.add(building);
-        
-        // Building roof (traditional Japanese style)
-        const roofGeometry = new THREE.BoxGeometry(pos.width + 0.3, 0.2, pos.depth + 0.3);
-        const roofMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
-        const roof = new THREE.Mesh(roofGeometry, roofMaterial);
-        roof.position.set(pos.x, pos.height + 0.1, pos.z);
-        roof.castShadow = true;
-        streetGroup.add(roof);
-        
-        // Windows
-        const windowGeometry = new THREE.PlaneGeometry(0.3, 0.4);
-        const windowMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0xffffaa,
-            transparent: true,
-            opacity: 0.8
-        });
-        
-        for (let i = 0; i < 2; i++) {
-            const window = new THREE.Mesh(windowGeometry, windowMaterial);
-            window.position.set(
-                pos.x + (i - 0.5) * 0.8,
-                pos.height * 0.6,
-                pos.z + (pos.depth / 2) + 0.01
-            );
-            streetGroup.add(window);
-        }
-    });
-    
-    // Street lamps (Japanese style)
-    const lampPositions = [
-        { x: -4, z: -4.5 },
-        { x: 0, z: -4.5 },
-        { x: 4, z: -4.5 },
-        { x: -4, z: 4.5 },
-        { x: 0, z: 4.5 },
-        { x: 4, z: 4.5 }
-    ];
-    
-    lampPositions.forEach(pos => {
-        // Lamp post
-        const postGeometry = new THREE.CylinderGeometry(0.05, 0.05, 2.5);
-        const postMaterial = new THREE.MeshLambertMaterial({ color: 0x444444 });
-        const post = new THREE.Mesh(postGeometry, postMaterial);
-        post.position.set(pos.x, 1.25, pos.z);
-        post.castShadow = true;
-        streetGroup.add(post);
-        
-        // Lamp head
-        const lampGeometry = new THREE.SphereGeometry(0.15, 8, 6);
-        const lampMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0xffffcc,
-            transparent: true,
-            opacity: 0.8
-        });
-        const lamp = new THREE.Mesh(lampGeometry, lampMaterial);
-        lamp.position.set(pos.x, 2.6, pos.z);
-        streetGroup.add(lamp);
-        
-        // Lamp glow
-        const glowGeometry = new THREE.SphereGeometry(0.3, 8, 6);
-        const glowMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0xffffaa,
-            transparent: true,
-            opacity: 0.2
-        });
-        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-        glow.position.set(pos.x, 2.6, pos.z);
-        streetGroup.add(glow);
-    });
-    
-    // Japanese vending machines
-    const vendingPositions = [
-        { x: -7, z: -5.5, rotation: Math.PI / 2 },
-        { x: 7, z: 5.5, rotation: -Math.PI / 2 }
-    ];
-    
-    vendingPositions.forEach(pos => {
-        const vendingGeometry = new THREE.BoxGeometry(0.8, 1.8, 0.6);
-        const vendingMaterial = new THREE.MeshLambertMaterial({ color: 0xff4444 });
-        const vending = new THREE.Mesh(vendingGeometry, vendingMaterial);
-        vending.position.set(pos.x, 0.9, pos.z);
-        vending.rotation.y = pos.rotation;
-        vending.castShadow = true;
-        vending.receiveShadow = true;
-        streetGroup.add(vending);
-        
-        // Vending machine screen
-        const screenGeometry = new THREE.PlaneGeometry(0.5, 0.7);
-        const screenMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0x0066ff,
-            transparent: true,
-            opacity: 0.8
-        });
-        const screen = new THREE.Mesh(screenGeometry, screenMaterial);
-        screen.position.set(
-            pos.x + Math.sin(pos.rotation) * 0.31,
-            1.2,
-            pos.z + Math.cos(pos.rotation) * 0.31
-        );
-        screen.rotation.y = pos.rotation;
-        streetGroup.add(screen);
-    });
-    
-    // Ground around the street
-    const groundGeometry = new THREE.PlaneGeometry(25, 25);
-    const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x2a4a2a });
-    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = -0.05;
-    ground.receiveShadow = true;
-    streetGroup.add(ground);
-    
-    // Add some Japanese-style decorative elements
-    // Cherry blossom trees (simplified)
-    const treePositions = [
-        { x: -8, z: -2 },
-        { x: 8, z: 2 },
-        { x: -8, z: 2 },
-        { x: 8, z: -2 }
-    ];
-    
-    treePositions.forEach(pos => {
-        // Tree trunk
-        const trunkGeometry = new THREE.CylinderGeometry(0.1, 0.15, 2);
-        const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
-        const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-        trunk.position.set(pos.x, 1, pos.z);
-        trunk.castShadow = true;
-        streetGroup.add(trunk);
-        
-        // Tree foliage
-        const foliageGeometry = new THREE.SphereGeometry(0.8, 8, 6);
-        const foliageMaterial = new THREE.MeshLambertMaterial({ 
-            color: 0xffb6c1,
-            transparent: true,
-            opacity: 0.8
-        });
-        const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
-        foliage.position.set(pos.x, 2.5, pos.z);
-        foliage.castShadow = true;
-        streetGroup.add(foliage);
-    });
     
     scene.add(streetGroup);
 }
@@ -656,7 +705,7 @@ function animate() {
         controls.update();
     }
     
-    // Rotate the car slightly for visual appeal (but not STL models)
+    // Rotate the car slightly for visual appeal (only for default model, not STL)
     if (carModel && !isExploded && !isSTLModel) {
         carModel.rotation.y += 0.005;
     }
@@ -1080,55 +1129,6 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Keyboard navigation for image viewer and model viewer
-document.addEventListener('keydown', (e) => {
-    const imageViewer = document.getElementById('imageViewerModal');
-    const photoModal = document.getElementById('photoModal');
-    
-    if (imageViewer.style.display === 'block') {
-        switch(e.key) {
-            case 'Escape':
-                closeImageViewer();
-                break;
-            case 'ArrowLeft':
-                previousImage();
-                break;
-            case 'ArrowRight':
-                nextImage();
-                break;
-        }
-    }
-    
-    if (photoModal.style.display === 'block' && e.key === 'Escape') {
-        closePhotoModal();
-    }
-});
-
-// Close modals when clicking outside
-window.addEventListener('click', (e) => {
-    const photoModal = document.getElementById('photoModal');
-    const imageViewerModal = document.getElementById('imageViewerModal');
-    const modelViewerContainer = document.querySelector('.model-viewer-container');
-    
-    if (e.target === photoModal) {
-        closePhotoModal();
-    }
-    
-    if (e.target === imageViewerModal) {
-        closeImageViewer();
-    }
-    
-    if (e.target === modelViewerContainer && isModelViewerVisible) {
-        toggleModelViewer();
-    }
-});
-
-// Reduced motion support
-if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    // Reduce GSAP animations
-    gsap.globalTimeline.timeScale(0.1);
-}
-
 // Performance optimization: Pause video when not visible
 document.addEventListener('visibilitychange', () => {
     const video = document.getElementById('hero-video');
@@ -1143,11 +1143,15 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
+// Permanent Models Configuration
+let permanentModels = [];
+
 // STL Model Functions
 function openSTLModal() {
     document.getElementById('stlModal').style.display = 'block';
     document.body.style.overflow = 'hidden';
     initSTLUpload();
+    loadPermanentModels();
 }
 
 function closeSTLModal() {
@@ -1248,9 +1252,130 @@ function loadSTLModel() {
         return;
     }
     
-    showNotification('Loading STL model...', 'info');
+    showNotification('Uploading STL model to cloud storage...', 'info');
     
-    // Create FileReader to read the STL file
+    // Upload to cloud storage first
+    uploadSTLToCloud(currentSTLFile, title, description)
+        .then(uploadResult => {
+            showNotification('STL model uploaded successfully! Loading...', 'success');
+            
+            // Now load the model from the cloud URL
+            loadSTLFromURL(uploadResult.fileUrl, title, description);
+        })
+        .catch(error => {
+            console.error('Upload error:', error);
+            showNotification('Failed to upload STL model. Loading locally...', 'error');
+            
+            // Fallback to local loading
+            loadSTLLocally(currentSTLFile, title, description);
+        });
+}
+
+async function uploadSTLToCloud(file, title, description) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('title', title);
+    formData.append('description', description);
+    
+    const response = await fetch('/.netlify/functions/upload-stl', {
+        method: 'POST',
+        body: formData
+    });
+    
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Upload failed');
+    }
+    
+    return await response.json();
+}
+
+function loadSTLFromURL(url, title, description) {
+    const loader = new THREE.STLLoader();
+    
+    loader.load(
+        url,
+        function(geometry) {
+            // Clear existing model
+            if (carModel) {
+                scene.remove(carModel);
+                originalPositions = [];
+            }
+            
+            // Create material for the STL model
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x2af0ff,
+                shininess: 100,
+                transparent: true,
+                opacity: 0.9
+            });
+            
+            // Create mesh
+            carModel = new THREE.Mesh(geometry, material);
+            carModel.castShadow = true;
+            carModel.receiveShadow = true;
+            
+            // Center and scale the model
+            const box = new THREE.Box3().setFromObject(carModel);
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+            
+            // Center the model horizontally and position on road
+            carModel.position.sub(center);
+            
+            // Scale the model to fit nicely in the viewer
+            const maxDimension = Math.max(size.x, size.y, size.z);
+            const scale = 3 / maxDimension; // Scale to fit in a 3-unit space
+            carModel.scale.setScalar(scale);
+            
+            // Position the model in the center of the road
+            carModel.position.set(0, 0.5, 0);
+            
+            // Store original position for explode effect
+            originalPositions = [{
+                object: carModel,
+                position: carModel.position.clone()
+            }];
+            
+            // Add to scene
+            scene.add(carModel);
+            
+            // Update flags
+            isSTLModel = true;
+            isWireframe = false;
+            isExploded = false;
+            
+            // Reset camera position for better view
+            camera.position.set(5, 3, 5);
+            controls.reset();
+            
+            // Save the current STL model info to localStorage for persistence
+            saveCurrentSTLModel({
+                url: url,
+                title: title,
+                description: description,
+                loadedFrom: 'cloud'
+            });
+            
+            showNotification(`STL model "${title}" loaded from cloud storage!`, 'success');
+            closeSTLModal();
+            
+            console.log('STL model loaded from cloud:', title, url);
+        },
+        function(progress) {
+            console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
+        },
+        function(error) {
+            console.error('Error loading STL from URL:', error);
+            showNotification('Error loading STL from cloud. Trying local fallback...', 'error');
+            
+            // Fallback to local loading
+            loadSTLLocally(currentSTLFile, title, description);
+        }
+    );
+}
+
+function loadSTLLocally(file, title, description) {
     const reader = new FileReader();
     reader.onload = function(event) {
         const arrayBuffer = event.target.result;
@@ -1294,7 +1419,7 @@ function loadSTLModel() {
             carModel.scale.setScalar(scale);
             
             // Position the model in the center of the road
-            carModel.position.set(0, 0.5, 0); // X=0 (road center), Y=0.5 (above road), Z=0 (road center)
+            carModel.position.set(0, 0.5, 0);
             
             // Store original position for explode effect
             originalPositions = [{
@@ -1314,10 +1439,10 @@ function loadSTLModel() {
             camera.position.set(5, 3, 5);
             controls.reset();
             
-            showNotification(`STL model "${title}" loaded successfully!`, 'success');
+            showNotification(`STL model "${title}" loaded locally!`, 'success');
             closeSTLModal();
             
-            console.log('STL model loaded:', title);
+            console.log('STL model loaded locally:', title);
             
         } catch (error) {
             console.error('Error loading STL file:', error);
@@ -1329,30 +1454,224 @@ function loadSTLModel() {
         showNotification('Error reading STL file', 'error');
     };
     
-    reader.readAsArrayBuffer(currentSTLFile);
+    reader.readAsArrayBuffer(file);
 }
 
-function loadDefaultModel() {
-    // Clear existing STL model if present
-    if (carModel) {
-        scene.remove(carModel);
-        originalPositions = [];
+
+// Permanent Models Functions
+async function loadPermanentModels() {
+    try {
+        const response = await fetch('/assets/models/models-config.json');
+        const config = await response.json();
+        permanentModels = config.models;
+        
+        // Update the STL modal to show permanent models
+        updateSTLModalWithPermanentModels();
+        
+        console.log('Loaded permanent models:', permanentModels);
+    } catch (error) {
+        console.error('Error loading permanent models:', error);
+    }
+}
+
+function updateSTLModalWithPermanentModels() {
+    const permanentSection = document.getElementById('permanentModelsSection');
+    if (!permanentSection) return;
+    
+    permanentSection.innerHTML = `
+        <h3 style="color: #2af0ff; margin-bottom: 20px; text-align: center;">Heritage H2GP Models</h3>
+        <div class="permanent-models-grid">
+            ${permanentModels.map(model => `
+                <div class="permanent-model-card" onclick="loadPermanentModel('${model.id}')">
+                    <div class="model-info">
+                        <h4>${model.name}</h4>
+                        <p>${model.description}</p>
+                        <div class="model-meta">
+                            <span class="model-category">${model.category}</span>
+                            <span class="model-year">${model.year}</span>
+                            ${model.isDefault ? '<span class="default-badge">Default</span>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+        <div class="section-divider">
+            <span>OR</span>
+        </div>
+    `;
+}
+
+function loadPermanentModel(modelId) {
+    const model = permanentModels.find(m => m.id === modelId);
+    if (!model) {
+        showNotification('Model not found', 'error');
+        return;
     }
     
-    // Reset flags
-    isSTLModel = false;
-    isWireframe = false;
-    isExploded = false;
+    const modelUrl = `/assets/models/${model.filename}`;
     
-    // Load the default procedural model
-    createH2GPCar();
+    showNotification(`Loading ${model.name}...`, 'info');
     
-    // Reset camera
-    camera.position.set(5, 3, 5);
-    controls.reset();
-    
-    showNotification('Default Heritage H2GP model loaded', 'success');
-    console.log('Default model loaded');
+    // Load the permanent STL model
+    loadSTLFromURL(modelUrl, model.name, model.description)
+        .then(() => {
+            // Save the permanent model info
+            saveCurrentSTLModel({
+                url: modelUrl,
+                title: model.name,
+                description: model.description,
+                loadedFrom: 'permanent',
+                modelId: model.id
+            });
+            
+            closeSTLModal();
+        })
+        .catch(error => {
+            console.error('Error loading permanent model:', error);
+            showNotification(`Error loading ${model.name}. File may not be uploaded yet.`, 'error');
+        });
+}
+
+function loadSTLFromURL(url, title, description) {
+    return new Promise((resolve, reject) => {
+        const loader = new THREE.STLLoader();
+        
+        loader.load(
+            url,
+            function(geometry) {
+                // Clear existing model
+                if (carModel) {
+                    scene.remove(carModel);
+                    originalPositions = [];
+                }
+                
+                // Create material for the STL model
+                const material = new THREE.MeshPhongMaterial({
+                    color: 0x2af0ff,
+                    shininess: 100,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                
+                // Create mesh
+                carModel = new THREE.Mesh(geometry, material);
+                carModel.castShadow = true;
+                carModel.receiveShadow = true;
+                
+                // Center and scale the model
+                const box = new THREE.Box3().setFromObject(carModel);
+                const center = box.getCenter(new THREE.Vector3());
+                const size = box.getSize(new THREE.Vector3());
+                
+                // Center the model horizontally and position on road
+                carModel.position.sub(center);
+                
+                // Scale the model to fit nicely in the viewer
+                const maxDimension = Math.max(size.x, size.y, size.z);
+                const scale = 3 / maxDimension; // Scale to fit in a 3-unit space
+                carModel.scale.setScalar(scale);
+                
+                // Position the model in the center of the road
+                carModel.position.set(0, 0.5, 0);
+                
+                // Store original position for explode effect
+                originalPositions = [{
+                    object: carModel,
+                    position: carModel.position.clone()
+                }];
+                
+                // Add to scene
+                scene.add(carModel);
+                
+                // Update flags
+                isSTLModel = true;
+                isWireframe = false;
+                isExploded = false;
+                
+                // Reset camera position for better view
+                camera.position.set(5, 3, 5);
+                controls.reset();
+                
+                showNotification(`STL model "${title}" loaded successfully!`, 'success');
+                console.log('STL model loaded:', title, url);
+                
+                resolve();
+            },
+            function(progress) {
+                console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
+            },
+            function(error) {
+                console.error('Error loading STL from URL:', error);
+                reject(error);
+            }
+        );
+    });
+}
+
+// Heritage H2GP Model Auto-Load Function
+function loadHeritageH2GPModel() {
+    // Wait for the scene to be fully initialized
+    setTimeout(() => {
+        // Try to load the Heritage H2GP 2024 STL model
+        const modelUrl = '/assets/models/heritage-h2gp-2024.stl';
+        const modelTitle = 'Heritage H2GP Car 2024';
+        const modelDescription = 'Our latest hydrogen-powered RC car design for the 2024 competition season';
+        
+        console.log('Auto-loading Heritage H2GP model...');
+        showNotification('Loading Heritage H2GP Car 2024...', 'info');
+        
+        // Load the Heritage H2GP STL model
+        loadSTLFromURL(modelUrl, modelTitle, modelDescription)
+            .then(() => {
+                console.log('Heritage H2GP model loaded successfully');
+                // Save the model info for persistence
+                saveCurrentSTLModel({
+                    url: modelUrl,
+                    title: modelTitle,
+                    description: modelDescription,
+                    loadedFrom: 'permanent',
+                    modelId: 'heritage-h2gp-2024'
+                });
+            })
+            .catch(error => {
+                console.error('Error loading Heritage H2GP model:', error);
+                console.log('Heritage H2GP STL file not found, keeping default procedural model');
+                showNotification('Heritage H2GP STL model not found, using default model', 'info');
+            });
+    }, 2000); // Wait 2 seconds for scene initialization
+}
+
+// STL Model Persistence Functions
+function saveCurrentSTLModel(modelInfo) {
+    try {
+        localStorage.setItem('h2gp-current-stl-model', JSON.stringify(modelInfo));
+        console.log('STL model info saved to localStorage:', modelInfo);
+    } catch (error) {
+        console.error('Error saving STL model info:', error);
+    }
+}
+
+function loadLastUploadedSTL() {
+    try {
+        const savedModelInfo = localStorage.getItem('h2gp-current-stl-model');
+        if (savedModelInfo) {
+            const modelInfo = JSON.parse(savedModelInfo);
+            console.log('Found saved STL model info:', modelInfo);
+            
+            // Wait a bit for the scene to be fully initialized
+            setTimeout(() => {
+                if (modelInfo.url && modelInfo.loadedFrom === 'cloud') {
+                    console.log('Loading saved STL model from cloud:', modelInfo.url);
+                    showNotification(`Loading your saved STL model: ${modelInfo.title}`, 'info');
+                    loadSTLFromURL(modelInfo.url, modelInfo.title, modelInfo.description);
+                }
+            }, 2000); // Wait 2 seconds after initial model load
+        } else {
+            console.log('No saved STL model found');
+        }
+    } catch (error) {
+        console.error('Error loading saved STL model:', error);
+    }
 }
 
 // Update keyboard navigation to include STL modal
@@ -1400,5 +1719,159 @@ window.addEventListener('click', (e) => {
     
     if (e.target === stlModal) {
         closeSTLModal();
+    }
+});
+
+// Video switching functionality
+let currentVideoIndex = 0;
+const videoIds = ['hero-video-1', 'hero-video-2'];
+
+function switchVideo() {
+    const currentVideo = document.getElementById(videoIds[currentVideoIndex]);
+    const nextVideoIndex = (currentVideoIndex + 1) % videoIds.length;
+    const nextVideo = document.getElementById(videoIds[nextVideoIndex]);
+    
+    if (currentVideo && nextVideo) {
+        // Fade out current video
+        currentVideo.classList.remove('active');
+        
+        // Fade in next video after a short delay
+        setTimeout(() => {
+            nextVideo.classList.add('active');
+            currentVideoIndex = nextVideoIndex;
+        }, 400);
+        
+        console.log(`Switched to video ${nextVideoIndex + 1}`);
+        showNotification(`Switched to video ${nextVideoIndex + 1}`, 'success');
+    }
+}
+
+// Auto-switch videos every 30 seconds
+setInterval(() => {
+    switchVideo();
+}, 30000);
+
+// Music Player Functions
+let musicPlayer = null;
+let isPlaying = false;
+let currentVolume = 30;
+
+function toggleMusic() {
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const musicStatus = document.getElementById('musicStatus');
+    const musicIcon = playPauseBtn.querySelector('.music-icon');
+    const iframe = document.getElementById('backgroundMusic');
+    
+    if (!isPlaying) {
+        // Start playing
+        iframe.src = iframe.src.replace('autoplay=0', 'autoplay=1');
+        isPlaying = true;
+        musicIcon.textContent = '⏸️';
+        musicStatus.textContent = 'Playing';
+        playPauseBtn.classList.add('playing');
+        showNotification('Music started playing', 'success');
+        console.log('Music started playing');
+    } else {
+        // Pause/stop playing
+        iframe.src = iframe.src.replace('autoplay=1', 'autoplay=0');
+        isPlaying = false;
+        musicIcon.textContent = '🎵';
+        musicStatus.textContent = 'Paused';
+        playPauseBtn.classList.remove('playing');
+        showNotification('Music paused', 'info');
+        console.log('Music paused');
+    }
+}
+
+function toggleVolume() {
+    const volumeSlider = document.getElementById('volumeSlider');
+    const isVisible = volumeSlider.style.display === 'block';
+    
+    if (isVisible) {
+        volumeSlider.style.display = 'none';
+    } else {
+        volumeSlider.style.display = 'block';
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            volumeSlider.style.display = 'none';
+        }, 5000);
+    }
+}
+
+function setVolume(value) {
+    currentVolume = value;
+    const volumeIcon = document.getElementById('volumeIcon');
+    
+    // Update volume icon based on level
+    if (value == 0) {
+        volumeIcon.textContent = '🔇';
+    } else if (value < 30) {
+        volumeIcon.textContent = '🔉';
+    } else {
+        volumeIcon.textContent = '🔊';
+    }
+    
+    // Note: YouTube iframe doesn't allow direct volume control from external JavaScript
+    // This is a limitation of YouTube's embed API for security reasons
+    console.log('Volume set to:', value + '%');
+    showNotification(`Volume: ${value}%`, 'info');
+}
+
+
+function initMusicPlayer() {
+    const musicPlayer = document.getElementById('musicPlayer');
+    const volumeSlider = document.getElementById('volumeSlider');
+    
+    // Set initial volume
+    const volumeRange = document.getElementById('volumeRange');
+    if (volumeRange) {
+        volumeRange.value = currentVolume;
+        setVolume(currentVolume);
+    }
+    
+    // Hide volume slider initially
+    if (volumeSlider) {
+        volumeSlider.style.display = 'none';
+    }
+    
+    // Add hover effects for music player
+    if (musicPlayer) {
+        musicPlayer.addEventListener('mouseenter', () => {
+            musicPlayer.classList.add('hover');
+        });
+        
+        musicPlayer.addEventListener('mouseleave', () => {
+            musicPlayer.classList.remove('hover');
+            // Hide volume slider when leaving music player area
+            setTimeout(() => {
+                if (volumeSlider) {
+                    volumeSlider.style.display = 'none';
+                }
+            }, 1000);
+        });
+    }
+    
+    console.log('Music player initialized');
+}
+
+// Add keyboard shortcuts for music control
+document.addEventListener('keydown', (e) => {
+    // Only trigger if no modal is open and not typing in an input
+    const isModalOpen = document.querySelector('.modal[style*="display: block"]') || 
+                       document.querySelector('.stl-modal[style*="display: block"]');
+    const isTyping = document.activeElement.tagName === 'INPUT' || 
+                    document.activeElement.tagName === 'TEXTAREA';
+    
+    if (!isModalOpen && !isTyping) {
+        switch(e.key.toLowerCase()) {
+            case 'm':
+                e.preventDefault();
+                toggleMusic();
+                break;
+            case 'v':
+                e.preventDefault();
+                toggleVolume();
+                break;
+        }
     }
 });

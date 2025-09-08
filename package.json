@@ -1,0 +1,23 @@
+{
+  "name": "heritage-h2gp-netlify-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for Heritage H2GP STEAM website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1691.0",
+    "lambda-multipart-parser": "^1.0.1"
+  },
+  "keywords": [
+    "netlify",
+    "functions",
+    "aws",
+    "s3",
+    "stl",
+    "3d-models"
+  ],
+  "author": "Heritage H2GP Team",
+  "license": "MIT"
+}
