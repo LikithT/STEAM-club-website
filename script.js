@@ -1363,7 +1363,11 @@ function loadSTLFromURL(url, title, description) {
             console.log('STL model loaded from cloud:', title, url);
         },
         function(progress) {
-            console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
+            if (progress.total && progress.total > 0) {
+                console.log('Loading progress:', (progress.loaded / progress.total * 100).toFixed(1) + '%');
+            } else {
+                console.log('Loading progress: ' + (progress.loaded / 1024).toFixed(1) + ' KB loaded');
+            }
         },
         function(error) {
             console.error('Error loading STL from URL:', error);
@@ -1598,7 +1602,11 @@ function loadSTLFromURL(url, title, description) {
                 resolve();
             },
             function(progress) {
-                console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
+                if (progress.total && progress.total > 0) {
+                    console.log('Loading progress:', (progress.loaded / progress.total * 100).toFixed(1) + '%');
+                } else {
+                    console.log('Loading progress: ' + (progress.loaded / 1024).toFixed(1) + ' KB loaded');
+                }
             },
             function(error) {
                 console.error('Error loading STL from URL:', error);
