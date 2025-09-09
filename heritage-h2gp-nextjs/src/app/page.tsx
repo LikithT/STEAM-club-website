@@ -217,7 +217,7 @@ export default function Home() {
                 <Car className="w-24 h-24 text-yellow-400 mx-auto mb-4" />
                 <h4 className="text-2xl font-bold text-white text-center mb-4">Heritage H2GP Car</h4>
                 <p className="text-gray-300 text-center">
-                  Our flagship racing vehicle featuring state-of-the-art hydrogen fuel cell technology, 
+                  Our Car featuring hydrogen fuel cell technology, 
                   custom aerodynamic design, and precision engineering for optimal performance.
                 </p>
               </div>
@@ -248,7 +248,8 @@ export default function Home() {
             {[
               {
                 title: "Basic Principle",
-                description: "Hydrogen fuel cells convert chemical energy directly into electrical energy through electrochemical reactions.",
+                description: "Hydrogen fuel cells convert chemical energy directly into electrical energy through a electrochemical reaction. This is an oxidation reduction reaction.",
+                
                 color: "from-blue-500 to-cyan-500"
               },
               {
