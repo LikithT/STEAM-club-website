@@ -3306,7 +3306,12 @@ section {
     font-family: 'Playfair Display', serif;
     font-size: clamp(6rem, 15vw, 16rem);
     font-weight: 900;
-    color: rgba(255, 215, 0, 0.15);
+    color: #FFD700;
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     text-transform: uppercase;
     letter-spacing: -0.05em;
     line-height: 0.8;
@@ -3314,7 +3319,32 @@ section {
     user-select: none;
     pointer-events: none;
     white-space: nowrap;
-    text-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+    text-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.8),
+        0 0 40px rgba(255, 215, 0, 0.6),
+        0 0 60px rgba(255, 215, 0, 0.4),
+        0 0 80px rgba(255, 215, 0, 0.3);
+    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.7));
+    animation: redBullGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes redBullGlow {
+    0% {
+        text-shadow: 
+            0 0 20px rgba(255, 215, 0, 0.8),
+            0 0 40px rgba(255, 215, 0, 0.6),
+            0 0 60px rgba(255, 215, 0, 0.4),
+            0 0 80px rgba(255, 215, 0, 0.3);
+        filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.7));
+    }
+    100% {
+        text-shadow: 
+            0 0 30px rgba(255, 215, 0, 1),
+            0 0 50px rgba(255, 215, 0, 0.8),
+            0 0 70px rgba(255, 215, 0, 0.6),
+            0 0 90px rgba(255, 215, 0, 0.4);
+        filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.9));
+    }
 }
 
 .car-image-container {

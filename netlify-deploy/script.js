@@ -1465,6 +1465,12 @@ function loadSTLLocally(file, title, description) {
 // Permanent Models Functions
 async function loadPermanentModels() {
     try {
+        // Check if we're running from file:// protocol
+        if (window.location.protocol === 'file:') {
+            console.log('Running from file:// protocol - permanent models loading disabled due to CORS restrictions');
+            return;
+        }
+        
         const response = await fetch('/assets/models/models-config.json');
         const config = await response.json();
         permanentModels = config.models;
@@ -1620,6 +1626,13 @@ function loadSTLFromURL(url, title, description) {
 function loadHeritageH2GPModel() {
     // Wait for the scene to be fully initialized
     setTimeout(() => {
+        // Check if we're running from file:// protocol
+        if (window.location.protocol === 'file:') {
+            console.log('Running from file:// protocol - STL loading disabled due to CORS restrictions');
+            showNotification('Heritage H2GP STL model not found, using default model', 'info');
+            return;
+        }
+        
         // Try to load the Heritage H2GP 2024 STL model
         const modelUrl = '/assets/models/heritage-h2gp-2024.stl';
         const modelTitle = 'Heritage H2GP Car 2024';
