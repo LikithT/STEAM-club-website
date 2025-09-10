@@ -90,6 +90,21 @@ class AttendanceSystem {
         attendanceCard.style.display = 'none';
         successCard.style.display = 'block';
         
+        // Add animation to the reward image
+        setTimeout(() => {
+            const rewardImage = document.getElementById('rewardCarImage');
+            if (rewardImage) {
+                rewardImage.style.opacity = '0';
+                rewardImage.style.transform = 'scale(0.8) translateY(20px)';
+                rewardImage.style.transition = 'all 0.6s ease-out';
+                
+                setTimeout(() => {
+                    rewardImage.style.opacity = '1';
+                    rewardImage.style.transform = 'scale(1) translateY(0)';
+                }, 300);
+            }
+        }, 100);
+        
         this.showNotification('Attendance recorded successfully!', 'success');
     }
 

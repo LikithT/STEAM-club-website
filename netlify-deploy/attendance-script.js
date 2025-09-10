@@ -79,17 +79,11 @@ class AttendanceSystem {
         const attendanceDetails = document.getElementById('attendanceDetails');
 
         attendanceDetails.innerHTML = `
-            <div class="success-details">
-                <div class="thank-you-image">
-                    <img src="assets/thank-you-car.jpg" alt="Thank You - Yellow McLaren" class="car-thank-you" />
-                    <div class="thank-you-text">Thank you for attending!</div>
-                </div>
-                <div class="attendance-info">
-                    <p><strong>Student ID:</strong> ${record.studentId}</p>
-                    <p><strong>Name:</strong> ${record.studentName}</p>
-                    <p><strong>Date:</strong> ${record.date}</p>
-                    <p><strong>Time:</strong> ${record.time}</p>
-                </div>
+            <div class="attendance-info">
+                <p><strong>Student ID:</strong> ${record.studentId}</p>
+                <p><strong>Name:</strong> ${record.studentName}</p>
+                <p><strong>Date:</strong> ${record.date}</p>
+                <p><strong>Time:</strong> ${record.time}</p>
             </div>
         `;
 
