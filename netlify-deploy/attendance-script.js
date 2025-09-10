@@ -30,11 +30,9 @@ class AttendanceSystem {
         
         const studentId = document.getElementById('studentId').value.trim();
         const studentName = document.getElementById('studentName').value.trim();
-        const meetingType = document.getElementById('meetingType').value;
         const meetingDate = document.getElementById('meetingDate').value;
-        const notes = document.getElementById('notes').value.trim();
 
-        if (!studentId || !studentName || !meetingType) {
+        if (!studentId || !studentName) {
             this.showNotification('Please fill in all required fields', 'error');
             return;
         }
@@ -58,9 +56,7 @@ class AttendanceSystem {
             time: new Date().toLocaleTimeString(),
             studentId: studentId,
             studentName: studentName,
-            meetingType: meetingType,
-            meetingDate: meetingDate,
-            notes: notes
+            meetingDate: meetingDate
         };
 
         // Save to localStorage
@@ -86,10 +82,8 @@ class AttendanceSystem {
             <div class="success-details">
                 <p><strong>Student ID:</strong> ${record.studentId}</p>
                 <p><strong>Name:</strong> ${record.studentName}</p>
-                <p><strong>Meeting Type:</strong> ${record.meetingType}</p>
                 <p><strong>Date:</strong> ${record.date}</p>
                 <p><strong>Time:</strong> ${record.time}</p>
-                ${record.notes ? `<p><strong>Notes:</strong> ${record.notes}</p>` : ''}
             </div>
         `;
 
@@ -154,7 +148,7 @@ class AttendanceSystem {
         tableBody.innerHTML = '';
 
         if (this.attendanceRecords.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="7" class="no-records">No attendance records found</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="5" class="no-records">No attendance records found</td></tr>';
             return;
         }
 
@@ -171,8 +165,6 @@ class AttendanceSystem {
                 <td>${record.studentId}</td>
                 <td>${record.studentName}</td>
                 <td>-</td>
-                <td><span class="meeting-type-badge ${record.meetingType}">${this.formatMeetingType(record.meetingType)}</span></td>
-                <td>${record.notes || '-'}</td>
             `;
             tableBody.appendChild(row);
         });
@@ -203,7 +195,7 @@ class AttendanceSystem {
         
         // Prepare data
         const wsData = [
-            ['Date', 'Time', 'Student ID', 'Student Name', 'Meeting Type', 'Meeting Date', 'Notes']
+            ['Date', 'Time', 'Student ID', 'Student Name', 'Meeting Date']
         ];
         
         this.attendanceRecords.forEach(record => {
@@ -212,9 +204,7 @@ class AttendanceSystem {
                 record.time,
                 record.studentId,
                 record.studentName,
-                this.formatMeetingType(record.meetingType),
-                record.meetingDate,
-                record.notes || ''
+                record.meetingDate
             ]);
         });
 
@@ -227,9 +217,7 @@ class AttendanceSystem {
             { wch: 10 }, // Time
             { wch: 12 }, // Student ID
             { wch: 20 }, // Student Name
-            { wch: 15 }, // Meeting Type
-            { wch: 12 }, // Meeting Date
-            { wch: 30 }  // Notes
+            { wch: 12 }  // Meeting Date
         ];
         ws['!cols'] = colWidths;
 
