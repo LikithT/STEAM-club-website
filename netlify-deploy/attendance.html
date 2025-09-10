@@ -145,6 +145,10 @@
                         <span class="btn-icon">👥</span>
                         View All Records
                     </button>
+                    <button class="admin-btn secondary" id="viewPercentagesBtn">
+                        <span class="btn-icon">📊</span>
+                        View Attendance %
+                    </button>
                     <button class="admin-btn secondary" id="clearDataBtn">
                         <span class="btn-icon">🗑️</span>
                         Clear All Data
@@ -181,6 +185,40 @@
                             </thead>
                             <tbody id="recordsTableBody">
                                 <!-- Records will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Attendance Percentages Section -->
+                <div class="percentages-section" id="percentagesSection" style="display: none;">
+                    <h3>Student Attendance Percentages</h3>
+                    <div class="percentages-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="totalMeetings">0</span>
+                            <span class="stat-label">Total Meetings</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="avgAttendance">0%</span>
+                            <span class="stat-label">Average Attendance</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="highAttendance">0</span>
+                            <span class="stat-label">High Attendance (≥80%)</span>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="percentages-table" id="percentagesTable">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Meetings Attended</th>
+                                    <th>Attendance %</th>
+                                </tr>
+                            </thead>
+                            <tbody id="percentagesTableBody">
+                                <!-- Percentages will be populated here -->
                             </tbody>
                         </table>
                     </div>

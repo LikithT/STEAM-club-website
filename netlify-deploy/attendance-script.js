@@ -183,7 +183,7 @@ class AttendanceSystem {
         return types[type] || type;
     }
 
-    // Export to Excel
+    // Export to Excel with date-separated sheets
     downloadExcelReport() {
         if (this.attendanceRecords.length === 0) {
             this.showNotification('No attendance records to export', 'error');
@@ -193,36 +193,76 @@ class AttendanceSystem {
         // Create workbook
         const wb = XLSX.utils.book_new();
         
-        // Prepare data
-        const wsData = [
-            ['Date', 'Time', 'Student ID', 'Student Name', 'Meeting Date']
-        ];
-        
+        // Group records by date
+        const recordsByDate = {};
         this.attendanceRecords.forEach(record => {
-            wsData.push([
-                record.date,
-                record.time,
-                record.studentId,
-                record.studentName,
-                record.meetingDate
-            ]);
+            const dateKey = record.date;
+            if (!recordsByDate[dateKey]) {
+                recordsByDate[dateKey] = [];
+            }
+            recordsByDate[dateKey].push(record);
         });
 
-        // Create worksheet
-        const ws = XLSX.utils.aoa_to_sheet(wsData);
-        
-        // Auto-size columns
-        const colWidths = [
-            { wch: 12 }, // Date
-            { wch: 10 }, // Time
-            { wch: 12 }, // Student ID
-            { wch: 20 }, // Student Name
-            { wch: 12 }  // Meeting Date
-        ];
-        ws['!cols'] = colWidths;
+        // Create a sheet for each date
+        Object.keys(recordsByDate).sort().forEach(date => {
+            const records = recordsByDate[date];
+            
+            // Prepare data for this date
+            const wsData = [
+                ['Date', 'Time', 'Student ID', 'Student Name', 'Meeting Date']
+            ];
+            
+            records.forEach(record => {
+                wsData.push([
+                    record.date,
+                    record.time,
+                    record.studentId,
+                    record.studentName,
+                    record.meetingDate
+                ]);
+            });
 
-        // Add worksheet to workbook
-        XLSX.utils.book_append_sheet(wb, ws, 'Attendance Records');
+            // Create worksheet
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            
+            // Auto-size columns
+            const colWidths = [
+                { wch: 12 }, // Date
+                { wch: 10 }, // Time
+                { wch: 12 }, // Student ID
+                { wch: 20 }, // Student Name
+                { wch: 12 }  // Meeting Date
+            ];
+            ws['!cols'] = colWidths;
+
+            // Create safe sheet name (Excel sheet names can't contain certain characters)
+            const sheetName = date.replace(/[\/\\?*[\]]/g, '-');
+            
+            // Add worksheet to workbook
+            XLSX.utils.book_append_sheet(wb, ws, sheetName);
+        });
+
+        // Create summary sheet
+        const summaryData = [
+            ['Summary Report'],
+            [''],
+            ['Total Records', this.attendanceRecords.length],
+            ['Unique Students', new Set(this.attendanceRecords.map(r => r.studentId)).size],
+            ['Date Range', `${Math.min(...Object.keys(recordsByDate).map(d => new Date(d)))} to ${Math.max(...Object.keys(recordsByDate).map(d => new Date(d)))}`],
+            [''],
+            ['Records by Date:'],
+            ['Date', 'Count']
+        ];
+
+        Object.keys(recordsByDate).sort().forEach(date => {
+            summaryData.push([date, recordsByDate[date].length]);
+        });
+
+        const summaryWs = XLSX.utils.aoa_to_sheet(summaryData);
+        summaryWs['!cols'] = [{ wch: 20 }, { wch: 15 }];
+        
+        // Insert summary sheet at the beginning
+        XLSX.utils.book_append_sheet(wb, summaryWs, 'Summary', 0);
 
         // Generate filename with current date
         const filename = `Heritage_H2GP_Attendance_${new Date().toISOString().split('T')[0]}.xlsx`;
@@ -230,7 +270,7 @@ class AttendanceSystem {
         // Save file
         XLSX.writeFile(wb, filename);
         
-        this.showNotification(`Attendance exported to ${filename}`, 'success');
+        this.showNotification(`Attendance exported to ${filename} with ${Object.keys(recordsByDate).length} date sheets`, 'success');
     }
 
     // Clear all data
@@ -311,6 +351,11 @@ class AttendanceSystem {
             clearDataBtn.addEventListener('click', () => this.clearAllData());
         }
 
+        const viewPercentagesBtn = document.getElementById('viewPercentagesBtn');
+        if (viewPercentagesBtn) {
+            viewPercentagesBtn.addEventListener('click', () => this.viewAttendancePercentages());
+        }
+
         // Form validation
         const studentIdInput = document.getElementById('studentId');
         const studentNameInput = document.getElementById('studentName');
@@ -371,6 +416,86 @@ class AttendanceSystem {
                 cursor.classList.remove('cursor-hover');
             });
         });
+    }
+
+    // View attendance percentages
+    viewAttendancePercentages() {
+        const percentagesSection = document.getElementById('percentagesSection');
+        
+        if (percentagesSection.style.display === 'none' || !percentagesSection.style.display) {
+            percentagesSection.style.display = 'block';
+            this.displayAttendancePercentages();
+            percentagesSection.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            percentagesSection.style.display = 'none';
+        }
+    }
+
+    // Display attendance percentages
+    displayAttendancePercentages() {
+        const percentagesBody = document.getElementById('percentagesTableBody');
+        percentagesBody.innerHTML = '';
+
+        if (this.attendanceRecords.length === 0) {
+            percentagesBody.innerHTML = '<tr><td colspan="4" class="no-records">No attendance records found</td></tr>';
+            return;
+        }
+
+        // Get all unique dates
+        const allDates = [...new Set(this.attendanceRecords.map(record => record.date))].sort();
+        const totalMeetings = allDates.length;
+
+        // Group records by student
+        const studentAttendance = {};
+        this.attendanceRecords.forEach(record => {
+            if (!studentAttendance[record.studentId]) {
+                studentAttendance[record.studentId] = {
+                    name: record.studentName,
+                    dates: new Set()
+                };
+            }
+            studentAttendance[record.studentId].dates.add(record.date);
+        });
+
+        // Calculate percentages and create table rows
+        const studentStats = Object.keys(studentAttendance).map(studentId => {
+            const student = studentAttendance[studentId];
+            const attendedMeetings = student.dates.size;
+            const percentage = totalMeetings > 0 ? Math.round((attendedMeetings / totalMeetings) * 100) : 0;
+            
+            return {
+                studentId,
+                name: student.name,
+                attended: attendedMeetings,
+                total: totalMeetings,
+                percentage
+            };
+        });
+
+        // Sort by percentage (highest first)
+        studentStats.sort((a, b) => b.percentage - a.percentage);
+
+        studentStats.forEach(student => {
+            const row = document.createElement('tr');
+            const percentageClass = student.percentage >= 80 ? 'high-attendance' : 
+                                  student.percentage >= 60 ? 'medium-attendance' : 'low-attendance';
+            
+            row.innerHTML = `
+                <td>${student.studentId}</td>
+                <td>${student.name}</td>
+                <td>${student.attended}/${student.total}</td>
+                <td class="${percentageClass}">${student.percentage}%</td>
+            `;
+            percentagesBody.appendChild(row);
+        });
+
+        // Update summary stats
+        const avgPercentage = studentStats.length > 0 ? 
+            Math.round(studentStats.reduce((sum, s) => sum + s.percentage, 0) / studentStats.length) : 0;
+        
+        document.getElementById('totalMeetings').textContent = totalMeetings;
+        document.getElementById('avgAttendance').textContent = `${avgPercentage}%`;
+        document.getElementById('highAttendance').textContent = studentStats.filter(s => s.percentage >= 80).length;
     }
 
     // Show notification

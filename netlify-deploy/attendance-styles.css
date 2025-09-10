@@ -428,7 +428,97 @@ body {
     text-align: center;
     color: #666666;
     font-style: italic;
-    padding: 40px;
+    padding: 2rem;
+}
+
+/* Attendance Percentages Section */
+.percentages-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: transparent;
+    border: 1px solid #333333;
+    border-radius: 8px;
+}
+
+.percentages-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.percentages-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.percentages-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+}
+
+.percentages-table th,
+.percentages-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #333333;
+}
+
+.percentages-table th {
+    font-weight: 600;
+    color: #ffffff;
+    background: transparent;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.percentages-table td {
+    font-size: 0.9rem;
+}
+
+.percentages-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Attendance percentage color coding */
+.high-attendance {
+    color: #4CAF50 !important;
+    font-weight: 600;
+}
+
+.medium-attendance {
+    color: #FF9800 !important;
+    font-weight: 600;
+}
+
+.low-attendance {
+    color: #f44336 !important;
+    font-weight: 600;
+}
+
+/* Responsive design for percentages table */
+@media (max-width: 768px) {
+    .percentages-stats {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .percentages-table {
+        font-size: 0.8rem;
+    }
+    
+    .percentages-table th,
+    .percentages-table td {
+        padding: 0.5rem 0.25rem;
+    }
 }
 
 /* Master Key Section */
