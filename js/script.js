@@ -1471,7 +1471,7 @@ async function loadPermanentModels() {
             return;
         }
         
-        const response = await fetch('/models-config.json');
+        const response = await fetch('assets/models/models-config.json');
         const config = await response.json();
         permanentModels = config.models;
         
@@ -1518,7 +1518,7 @@ function loadPermanentModel(modelId) {
         return;
     }
     
-    const modelUrl = `/${model.filename}`;
+    const modelUrl = `assets/models/${model.filename}`;
     
     showNotification(`Loading ${model.name}...`, 'info');
     
@@ -1646,8 +1646,8 @@ function loadHeritageH2GPModel() {
 
 // Load Heritage H2GP model with compression support
 async function loadHeritageModelWithCompression(title, description) {
-    const compressedUrl = '/heritage-h2gp-2024.stl.gz';
-    const originalUrl = '/heritage-h2gp-2024.stl';
+    const compressedUrl = 'assets/models/heritage-h2gp-2024.stl.gz';
+    const originalUrl = 'assets/models/heritage-h2gp-2024.stl';
     
     try {
         // First try to load the compressed version
