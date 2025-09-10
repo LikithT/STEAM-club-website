@@ -1,9 +1,9 @@
-// Google Sheets Integration for Attendance System
+// Simple Attendance System with Master Key Access
 class AttendanceSystem {
     constructor() {
-        this.isAuthenticated = false;
-        this.currentUser = null;
         this.attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
+        this.isAdminAuthenticated = false;
+        this.masterKey = 'Pagani'; // Master key for admin access
         this.init();
     }
 
@@ -11,142 +11,35 @@ class AttendanceSystem {
         this.setupEventListeners();
         this.initMobileNavigation();
         this.initCursorEffects();
-        this.loadGoogleSheetsAPI();
+        this.setCurrentDate();
+        this.updateAttendanceStats();
     }
 
-    // Load Google Sheets API
-    loadGoogleSheetsAPI() {
-        const script = document.createElement('script');
-        script.src = 'https://apis.google.com/js/api.js';
-        script.onload = () => {
-            gapi.load('client:auth2', () => {
-                this.initGoogleAPI();
-            });
-        };
-        document.head.appendChild(script);
-    }
-
-    // Initialize Google API
-    async initGoogleAPI() {
-        try {
-            await gapi.client.init({
-                apiKey: 'YOUR_API_KEY', // Replace with your Google API key
-                clientId: 'YOUR_CLIENT_ID', // Replace with your Google OAuth client ID
-                discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-                scope: 'https://www.googleapis.com/auth/spreadsheets'
-            });
-
-            // Check if user is already signed in
-            const authInstance = gapi.auth2.getAuthInstance();
-            if (authInstance.isSignedIn.get()) {
-                this.handleAuthSuccess(authInstance.currentUser.get());
-            }
-        } catch (error) {
-            console.log('Google API initialization failed, using local storage fallback');
-            this.showNotification('Using local storage for attendance tracking', 'info');
+    // Set current date in the form
+    setCurrentDate() {
+        const dateInput = document.getElementById('meetingDate');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
         }
     }
 
-    // Google OAuth Sign In
-    async signInWithGoogle() {
-        try {
-            const authInstance = gapi.auth2.getAuthInstance();
-            const user = await authInstance.signIn();
-            this.handleAuthSuccess(user);
-        } catch (error) {
-            console.error('Google sign-in failed:', error);
-            // Fallback to demo mode
-            this.simulateGoogleAuth();
-        }
-    }
-
-    // Simulate Google Auth for demo purposes
-    simulateGoogleAuth() {
-        const demoUsers = [
-            { name: 'John Smith', email: 'john.smith@student.edu', id: 'demo_user_1' },
-            { name: 'Sarah Johnson', email: 'sarah.johnson@student.edu', id: 'demo_user_2' },
-            { name: 'Mike Chen', email: 'mike.chen@student.edu', id: 'demo_user_3' },
-            { name: 'Emily Davis', email: 'emily.davis@student.edu', id: 'demo_user_4' }
-        ];
+    // Submit attendance
+    submitAttendance(event) {
+        event.preventDefault();
         
-        const randomUser = demoUsers[Math.floor(Math.random() * demoUsers.length)];
-        this.handleAuthSuccess({
-            getBasicProfile: () => ({
-                getName: () => randomUser.name,
-                getEmail: () => randomUser.email,
-                getId: () => randomUser.id
-            })
-        });
-    }
-
-    // Handle successful authentication
-    handleAuthSuccess(user) {
-        const profile = user.getBasicProfile();
-        this.isAuthenticated = true;
-        this.currentUser = {
-            name: profile.getName(),
-            email: profile.getEmail(),
-            id: profile.getId()
-        };
-
-        this.updateAuthUI();
-        this.showNotification(`Welcome, ${this.currentUser.name}!`, 'success');
-    }
-
-    // Update authentication UI
-    updateAuthUI() {
-        const authSection = document.getElementById('authSection');
-        const attendanceForm = document.getElementById('attendanceForm');
-        const userInfo = document.getElementById('userInfo');
-
-        if (this.isAuthenticated) {
-            authSection.style.display = 'none';
-            attendanceForm.style.display = 'block';
-            userInfo.innerHTML = `
-                <div class="user-profile">
-                    <div class="user-avatar">${this.currentUser.name.charAt(0)}</div>
-                    <div class="user-details">
-                        <h3>${this.currentUser.name}</h3>
-                        <p>${this.currentUser.email}</p>
-                    </div>
-                    <button class="sign-out-btn" onclick="attendanceSystem.signOut()">Sign Out</button>
-                </div>
-            `;
-        } else {
-            authSection.style.display = 'block';
-            attendanceForm.style.display = 'none';
-            userInfo.innerHTML = '';
-        }
-    }
-
-    // Sign out
-    async signOut() {
-        try {
-            const authInstance = gapi.auth2.getAuthInstance();
-            await authInstance.signOut();
-        } catch (error) {
-            console.log('Google sign-out failed, clearing local session');
-        }
-        
-        this.isAuthenticated = false;
-        this.currentUser = null;
-        this.updateAuthUI();
-        this.showNotification('Signed out successfully', 'success');
-    }
-
-    // Submit attendance to Google Sheets
-    async submitAttendance() {
         const studentId = document.getElementById('studentId').value.trim();
         const studentName = document.getElementById('studentName').value.trim();
         const meetingType = document.getElementById('meetingType').value;
+        const meetingDate = document.getElementById('meetingDate').value;
         const notes = document.getElementById('notes').value.trim();
 
-        if (!studentId || !studentName) {
+        if (!studentId || !studentName || !meetingType) {
             this.showNotification('Please fill in all required fields', 'error');
             return;
         }
 
-        // Check for duplicate attendance
+        // Check for duplicate attendance for the same day
         const today = new Date().toDateString();
         const existingRecord = this.attendanceRecords.find(record => 
             record.studentId === studentId && 
@@ -159,188 +52,105 @@ class AttendanceSystem {
         }
 
         const attendanceRecord = {
+            id: Date.now().toString(),
             timestamp: new Date().toISOString(),
             date: new Date().toLocaleDateString(),
             time: new Date().toLocaleTimeString(),
             studentId: studentId,
             studentName: studentName,
             meetingType: meetingType,
-            notes: notes,
-            submittedBy: this.currentUser.name,
-            submittedByEmail: this.currentUser.email
+            meetingDate: meetingDate,
+            notes: notes
         };
 
-        try {
-            // Try to submit to Google Sheets
-            await this.submitToGoogleSheets(attendanceRecord);
-            this.showNotification('Attendance submitted to Google Sheets successfully!', 'success');
-        } catch (error) {
-            console.error('Google Sheets submission failed:', error);
-            // Fallback to local storage
-            this.attendanceRecords.push(attendanceRecord);
-            localStorage.setItem('attendanceRecords', JSON.stringify(this.attendanceRecords));
-            this.showNotification('Attendance saved locally (Google Sheets unavailable)', 'info');
-        }
+        // Save to localStorage
+        this.attendanceRecords.push(attendanceRecord);
+        localStorage.setItem('attendanceRecords', JSON.stringify(this.attendanceRecords));
 
+        // Show success message
+        this.showSuccessMessage(attendanceRecord);
+        
         // Clear form
-        document.getElementById('attendanceFormElement').reset();
+        document.getElementById('attendanceForm').reset();
+        this.setCurrentDate();
         this.updateAttendanceStats();
     }
 
-    // Submit to Google Sheets
-    async submitToGoogleSheets(record) {
-        const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID'; // Replace with your Google Sheets ID
-        const RANGE = 'Sheet1!A:H'; // Adjust range as needed
+    // Show success message
+    showSuccessMessage(record) {
+        const attendanceCard = document.getElementById('attendanceCard');
+        const successCard = document.getElementById('successCard');
+        const attendanceDetails = document.getElementById('attendanceDetails');
 
-        const values = [
-            [
-                record.timestamp,
-                record.date,
-                record.time,
-                record.studentId,
-                record.studentName,
-                record.meetingType,
-                record.notes,
-                record.submittedBy
-            ]
-        ];
+        attendanceDetails.innerHTML = `
+            <div class="success-details">
+                <p><strong>Student ID:</strong> ${record.studentId}</p>
+                <p><strong>Name:</strong> ${record.studentName}</p>
+                <p><strong>Meeting Type:</strong> ${record.meetingType}</p>
+                <p><strong>Date:</strong> ${record.date}</p>
+                <p><strong>Time:</strong> ${record.time}</p>
+                ${record.notes ? `<p><strong>Notes:</strong> ${record.notes}</p>` : ''}
+            </div>
+        `;
 
-        const body = {
-            values: values
-        };
-
-        const response = await gapi.client.sheets.spreadsheets.values.append({
-            spreadsheetId: SPREADSHEET_ID,
-            range: RANGE,
-            valueInputOption: 'RAW',
-            resource: body
-        });
-
-        return response;
+        attendanceCard.style.display = 'none';
+        successCard.style.display = 'block';
+        
+        this.showNotification('Attendance recorded successfully!', 'success');
     }
 
-    // Create Google Sheets spreadsheet (for setup)
-    async createAttendanceSpreadsheet() {
-        try {
-            const response = await gapi.client.sheets.spreadsheets.create({
-                resource: {
-                    properties: {
-                        title: 'Heritage H2GP Attendance Tracker'
-                    },
-                    sheets: [{
-                        properties: {
-                            title: 'Attendance Records'
-                        }
-                    }]
-                }
-            });
+    // Go back to attendance form
+    backToForm() {
+        const attendanceCard = document.getElementById('attendanceCard');
+        const successCard = document.getElementById('successCard');
+        
+        attendanceCard.style.display = 'block';
+        successCard.style.display = 'none';
+    }
 
-            const spreadsheetId = response.result.spreadsheetId;
-            
-            // Add headers
-            await gapi.client.sheets.spreadsheets.values.update({
-                spreadsheetId: spreadsheetId,
-                range: 'Sheet1!A1:H1',
-                valueInputOption: 'RAW',
-                resource: {
-                    values: [['Timestamp', 'Date', 'Time', 'Student ID', 'Student Name', 'Meeting Type', 'Notes', 'Submitted By']]
-                }
-            });
+    // Master key authentication
+    authenticateAdmin() {
+        const masterKeyInput = document.getElementById('masterKey');
+        const enteredKey = masterKeyInput.value.trim();
 
-            this.showNotification(`Spreadsheet created! ID: ${spreadsheetId}`, 'success');
-            return spreadsheetId;
-        } catch (error) {
-            console.error('Failed to create spreadsheet:', error);
-            throw error;
+        if (enteredKey === this.masterKey || enteredKey === this.masterKey.toLowerCase()) {
+            this.isAdminAuthenticated = true;
+            this.showAdminPanel();
+            masterKeyInput.value = '';
+            this.showNotification('Admin access granted', 'success');
+        } else {
+            this.showNotification('Invalid master key', 'error');
+            masterKeyInput.value = '';
         }
     }
 
-    // Export to Excel (fallback option)
-    exportToExcel() {
-        if (this.attendanceRecords.length === 0) {
-            this.showNotification('No attendance records to export', 'error');
-            return;
-        }
-
-        // Create workbook
-        const wb = XLSX.utils.book_new();
+    // Show admin panel
+    showAdminPanel() {
+        const masterKeyCard = document.getElementById('masterKeyCard');
+        const adminCard = document.getElementById('adminCard');
         
-        // Prepare data
-        const wsData = [
-            ['Timestamp', 'Date', 'Time', 'Student ID', 'Student Name', 'Meeting Type', 'Notes', 'Submitted By']
-        ];
+        masterKeyCard.style.display = 'none';
+        adminCard.style.display = 'block';
         
-        this.attendanceRecords.forEach(record => {
-            wsData.push([
-                record.timestamp,
-                record.date,
-                record.time,
-                record.studentId,
-                record.studentName,
-                record.meetingType,
-                record.notes,
-                record.submittedBy
-            ]);
-        });
-
-        // Create worksheet
-        const ws = XLSX.utils.aoa_to_sheet(wsData);
-        
-        // Auto-size columns
-        const colWidths = [
-            { wch: 20 }, // Timestamp
-            { wch: 12 }, // Date
-            { wch: 10 }, // Time
-            { wch: 12 }, // Student ID
-            { wch: 20 }, // Student Name
-            { wch: 15 }, // Meeting Type
-            { wch: 30 }, // Notes
-            { wch: 20 }  // Submitted By
-        ];
-        ws['!cols'] = colWidths;
-
-        // Add worksheet to workbook
-        XLSX.utils.book_append_sheet(wb, ws, 'Attendance Records');
-
-        // Generate filename with current date
-        const filename = `Heritage_H2GP_Attendance_${new Date().toISOString().split('T')[0]}.xlsx`;
-        
-        // Save file
-        XLSX.writeFile(wb, filename);
-        
-        this.showNotification(`Attendance exported to ${filename}`, 'success');
+        this.updateAttendanceStats();
+        adminCard.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Update attendance statistics
-    updateAttendanceStats() {
-        const totalRecords = this.attendanceRecords.length;
-        const todayRecords = this.attendanceRecords.filter(record => 
-            new Date(record.timestamp).toDateString() === new Date().toDateString()
-        ).length;
-        const uniqueStudents = new Set(this.attendanceRecords.map(record => record.studentId)).size;
-
-        document.getElementById('totalAttendance').textContent = totalRecords;
-        document.getElementById('todayAttendance').textContent = todayRecords;
-        document.getElementById('uniqueStudents').textContent = uniqueStudents;
-    }
-
-    // View attendance records
-    viewAttendanceRecords() {
-        const recordsContainer = document.getElementById('attendanceRecords');
-        const adminSection = document.getElementById('adminSection');
+    // View all records
+    viewAllRecords() {
+        const recordsSection = document.getElementById('recordsSection');
         
-        if (recordsContainer.style.display === 'none' || !recordsContainer.style.display) {
-            recordsContainer.style.display = 'block';
-            adminSection.scrollIntoView({ behavior: 'smooth' });
+        if (recordsSection.style.display === 'none' || !recordsSection.style.display) {
+            recordsSection.style.display = 'block';
             this.displayAttendanceTable();
         } else {
-            recordsContainer.style.display = 'none';
+            recordsSection.style.display = 'none';
         }
     }
 
     // Display attendance table
     displayAttendanceTable() {
-        const tableBody = document.getElementById('attendanceTableBody');
+        const tableBody = document.getElementById('recordsTableBody');
         tableBody.innerHTML = '';
 
         if (this.attendanceRecords.length === 0) {
@@ -360,16 +170,83 @@ class AttendanceSystem {
                 <td>${record.time}</td>
                 <td>${record.studentId}</td>
                 <td>${record.studentName}</td>
-                <td><span class="meeting-type-badge ${record.meetingType}">${record.meetingType}</span></td>
+                <td>-</td>
+                <td><span class="meeting-type-badge ${record.meetingType}">${this.formatMeetingType(record.meetingType)}</span></td>
                 <td>${record.notes || '-'}</td>
-                <td>${record.submittedBy}</td>
             `;
             tableBody.appendChild(row);
         });
     }
 
-    // Clear all attendance data
-    clearAttendanceData() {
+    // Format meeting type for display
+    formatMeetingType(type) {
+        const types = {
+            'regular': 'Regular Meeting',
+            'workshop': 'Workshop',
+            'competition': 'Competition Prep',
+            'build': 'Build Session',
+            'field-trip': 'Field Trip',
+            'other': 'Other'
+        };
+        return types[type] || type;
+    }
+
+    // Export to Excel
+    downloadExcelReport() {
+        if (this.attendanceRecords.length === 0) {
+            this.showNotification('No attendance records to export', 'error');
+            return;
+        }
+
+        // Create workbook
+        const wb = XLSX.utils.book_new();
+        
+        // Prepare data
+        const wsData = [
+            ['Date', 'Time', 'Student ID', 'Student Name', 'Meeting Type', 'Meeting Date', 'Notes']
+        ];
+        
+        this.attendanceRecords.forEach(record => {
+            wsData.push([
+                record.date,
+                record.time,
+                record.studentId,
+                record.studentName,
+                this.formatMeetingType(record.meetingType),
+                record.meetingDate,
+                record.notes || ''
+            ]);
+        });
+
+        // Create worksheet
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+        
+        // Auto-size columns
+        const colWidths = [
+            { wch: 12 }, // Date
+            { wch: 10 }, // Time
+            { wch: 12 }, // Student ID
+            { wch: 20 }, // Student Name
+            { wch: 15 }, // Meeting Type
+            { wch: 12 }, // Meeting Date
+            { wch: 30 }  // Notes
+        ];
+        ws['!cols'] = colWidths;
+
+        // Add worksheet to workbook
+        XLSX.utils.book_append_sheet(wb, ws, 'Attendance Records');
+
+        // Generate filename with current date
+        const filename = `Heritage_H2GP_Attendance_${new Date().toISOString().split('T')[0]}.xlsx`;
+        
+        // Save file
+        XLSX.writeFile(wb, filename);
+        
+        this.showNotification(`Attendance exported to ${filename}`, 'success');
+    }
+
+    // Clear all data
+    clearAllData() {
         if (confirm('Are you sure you want to clear all attendance data? This action cannot be undone.')) {
             this.attendanceRecords = [];
             localStorage.removeItem('attendanceRecords');
@@ -379,45 +256,90 @@ class AttendanceSystem {
         }
     }
 
+    // Update attendance statistics
+    updateAttendanceStats() {
+        const totalRecords = this.attendanceRecords.length;
+        const uniqueStudents = new Set(this.attendanceRecords.map(record => record.studentId)).size;
+        
+        // Calculate this week's records
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        const thisWeekRecords = this.attendanceRecords.filter(record => 
+            new Date(record.timestamp) >= oneWeekAgo
+        ).length;
+
+        const totalRecordsEl = document.getElementById('totalRecords');
+        const uniqueStudentsEl = document.getElementById('uniqueStudents');
+        const thisWeekRecordsEl = document.getElementById('thisWeekRecords');
+
+        if (totalRecordsEl) totalRecordsEl.textContent = totalRecords;
+        if (uniqueStudentsEl) uniqueStudentsEl.textContent = uniqueStudents;
+        if (thisWeekRecordsEl) thisWeekRecordsEl.textContent = thisWeekRecords;
+    }
+
     // Setup event listeners
     setupEventListeners() {
-        // Google Sign In
-        document.getElementById('googleSignInBtn')?.addEventListener('click', () => {
-            this.signInWithGoogle();
-        });
-
         // Attendance form submission
-        document.getElementById('submitAttendanceBtn')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.submitAttendance();
-        });
+        const attendanceForm = document.getElementById('attendanceForm');
+        if (attendanceForm) {
+            attendanceForm.addEventListener('submit', (e) => this.submitAttendance(e));
+        }
 
-        // Admin functions
-        document.getElementById('viewRecordsBtn')?.addEventListener('click', () => {
-            this.viewAttendanceRecords();
-        });
+        // Back button
+        const backBtn = document.getElementById('backBtn');
+        if (backBtn) {
+            backBtn.addEventListener('click', () => this.backToForm());
+        }
 
-        document.getElementById('exportExcelBtn')?.addEventListener('click', () => {
-            this.exportToExcel();
-        });
+        // Master key authentication
+        const masterKeyBtn = document.getElementById('masterKeyBtn');
+        if (masterKeyBtn) {
+            masterKeyBtn.addEventListener('click', () => this.authenticateAdmin());
+        }
 
-        document.getElementById('clearDataBtn')?.addEventListener('click', () => {
-            this.clearAttendanceData();
-        });
+        // Master key input - allow Enter key
+        const masterKeyInput = document.getElementById('masterKey');
+        if (masterKeyInput) {
+            masterKeyInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    this.authenticateAdmin();
+                }
+            });
+        }
+
+        // Admin controls
+        const downloadExcelBtn = document.getElementById('downloadExcelBtn');
+        if (downloadExcelBtn) {
+            downloadExcelBtn.addEventListener('click', () => this.downloadExcelReport());
+        }
+
+        const viewRecordsBtn = document.getElementById('viewRecordsBtn');
+        if (viewRecordsBtn) {
+            viewRecordsBtn.addEventListener('click', () => this.viewAllRecords());
+        }
+
+        const clearDataBtn = document.getElementById('clearDataBtn');
+        if (clearDataBtn) {
+            clearDataBtn.addEventListener('click', () => this.clearAllData());
+        }
 
         // Form validation
         const studentIdInput = document.getElementById('studentId');
         const studentNameInput = document.getElementById('studentName');
 
-        studentIdInput?.addEventListener('input', (e) => {
-            // Allow only alphanumeric characters
-            e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '');
-        });
+        if (studentIdInput) {
+            studentIdInput.addEventListener('input', (e) => {
+                // Allow only alphanumeric characters
+                e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '');
+            });
+        }
 
-        studentNameInput?.addEventListener('input', (e) => {
-            // Allow only letters and spaces
-            e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
-        });
+        if (studentNameInput) {
+            studentNameInput.addEventListener('input', (e) => {
+                // Allow only letters and spaces
+                e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+            });
+        }
     }
 
     // Mobile navigation
@@ -425,18 +347,20 @@ class AttendanceSystem {
         const mobileNavToggle = document.getElementById('mobileNavToggle');
         const mobileNavMenu = document.getElementById('mobileNavMenu');
 
-        mobileNavToggle?.addEventListener('click', () => {
-            mobileNavToggle.classList.toggle('active');
-            mobileNavMenu.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking on links
-        document.querySelectorAll('.mobile-nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileNavToggle.classList.remove('active');
-                mobileNavMenu.classList.remove('active');
+        if (mobileNavToggle && mobileNavMenu) {
+            mobileNavToggle.addEventListener('click', () => {
+                mobileNavToggle.classList.toggle('active');
+                mobileNavMenu.classList.toggle('active');
             });
-        });
+
+            // Close mobile menu when clicking on links
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileNavToggle.classList.remove('active');
+                    mobileNavMenu.classList.remove('active');
+                });
+            });
+        }
     }
 
     // Cursor effects
@@ -470,18 +394,40 @@ class AttendanceSystem {
         // Create new notification
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
-        notification.textContent = message;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <span class="notification-icon">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+                <span class="notification-message">${message}</span>
+            </div>
+        `;
+
+        // Add styles
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        `;
 
         document.body.appendChild(notification);
 
         // Show notification
         setTimeout(() => {
-            notification.classList.add('show');
+            notification.style.transform = 'translateX(0)';
         }, 100);
 
         // Hide notification after 5 seconds
         setTimeout(() => {
-            notification.classList.remove('show');
+            notification.style.transform = 'translateX(400px)';
             setTimeout(() => {
                 notification.remove();
             }, 300);
@@ -492,9 +438,4 @@ class AttendanceSystem {
 // Initialize attendance system when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.attendanceSystem = new AttendanceSystem();
-    
-    // Load SheetJS library for Excel export
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
-    document.head.appendChild(script);
 });

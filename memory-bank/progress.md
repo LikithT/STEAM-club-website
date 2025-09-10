@@ -61,7 +61,14 @@
 - Performance monitoring and analytics
 
 ## Known Issues
-*None identified - all features working correctly*
+*All major bugs have been fixed - website working correctly*
+
+### Recently Fixed Issues ✅
+- **CORS Policy Errors**: Fixed STL model loading failures when running from file:// protocol
+- **Resource Loading Errors**: Resolved net::ERR_INVALID_URL and net::ERR_FAILED errors
+- **STL Model Loading**: Added proper error handling and fallback for Heritage H2GP model loading
+- **Permanent Models Loading**: Fixed CORS issues when loading model configuration files
+- **Console Error Cleanup**: Eliminated major console errors that were cluttering the browser console
 
 ## Evolution of Project Decisions
 - **Initial Setup**: Established Memory Bank system for project continuity

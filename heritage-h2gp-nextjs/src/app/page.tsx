@@ -1,289 +1,211 @@
-"use client"
+'use client'
 
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import Navigation from '@/components/navigation'
-import Hero3D from '@/components/hero-3d'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { 
-  Zap, 
-  Car, 
+  GraduationCap, 
   Users, 
-  Trophy, 
-  BookOpen, 
-  Mail, 
-  Github, 
-  Instagram, 
-  MessageCircle,
-  Atom,
-  Battery,
-  Gauge,
-  Target,
-  Award,
-  Calendar,
-  MapPin
+  Calendar, 
+  Shield, 
+  Zap, 
+  CheckCircle,
+  ArrowRight,
+  Sparkles
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
-export default function Home() {
+export default function LandingPage() {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [user, setUser] = useState(null)
+
   useEffect(() => {
-    // Initialize Lenis smooth scrolling
-    import('lenis').then((Lenis) => {
-      const lenis = new Lenis.default()
-      
-      function raf(time: number) {
-        lenis.raf(time)
-        requestAnimationFrame(raf)
+    // Check if user is already authenticated
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/profile')
+        if (response.ok) {
+          const userData = await response.json()
+          setUser(userData)
+          router.push('/profile')
+        }
+      } catch (error) {
+        // User not authenticated, stay on landing page
+        console.log('User not authenticated')
       }
-      
-      requestAnimationFrame(raf)
-      
-      return () => lenis.destroy()
-    })
-  }, [])
+    }
+    
+    checkAuth()
+  }, [router])
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true)
+    try {
+      // For demo purposes, simulate Google OAuth with demo login
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: 'demo@heritage.edu',
+          name: 'Demo Student'
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setUser(data.user)
+        router.push('/profile')
+      } else {
+        console.error('Login failed')
+      }
+    } catch (error) {
+      console.error('Sign in error:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <Navigation />
-      
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <Hero3D />
-        
-        <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-indigo-600/10" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
           >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-yellow-200 to-yellow-400 bg-clip-text text-transparent">
-              Heritage H2GP
+            <Badge variant="secondary" className="mb-4">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Heritage H2GP Attendance System
+            </Badge>
+            
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+              Smart Attendance
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                {' '}Made Simple
+              </span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
-              Pioneering the future of sustainable energy through hydrogen-powered racing and STEAM education
+            
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+              Streamlined attendance tracking for Heritage High School's H2GP STEAM program. 
+              Secure, efficient, and designed for the modern classroom.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-blue-900 font-semibold"
-                onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <Button
+                onClick={handleGoogleSignIn}
+                disabled={isLoading}
+                size="lg"
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
               >
-                <Zap className="mr-2 h-5 w-5" />
-                Discover Our Mission
+                {isLoading ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3" />
+                ) : (
+                  <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                  </svg>
+                )}
+                Sign in with Google
+                <ArrowRight className="w-5 h-5 ml-3" />
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-blue-900"
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                <Users className="mr-2 h-5 w-5" />
-                Join Our Team
-              </Button>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
-        
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        >
-          <div className="w-6 h-10 border-2 border-yellow-400 rounded-full flex justify-center">
-            <motion.div
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1 h-3 bg-yellow-400 rounded-full mt-2"
-            />
-          </div>
-        </motion.div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-20 px-4">
-        <div className="container mx-auto max-w-6xl">
+      {/* Features Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-              About Heritage H2GP
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Why Choose Our System?
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              We are Heritage High School&apos;s premier STEAM club, dedicated to advancing sustainable energy education through competitive hydrogen-powered RC car racing.
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Built specifically for educational environments with security, simplicity, and efficiency in mind.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                icon: Atom,
-                title: "Innovation",
-                description: "Pushing the boundaries of hydrogen fuel cell technology in competitive racing environments."
+                icon: Shield,
+                title: 'Secure Authentication',
+                description: 'Google OAuth 2.0 with JWT verification ensures only authorized users can access the system.',
+                color: 'text-green-600'
+              },
+              {
+                icon: Zap,
+                title: 'One-Click Attendance',
+                description: 'Mark attendance with a single click. No complex forms or lengthy processes.',
+                color: 'text-blue-600'
               },
               {
                 icon: Users,
-                title: "Education",
-                description: "Inspiring the next generation of engineers and scientists through hands-on STEAM learning."
+                title: 'Admin Dashboard',
+                description: 'Comprehensive admin panel with analytics, exports, and user management.',
+                color: 'text-purple-600'
               },
               {
-                icon: Trophy,
-                title: "Competition",
-                description: "Competing at the highest levels in H2GP racing championships across the nation."
+                icon: Calendar,
+                title: 'Smart Scheduling',
+                description: 'Automatic session management with timezone support and flexible scheduling.',
+                color: 'text-orange-600'
+              },
+              {
+                icon: CheckCircle,
+                title: 'Export Ready',
+                description: 'Export attendance data to Excel or CSV with customizable filters and date ranges.',
+                color: 'text-indigo-600'
+              },
+              {
+                icon: GraduationCap,
+                title: 'Student Focused',
+                description: 'Clean, intuitive interface designed specifically for student use and accessibility.',
+                color: 'text-teal-600'
               }
-            ].map((item, index) => (
+            ].map((feature, index) => (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 transition-all duration-300">
-                  <CardHeader className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <item.icon className="w-8 h-8 text-blue-900" />
-                    </div>
-                    <CardTitle className="text-white">{item.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-300 text-center">{item.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* H2GP Racing Section */}
-      <section id="racing" className="py-20 px-4 bg-gradient-to-r from-blue-900/20 to-slate-900/20">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-              H2GP Racing
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Experience the thrill of hydrogen-powered racing with our cutting-edge RC cars designed for maximum performance and efficiency.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-3xl font-bold text-white mb-6">Our Racing Technology</h3>
-              <div className="space-y-4">
-                {[
-                  { icon: Battery, text: "Advanced PEM fuel cell systems" },
-                  { icon: Gauge, text: "Precision-engineered chassis design" },
-                  { icon: Target, text: "Optimized aerodynamics for speed" },
-                  { icon: Zap, text: "Real-time performance monitoring" }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center">
-                      <item.icon className="w-4 h-4 text-blue-900" />
-                    </div>
-                    <span className="text-gray-300">{item.text}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="bg-gradient-to-br from-yellow-400/20 to-blue-600/20 rounded-2xl p-8 backdrop-blur-sm border border-white/10">
-                <Car className="w-24 h-24 text-yellow-400 mx-auto mb-4" />
-                <h4 className="text-2xl font-bold text-white text-center mb-4">Heritage H2GP Car</h4>
-                <p className="text-gray-300 text-center">
-                  Our Car featuring hydrogen fuel cell technology, 
-                  custom aerodynamic design, and precision engineering for optimal performance.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Fuel Cell Education Section */}
-      <section id="fuel-cell" className="py-20 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-              Hydrogen Fuel Cell Technology
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Learn about the revolutionary technology powering our racing cars and the future of clean energy.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                title: "Basic Principle",
-                description: "Hydrogen fuel cells convert chemical energy directly into electrical energy through a electrochemical reaction. This is an oxidation reduction reaction.",
-                
-                color: "from-blue-500 to-cyan-500"
-              },
-              {
-                title: "Main Components",
-                description: "Anode, cathode, and PEM (Proton Exchange Membrane) work together to generate clean electricity.",
-                color: "from-green-500 to-emerald-500"
-              },
-              {
-                title: "Chemical Reactions",
-                description: "H₂ → 2H⁺ + 2e⁻ at anode, O₂ + 4H⁺ + 4e⁻ → 2H₂O at cathode.",
-                color: "from-purple-500 to-violet-500"
-              },
-              {
-                title: "H2GP Application",
-                description: "Optimized fuel cells provide consistent power for high-performance racing applications.",
-                color: "from-yellow-500 to-orange-500"
-              }
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 transition-all duration-300 h-full">
+                <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-0 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">
                   <CardHeader>
-                    <div className={`w-12 h-12 bg-gradient-to-r ${item.color} rounded-lg flex items-center justify-center mb-3`}>
-                      <BookOpen className="w-6 h-6 text-white" />
+                    <div className={`w-12 h-12 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center mb-4`}>
+                      <feature.icon className={`w-6 h-6 ${feature.color}`} />
                     </div>
-                    <CardTitle className="text-white text-lg">{item.title}</CardTitle>
+                    <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+                      {feature.title}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-300 text-sm">{item.description}</p>
+                    <CardDescription className="text-gray-600 dark:text-gray-300">
+                      {feature.description}
+                    </CardDescription>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -292,191 +214,65 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Achievements Section */}
-      <section id="achievements" className="py-20 px-4 bg-gradient-to-r from-slate-900/20 to-blue-900/20">
-        <div className="container mx-auto max-w-6xl">
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-              Our Achievements
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Ready to Get Started?
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Celebrating our success in competitive hydrogen racing and STEAM education excellence.
+            <p className="text-xl text-blue-100 mb-8">
+              Join the Heritage H2GP community and start tracking attendance with ease.
             </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Award,
-                title: "Regional Champions",
-                description: "2024 H2GP Regional Championship Winners",
-                date: "March 2024"
-              },
-              {
-                icon: Trophy,
-                title: "Innovation Award",
-                description: "Best Technical Innovation in Fuel Cell Design",
-                date: "February 2024"
-              },
-              {
-                icon: Target,
-                title: "Efficiency Record",
-                description: "Highest fuel efficiency in competition history",
-                date: "January 2024"
-              }
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                viewport={{ once: true }}
-              >
-                <Card className="bg-gradient-to-br from-yellow-400/10 to-blue-600/10 backdrop-blur-sm border-yellow-400/20 hover:border-yellow-400/40 transition-all duration-300">
-                  <CardHeader className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <item.icon className="w-8 h-8 text-blue-900" />
-                    </div>
-                    <CardTitle className="text-white">{item.title}</CardTitle>
-                    <CardDescription className="text-yellow-400">{item.date}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-300 text-center">{item.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 px-4">
-        <div className="container mx-auto max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-              Join Our Mission
-            </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Ready to be part of the future of sustainable energy? Connect with us and join the Heritage H2GP team.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-12">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+            <Button
+              onClick={handleGoogleSignIn}
+              disabled={isLoading}
+              size="lg"
+              variant="secondary"
+              className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
             >
-              <h3 className="text-2xl font-bold text-white mb-6">Get In Touch</h3>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <MapPin className="w-5 h-5 text-yellow-400" />
-                  <span className="text-gray-300">Heritage High School, Brentwood, CA</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5 text-yellow-400" />
-                  <span className="text-gray-300">heritage.h2gp@gmail.com</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Calendar className="w-5 h-5 text-yellow-400" />
-                  <span className="text-gray-300">Meetings: Tuesdays & Thursdays, 3:30 PM</span>
-                </div>
-              </div>
-
-              <Separator className="my-8 bg-white/20" />
-
-              <h4 className="text-xl font-semibold text-white mb-4">Follow Us</h4>
-              <div className="flex space-x-4">
-                {[
-                  { icon: Instagram, href: "#", label: "Instagram" },
-                  { icon: MessageCircle, href: "https://discord.gg/yfaWm3K8", label: "Discord" },
-                  { icon: Github, href: "#", label: "GitHub" }
-                ].map((social, index) => (
-                  <Button
-                    key={index}
-                    variant="outline"
-                    size="icon"
-                    className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400 hover:text-blue-900"
-                    asChild
-                  >
-                    <a href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label}>
-                      <social.icon className="w-5 h-5" />
-                    </a>
-                  </Button>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <Card className="bg-white/5 backdrop-blur-sm border-white/10">
-                <CardHeader>
-                  <CardTitle className="text-white">Ready to Join?</CardTitle>
-                  <CardDescription className="text-gray-300">
-                    Become part of our innovative STEAM community
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-gray-300 text-sm">
-                    Whether you&apos;re interested in engineering, design, programming, or just curious about sustainable energy, 
-                    there&apos;s a place for you on our team. No prior experience required – just enthusiasm for learning and innovation!
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {["Engineering", "Design", "Programming", "Research", "Marketing"].map((skill) => (
-                      <Badge key={skill} variant="secondary" className="bg-yellow-400/20 text-yellow-400">
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                  <Button 
-                    className="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-blue-900 font-semibold"
-                    asChild
-                  >
-                    <a href="mailto:heritage.h2gp@gmail.com">
-                      <Mail className="mr-2 h-4 w-4" />
-                      Contact Us Today
-                    </a>
-                  </Button>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
+              {isLoading ? (
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 mr-3" />
+              ) : (
+                <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+              )}
+              Get Started Now
+            </Button>
+          </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 border-t border-white/10">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                <Zap className="w-5 h-5 text-blue-900" />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-                Heritage H2GP
-              </span>
-            </div>
-            <p className="text-gray-400 text-sm">
-              © 2024 Heritage H2GP STEAM Club. Powering the future with hydrogen.
+      <footer className="bg-slate-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold mb-4">Heritage H2GP</h3>
+            <p className="text-slate-400 mb-4">
+              Hydrogen Racing Team - Engineering sustainable solutions for tomorrow
             </p>
+            <Separator className="my-8 bg-slate-700" />
+            <div className="flex justify-center items-center gap-4 mb-4">
+              <p className="text-slate-500 text-sm">
+                © 2024 Heritage High School H2GP Racing Team. All rights reserved.
+              </p>
+              <button
+                onClick={() => router.push('/admin')}
+                className="text-slate-600 hover:text-slate-400 text-xs opacity-50 hover:opacity-100 transition-opacity duration-300"
+                title="Admin Panel"
+              >
+                •
+              </button>
+            </div>
           </div>
         </div>
       </footer>

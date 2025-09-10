@@ -1,7 +1,7 @@
 // Login Script with Google Authentication and Demo Support
 
-// Google OAuth Configuration
-const GOOGLE_CLIENT_ID = '1234567890-abcdefghijklmnopqrstuvwxyz123456.apps.googleusercontent.com'; // Replace with actual client ID
+// Google OAuth Configuration - Disabled for localhost
+const GOOGLE_CLIENT_ID = null; // Disabled for localhost development
 
 // Demo users for testing
 const DEMO_USERS = [
@@ -22,6 +22,17 @@ const DEMO_USERS = [
 // Initialize Google Sign-In
 function initializeGoogleSignIn() {
     try {
+        // Check if Google Client ID is configured
+        if (!GOOGLE_CLIENT_ID) {
+            console.log('Google OAuth disabled for localhost - using demo mode only');
+            // Hide Google sign-in container
+            const googleContainer = document.querySelector('.google-signin-container');
+            const divider = document.querySelector('.divider');
+            if (googleContainer) googleContainer.style.display = 'none';
+            if (divider) divider.style.display = 'none';
+            return;
+        }
+
         // Check if Google Identity Services is loaded
         if (typeof google !== 'undefined' && google.accounts) {
             google.accounts.id.initialize({

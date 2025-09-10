@@ -1,0 +1,232 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// NextAuth.js required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// User roles enum
+enum UserRole {
+  STUDENT
+  ADMIN
+  TEACHER
+}
+
+// Attendance status enum
+enum AttendanceStatus {
+  PRESENT
+  LATE
+  EXCUSED
+  ABSENT
+  INVALID
+}
+
+// Session status enum
+enum SessionStatus {
+  OPEN
+  CLOSED
+  ARCHIVED
+}
+
+// Auth mode enum
+enum AuthMode {
+  QR
+  CODE
+  ONECLICK
+  GEOFENCE
+}
+
+// Main application models
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  googleSub   String?  @unique
+  displayName String?
+  studentId   String?  @unique
+  role        UserRole @default(STUDENT)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // NextAuth relations
+  accounts   Account[]
+  sessions   Session[]
+  
+  // App relations
+  attendance     Attendance[]
+  auditLogs      AuditLog[]
+  createdClasses Class[]      @relation("ClassCreator")
+
+  @@index([email])
+  @@index([studentId])
+  @@index([googleSub])
+}
+
+model Class {
+  id           String    @id @default(cuid())
+  name         String
+  code         String    @unique
+  scheduleMeta Json?     // Store days/times, timezone info
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  createdById  String
+  
+  createdBy User              @relation("ClassCreator", fields: [createdById], references: [id])
+  sessions  AttendanceSession[]
+
+  @@index([code])
+  @@index([active])
+}
+
+model AttendanceSession {
+  id        String        @id @default(cuid())
+  classId   String
+  date      DateTime      // ISO date in class timezone
+  startAt   DateTime?
+  endAt     DateTime?
+  status    SessionStatus @default(OPEN)
+  authMode  AuthMode      @default(ONECLICK)
+  
+  // Geofence data (nullable)
+  geofenceLat    Float?
+  geofenceLng    Float?
+  geofenceRadius Int?      // radius in meters
+  
+  // Session metadata
+  dailyCode      String?   // Daily join code
+  qrSecret       String?   // Secret for QR token generation
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  class      Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
+  attendance Attendance[]
+
+  @@index([classId, date])
+  @@index([status])
+  @@index([date])
+}
+
+model Attendance {
+  id          String           @id @default(cuid())
+  sessionId   String
+  userId      String
+  studentId   String?          // Denormalized for reporting
+  studentName String?          // Denormalized for reporting
+  email       String?          // Denormalized for reporting
+  markedAt    DateTime         @default(now())
+  status      AttendanceStatus @default(PRESENT)
+  
+  // Anti-cheat fields
+  deviceHash  String?          // Privacy-preserving device fingerprint
+  ipHash      String?          // Privacy-preserving IP hash
+  
+  // Metadata
+  notes       String?
+  createdBy   String?          // 'system' or admin user ID
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  session AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user    User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, userId]) // One attendance per session per user
+  @@index([sessionId])
+  @@index([userId])
+  @@index([markedAt])
+  @@index([status])
+}
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  actorUserId  String
+  action       String   // e.g., "CREATE_SESSION", "UPDATE_ATTENDANCE", "EXPORT_DATA"
+  targetType   String   // e.g., "SESSION", "ATTENDANCE", "USER"
+  targetId     String?  // ID of the target entity
+  diffJson     Json?    // JSON diff of changes
+  metadata     Json?    // Additional context
+  createdAt    DateTime @default(now())
+
+  actor User @relation(fields: [actorUserId], references: [id], onDelete: Cascade)
+
+  @@index([actorUserId])
+  @@index([action])
+  @@index([targetType])
+  @@index([createdAt])
+}
+
+// Additional models for enhanced functionality
+model Roster {
+  id        String   @id @default(cuid())
+  classId   String
+  userId    String
+  addedAt   DateTime @default(now())
+  addedBy   String   // Admin user ID
+  
+  @@unique([classId, userId])
+  @@index([classId])
+}
+
+model ExportLog {
+  id          String   @id @default(cuid())
+  userId      String   // Admin who performed export
+  exportType  String   // "CSV" or "XLSX"
+  filters     Json     // Export filters applied
+  recordCount Int      // Number of records exported
+  fileName    String
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// Settings model for system configuration
+model SystemSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+  
+  @@index([key])
+}
