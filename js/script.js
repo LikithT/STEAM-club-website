@@ -1465,13 +1465,13 @@ function loadSTLLocally(file, title, description) {
 // Permanent Models Functions
 async function loadPermanentModels() {
     try {
-        // Check if we're running from file:// protocol
-        if (window.location.protocol === 'file:') {
-            console.log('Running from file:// protocol - permanent models loading disabled due to CORS restrictions');
-            return;
-        }
+        console.log('Attempting to load permanent models configuration...');
         
         const response = await fetch('assets/models/models-config.json');
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
         const config = await response.json();
         permanentModels = config.models;
         
@@ -1481,6 +1481,22 @@ async function loadPermanentModels() {
         console.log('Loaded permanent models:', permanentModels);
     } catch (error) {
         console.error('Error loading permanent models:', error);
+        
+        // Provide fallback configuration for when models-config.json can't be loaded
+        permanentModels = [
+            {
+                id: "heritage-h2gp-2024",
+                name: "Heritage H2GP Car 2024",
+                description: "Our latest hydrogen-powered RC car design for the 2024 competition season",
+                filename: "heritage-h2gp-2024.stl",
+                category: "competition",
+                year: 2024,
+                isDefault: true
+            }
+        ];
+        
+        console.log('Using fallback permanent models configuration');
+        updateSTLModalWithPermanentModels();
     }
 }
 
@@ -1626,15 +1642,18 @@ function loadSTLFromURL(url, title, description) {
 function loadHeritageH2GPModel() {
     // Wait for the scene to be fully initialized
     setTimeout(() => {
-        // Check if we're running from file:// protocol
-        if (window.location.protocol === 'file:') {
-            console.log('Running from file:// protocol - STL loading disabled due to CORS restrictions');
-            showNotification('Heritage H2GP STL model not found, using default model', 'info');
-            return;
-        }
-        
         const modelTitle = 'Heritage H2GP Car 2024';
         const modelDescription = 'Our latest hydrogen-powered RC car design for the 2024 competition season';
+        
+        // Check if we're running from file:// protocol
+        if (window.location.protocol === 'file:') {
+            console.log('Running from file:// protocol - attempting STL loading with enhanced error handling');
+            showNotification('Attempting to load Heritage H2GP STL model...', 'info');
+            
+            // Try to load with enhanced error handling for local files
+            loadHeritageModelWithEnhancedFallback(modelTitle, modelDescription);
+            return;
+        }
         
         console.log('Auto-loading Heritage H2GP model...');
         showNotification('Loading Heritage H2GP Car 2024...', 'info');
@@ -1642,6 +1661,64 @@ function loadHeritageH2GPModel() {
         // Try to load compressed version first, then fallback to original
         loadHeritageModelWithCompression(modelTitle, modelDescription);
     }, 2000); // Wait 2 seconds for scene initialization
+}
+
+// Enhanced fallback loading for local files (file:// protocol)
+async function loadHeritageModelWithEnhancedFallback(title, description) {
+    const compressedUrl = 'assets/models/heritage-h2gp-2024.stl.gz';
+    const originalUrl = 'assets/models/heritage-h2gp-2024.stl';
+    
+    console.log('Attempting enhanced fallback loading for local files...');
+    
+    try {
+        // First try to load the compressed version with enhanced error handling
+        console.log('Trying compressed STL with enhanced fallback...');
+        await loadCompressedSTLFromURL(compressedUrl, title, description);
+        
+        console.log('Heritage H2GP compressed model loaded successfully (local)');
+        showNotification('Heritage H2GP Car 2024 loaded (compressed)!', 'success');
+        
+        // Save the model info for persistence
+        saveCurrentSTLModel({
+            url: compressedUrl,
+            title: title,
+            description: description,
+            loadedFrom: 'permanent',
+            modelId: 'heritage-h2gp-2024-compressed',
+            compressed: true
+        });
+        
+    } catch (compressedError) {
+        console.log('Compressed model failed, trying original with enhanced fallback:', compressedError.message);
+        
+        try {
+            // Fallback to original uncompressed version with enhanced error handling
+            console.log('Trying original STL with enhanced fallback...');
+            await loadSTLFromURL(originalUrl, title, description);
+            
+            console.log('Heritage H2GP original model loaded successfully (local)');
+            showNotification('Heritage H2GP Car 2024 loaded!', 'success');
+            
+            // Save the model info for persistence
+            saveCurrentSTLModel({
+                url: originalUrl,
+                title: title,
+                description: description,
+                loadedFrom: 'permanent',
+                modelId: 'heritage-h2gp-2024'
+            });
+            
+        } catch (originalError) {
+            console.error('Both compressed and original models failed with enhanced fallback:', originalError);
+            console.log('STL files exist but cannot be loaded due to browser security restrictions');
+            showNotification('STL files found but cannot load due to browser security (use web server)', 'info');
+            
+            // Provide helpful information to the user
+            setTimeout(() => {
+                showNotification('Upload to InfinityFree to see the real STL model!', 'info');
+            }, 3000);
+        }
+    }
 }
 
 // Load Heritage H2GP model with compression support
