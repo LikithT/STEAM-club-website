@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage H2GP - Student Login</title>
+    <link rel="stylesheet" href="login-styles.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" class="logo-text">H2GP</a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">← Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <section class="login-section">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <h1>Sign in to Heritage H2GP</h1>
+                    <p>Access the student attendance system</p>
+                </div>
+
+                <div class="login-form" id="loginForm">
+                    <!-- Google Sign In Button -->
+                    <div id="g_id_onload"
+                         data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                         data-context="signin"
+                         data-ux_mode="popup"
+                         data-callback="handleCredentialResponse"
+                         data-auto_prompt="false">
+                    </div>
+                    
+                    <div class="google-signin-container">
+                        <div id="g_id_signin"
+                             data-type="standard"
+                             data-shape="rectangular"
+                             data-theme="outline"
+                             data-text="signin_with"
+                             data-size="large"
+                             data-logo_alignment="left">
+                        </div>
+                    </div>
+
+                    <div class="divider">
+                        <span>or</span>
+                    </div>
+
+                    <!-- Demo Sign In -->
+                    <button class="demo-signin-btn" onclick="demoSignIn()">
+                        <span>Continue with Demo Account</span>
+                    </button>
+                </div>
+
+                <!-- Success State -->
+                <div class="login-success" id="loginSuccess" style="display: none;">
+                    <div class="success-content">
+                        <div class="success-icon">✓</div>
+                        <h2>Welcome!</h2>
+                        <p id="welcomeMessage">You have successfully signed in.</p>
+                        <button class="proceed-btn" onclick="proceedToAttendance()">
+                            Continue to Attendance
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="info-section">
+                <div class="info-item">
+                    <h3>Secure Access</h3>
+                    <p>Your data is protected with industry-standard security measures.</p>
+                </div>
+                <div class="info-item">
+                    <h3>Quick & Easy</h3>
+                    <p>Sign in once and access all your attendance records seamlessly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="login-script.js"></script>
+</body>
+</html>

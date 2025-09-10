@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage H2GP - Student Attendance</title>
+    <link rel="stylesheet" href="attendance-styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" class="logo-text">H2GP</a>
+            </div>
+            <div class="nav-menu">
+                <div class="user-info" id="userInfo">
+                    <!-- User info will be populated by JavaScript -->
+                </div>
+                <a href="index.html" class="nav-link">← Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Attendance Section -->
+    <section class="attendance-section">
+        <div class="container">
+            <!-- Header -->
+            <div class="attendance-header">
+                <div class="header-content">
+                    <h1>Student Attendance</h1>
+                    <p>Enter your information to record your attendance</p>
+                </div>
+                <div class="header-stats" id="headerStats">
+                    <div class="stat-card">
+                        <span class="stat-number" id="todayCount">0</span>
+                        <span class="stat-label">Today</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalCount">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="attendance-content">
+                <!-- Attendance Form -->
+                <div class="attendance-form-container">
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h2>Record Your Attendance</h2>
+                            <p>Please fill in your information below</p>
+                        </div>
+
+                        <form class="attendance-form" id="attendanceForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="studentId">Student ID *</label>
+                                    <input type="text" id="studentId" name="studentId" required 
+                                           placeholder="Enter your student ID" maxlength="20">
+                                    <span class="form-hint">Alphanumeric characters only</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="studentName">Full Name *</label>
+                                    <input type="text" id="studentName" name="studentName" required 
+                                           placeholder="Enter your full name" maxlength="50">
+                                    <span class="form-hint">Letters and spaces only</span>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="meetingType">Meeting Type</label>
+                                    <select id="meetingType" name="meetingType">
+                                        <option value="regular">Regular Meeting</option>
+                                        <option value="workshop">Workshop</option>
+                                        <option value="competition">Competition</option>
+                                        <option value="build-session">Build Session</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="grade">Grade Level</label>
+                                    <select id="grade" name="grade">
+                                        <option value="">Select Grade</option>
+                                        <option value="9">9th Grade</option>
+                                        <option value="10">10th Grade</option>
+                                        <option value="11">11th Grade</option>
+                                        <option value="12">12th Grade</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="notes">Additional Notes (Optional)</label>
+                                <textarea id="notes" name="notes" rows="3" 
+                                          placeholder="Any additional information or comments..."></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="clear-btn" onclick="clearForm()">Clear Form</button>
+                                <button type="submit" class="submit-btn" id="submitBtn">
+                                    <span class="btn-text">Submit Attendance</span>
+                                    <span class="btn-loading" style="display: none;">
+                                        <span class="loading-spinner"></span>
+                                        Submitting...
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage" style="display: none;">
+                    <div class="success-card">
+                        <div class="success-icon">✓</div>
+                        <h3>Attendance Recorded!</h3>
+                        <p>Your attendance has been successfully submitted and saved to the system.</p>
+                        <div class="success-details" id="successDetails">
+                            <!-- Details will be populated by JavaScript -->
+                        </div>
+                        <div class="success-actions">
+                            <button class="new-entry-btn" onclick="recordNewEntry()">Record Another Entry</button>
+                            <button class="view-data-btn" onclick="viewAllData()">View All Data</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Panel (for viewing data) -->
+                <div class="admin-panel" id="adminPanel" style="display: none;">
+                    <div class="admin-header">
+                        <h3>Attendance Records</h3>
+                        <div class="admin-actions">
+                            <button class="admin-btn" onclick="exportToExcel()">
+                                <span>📊</span> Export Excel
+                            </button>
+                            <button class="admin-btn" onclick="refreshData()">
+                                <span>🔄</span> Refresh
+                            </button>
+                            <button class="admin-btn danger" onclick="clearAllData()">
+                                <span>🗑️</span> Clear All
+                            </button>
+                            <button class="admin-btn" onclick="hideAdminPanel()">
+                                <span>✕</span> Close
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="admin-stats">
+                        <div class="admin-stat">
+                            <span class="admin-stat-number" id="adminTotalRecords">0</span>
+                            <span class="admin-stat-label">Total Records</span>
+                        </div>
+                        <div class="admin-stat">
+                            <span class="admin-stat-number" id="adminUniqueStudents">0</span>
+                            <span class="admin-stat-label">Unique Students</span>
+                        </div>
+                        <div class="admin-stat">
+                            <span class="admin-stat-number" id="adminTodayRecords">0</span>
+                            <span class="admin-stat-label">Today's Records</span>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Grade</th>
+                                    <th>Meeting Type</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-text">Heritage H2GP</span>
+                </div>
+                <div class="footer-text">
+                    <p>© 2024 Heritage High School H2GP Racing Team. Secure attendance tracking system.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="student-attendance-script.js"></script>
+</body>
+</html>

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage H2GP - Hydrogen Racing Innovation</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="attendance-styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- SheetJS for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Background Music Player -->
+    <div class="music-player" id="musicPlayer">
+        <div class="music-controls">
+            <button class="music-btn" id="playPauseBtn" onclick="toggleMusic()">
+                <span class="music-icon">🎵</span>
+            </button>
+            <div class="music-info">
+                <span class="music-title">Central Cee</span>
+                <span class="music-status" id="musicStatus">Click to play</span>
+            </div>
+            <button class="music-btn volume-btn" onclick="toggleVolume()">
+                <span class="volume-icon" id="volumeIcon">🔊</span>
+            </button>
+        </div>
+        <div class="volume-slider" id="volumeSlider" style="display: none;">
+            <input type="range" id="volumeRange" min="0" max="100" value="30" onchange="setVolume(this.value)">
+        </div>
+    </div>
+
+    <!-- Hidden YouTube Player for Background Music -->
+        <div id="musicPlayerContainer" style="display: none;">
+            <iframe id="backgroundMusic" 
+                src="https://www.youtube.com/embed/u6sg2aVc3lg?enablejsapi=1&autoplay=0&loop=1&playlist=u6sg2aVc3lg&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1"
+                frameborder="0" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
+        </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">H2GP</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="hydrogen-fuel-cell.html" target="_blank" class="nav-link">Fuel Cell Guide</a>
+                <a href="#gallery" class="nav-link">Gallery</a>
+                <a href="#team" class="nav-link">Team</a>
+                <a href="#model" class="nav-link">3D Model</a>
+                <a href="#attendance" class="nav-link">Attendance</a>
+                <a href="#contact" class="nav-button">Contact</a>
+            </div>
+            <!-- Mobile Navigation Toggle -->
+            <button class="mobile-nav-toggle" id="mobileNavToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Menu -->
+    <div class="mobile-nav-menu" id="mobileNavMenu">
+        <a href="#home" class="mobile-nav-link">Home</a>
+        <a href="#about" class="mobile-nav-link">About</a>
+        <a href="#projects" class="mobile-nav-link">Projects</a>
+            <a href="hydrogen-fuel-cell.html" target="_blank" class="mobile-nav-link">Fuel Cell Guide</a>
+        <a href="#gallery" class="mobile-nav-link">Gallery</a>
+        <a href="#team" class="mobile-nav-link">Team</a>
+        <a href="#model" class="mobile-nav-link">3D Model</a>
+        <a href="#attendance" class="mobile-nav-link">Attendance</a>
+        <a href="#contact" class="mobile-nav-link">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-video-container">
+            <iframe id="hero-video-1" class="hero-video active" 
+                src="https://www.youtube.com/embed/tXvtkfPW9JM?autoplay=1&mute=1&loop=1&playlist=tXvtkfPW9JM&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1&enablejsapi=1"
+                frameborder="0" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
+            <iframe id="hero-video-2" class="hero-video" 
+                src="https://www.youtube.com/embed/5VqhJPGu7SQ?autoplay=1&mute=1&loop=1&playlist=5VqhJPGu7SQ&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1&enablejsapi=1"
+                frameborder="0" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
+            <div class="video-overlay"></div>
+            <div class="video-controls">
+                <button class="video-switch-btn" onclick="switchVideo()">Switch Video</button>
+            </div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="title-line">We</span>
+                <span class="title-line">Engineer</span>
+                <span class="title-line">Hydrogen-Powered</span>
+                <span class="title-line">RC Cars</span>
+            </h1>
+            <p class="hero-subtitle">Heritage High School STEAM Club - Shaping The Engineers of Tomorrow</p>
+        </div>
+        <div class="scroll-indicator">
+            <span class="scroll-text">Scroll to explore</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- H2GP Car Showcase Section -->
+    <section id="car-showcase" class="car-showcase">
+        <div class="container">
+            <div class="car-showcase-content">
+                <div class="car-image-container">
+                    <img src="assets/yellow-mclaren.jpg" alt="Heritage H2GP Car" class="car-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Beyond Racing</h2>
+                <h3 class="section-subtitle">Within Innovation</h3>
+                <p class="section-description">Heritage H2GP transforms hydrogen-powered RC car racing into comprehensive STEAM education, inspiring the next generation of sustainable energy innovators.</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Heritage H2GP is a distinguished STEAM education club that transforms hydrogen-powered RC car racing into a comprehensive learning experience. We inspire students to apply scientific and engineering principles through hands-on experimentation, competing at regional, state, and international levels.</p>
+                    <p>Our mission is to cultivate innovation and foster a passion for sustainable energy solutions among our peers, preparing the next generation of leaders for successful careers in STEM fields.</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">5+</span>
+                        <span class="stat-label">Years of Excellence</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Active Members</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">15+</span>
+                        <span class="stat-label">Competitions Won</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">What We Accomplish</h2>
+                <div class="photo-upload-section">
+                    <button class="upload-btn" onclick="openPhotoModal()">
+                        <span class="upload-icon">📷</span>
+                        Add Photos
+                    </button>
+                </div>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="image-container" data-category="cars">
+                            <div class="placeholder-image">🏎️</div>
+                            <div class="image-overlay">
+                                <button class="add-image-btn" onclick="openImageUpload('cars')">+ Add Image</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Hydrogen-Powered RC Cars</h3>
+                        <p>We design, build, and optimize high-performance hydrogen fuel cell vehicles for endurance racing competitions, integrating cutting-edge sustainable technology.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="image-container" data-category="racing">
+                            <div class="placeholder-image">🏆</div>
+                            <div class="image-overlay">
+                                <button class="add-image-btn" onclick="openImageUpload('racing')">+ Add Image</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Competitive Racing</h3>
+                        <p>Our team competes in regional, state, and international H2GP competitions, consistently achieving top rankings through innovative engineering solutions.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="image-container" data-category="education">
+                            <div class="placeholder-image">🔬</div>
+                            <div class="image-overlay">
+                                <button class="add-image-btn" onclick="openImageUpload('education')">+ Add Image</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>STEAM Education</h3>
+                        <p>We provide comprehensive hands-on learning experiences that integrate Science, Technology, Engineering, Arts, and Mathematics through practical application.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Featured Video Section -->
+            <div class="featured-video-section">
+                <div class="section-header">
+                    <h3 class="video-title">H2GP Racing in Action</h3>
+                    <p class="video-description">Watch our team compete at the H2 Grand Prix World Finals</p>
+                </div>
+                <div class="video-container">
+                    <iframe class="featured-video" 
+                        src="https://www.youtube.com/embed/tXvtkfPW9JM?controls=1&showinfo=1&rel=0&modestbranding=1"
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 3D Model Section -->
+    <section id="model" class="model-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Heritage H2GP Car</h2>
+                <p class="section-description">Explore our hydrogen-powered RC car in interactive 3D</p>
+                <div class="model-upload-section">
+                    <button class="upload-btn" onclick="openSTLModal()">
+                        <span class="upload-icon">🏎️</span>
+                        Upload STL Model
+                    </button>
+                </div>
+            </div>
+            <div class="model-viewer-wrapper">
+                <div id="modelViewer" class="model-viewer-main"></div>
+                <div class="model-controls-main">
+                    <button class="model-btn-main" onclick="resetView()">Reset View</button>
+                    <button class="model-btn-main" onclick="toggleWireframe()">Wireframe</button>
+                    <button class="model-btn-main" onclick="toggleExplode()">Explode View</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Journey in Pictures</h2>
+                <p class="section-description">Capturing moments of innovation, teamwork, and achievement</p>
+            </div>
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">All Photos</button>
+                <button class="filter-btn" data-filter="cars">RC Cars</button>
+                <button class="filter-btn" data-filter="racing">Racing</button>
+                <button class="filter-btn" data-filter="education">Education</button>
+                <button class="filter-btn" data-filter="team">Team</button>
+            </div>
+            <div class="gallery-grid" id="galleryGrid">
+                <div class="gallery-placeholder">
+                    <div class="placeholder-content">
+                        <span class="placeholder-icon">📸</span>
+                        <h3>No photos yet</h3>
+                        <p>Upload your first photo to get started!</p>
+                        <button class="upload-btn" onclick="openPhotoModal()">Upload Photo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="team">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Team</h2>
+                <p class="section-description">Dedicated students and faculty working together to advance sustainable transportation technology</p>
+            </div>
+            <div class="team-content">
+                <div class="team-info">
+                    <h3>Faculty Advisor</h3>
+                    <div class="advisor-card">
+                        <h4>Mr. Pennington</h4>
+                        <p>Room A112</p>
+                        <a href="mailto:penningtons@luhsd.net">penningtons@luhsd.net</a>
+                    </div>
+                </div>
+                <div class="team-description">
+                    <p>Our diverse team of passionate students collaborates to design, build, and race hydrogen-powered vehicles. Through this collaborative effort, we develop technical expertise, leadership skills, and a deep understanding of sustainable energy systems.</p>
+                    <p>Each member contributes unique skills in engineering, design, project management, and technical communication, creating a comprehensive learning environment that prepares students for future STEM careers.</p>
+                </div>
+            </div>
+            
+            <!-- Team Video Section -->
+            <div class="team-video-section">
+                <div class="section-header">
+                    <h3 class="video-title">Behind the Scenes</h3>
+                    <p class="video-description">See our team in action during competition preparation and racing events</p>
+                </div>
+                <div class="video-container">
+                    <iframe class="featured-video" 
+                        src="https://www.youtube.com/embed/5VqhJPGu7SQ?controls=1&showinfo=1&rel=0&modestbranding=1"
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Attendance Section -->
+    <section id="attendance" class="attendance-main">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Club Attendance System</h2>
+                <p class="section-description">Heritage High School STEAM Club - Track your meeting attendance</p>
+            </div>
+            
+            <!-- Student Attendance Form Card -->
+            <div class="attendance-card" id="attendanceCard">
+                <div class="card-header">
+                    <h2>Record Your Attendance</h2>
+                    <p>Fill in your information to mark your attendance</p>
+                </div>
+                
+                <form class="attendance-form" id="attendanceForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentId">Student ID *</label>
+                            <input type="text" id="studentId" name="studentId" required 
+                                   placeholder="Enter your student ID" maxlength="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentName">Full Name *</label>
+                            <input type="text" id="studentName" name="studentName" required 
+                                   placeholder="Enter your full name" maxlength="50">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="meetingDate">Meeting Date</label>
+                            <input type="date" id="meetingDate" name="meetingDate" readonly>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <span class="submit-icon">✓</span>
+                        Mark Attendance
+                    </button>
+                </form>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-card" id="successCard" style="display: none;">
+                <div class="success-content">
+                    <div class="success-icon">✅</div>
+                    <h3>Attendance Recorded Successfully!</h3>
+                    <p>Your attendance has been recorded for today's meeting.</p>
+                    
+                    <!-- Yellow McLaren P1 Reward Image -->
+                    <div class="reward-image-container">
+                        <img src="assets/actual-mclaren-p1.jpg" 
+                             alt="McLaren P1 Supercar" 
+                             class="reward-car-image" 
+                             id="rewardCarImage">
+                        <div class="reward-text">
+                            <h4>🏆 Thank you for attending!</h4>
+                            <p>Keep up the great work with the STEAM club!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="attendance-details" id="attendanceDetails"></div>
+                    <button class="back-btn" id="backBtn">Record Another Attendance</button>
+                </div>
+            </div>
+
+            <!-- Master Key Access -->
+            <div class="attendance-card" id="masterKeyCard">
+                <div class="card-header">
+                    <h2>Admin Access</h2>
+                    <p>Enter master key to view attendance records</p>
+                </div>
+                <div class="master-key-form">
+                    <div class="form-group">
+                        <label for="masterKey">Master Key</label>
+                        <input type="password" id="masterKey" placeholder="Enter master key" maxlength="20">
+                    </div>
+                    <button type="button" class="submit-btn" id="masterKeyBtn">
+                        <span class="submit-icon">🔑</span>
+                        Access Admin Panel
+                    </button>
+                </div>
+            </div>
+
+            <!-- Admin Section -->
+            <div class="admin-card" id="adminCard" style="display: none;">
+                <div class="card-header">
+                    <h2>Admin Controls</h2>
+                    <p>Manage attendance records and export data</p>
+                </div>
+                <div class="admin-controls">
+                    <button class="admin-btn primary" id="downloadExcelBtn">
+                        <span class="btn-icon">📊</span>
+                        Download Excel Report
+                    </button>
+                    <button class="admin-btn secondary" id="viewRecordsBtn">
+                        <span class="btn-icon">👥</span>
+                        View All Records
+                    </button>
+                    <button class="admin-btn secondary" id="clearDataBtn">
+                        <span class="btn-icon">🗑️</span>
+                        Clear All Data
+                    </button>
+                </div>
+                
+                <!-- Records Table -->
+                <div class="records-section" id="recordsSection" style="display: none;">
+                    <h3>Attendance Records</h3>
+                    <div class="records-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="totalRecords">0</span>
+                            <span class="stat-label">Total Records</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="uniqueStudents">0</span>
+                            <span class="stat-label">Unique Students</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="thisWeekRecords">0</span>
+                            <span class="stat-label">This Week</span>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="records-table" id="recordsTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recordsTableBody">
+                                <!-- Records will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Join Our Mission</h2>
+                <p class="section-description">Ready to engineer the future of sustainable transportation?</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <h3>Connect With Us</h3>
+                        <div class="social-links">
+                            <a href="https://www.instagram.com/heritage.h2gp/" class="social-link">
+                                <span class="social-icon">📷</span>
+                                <span>@heritage.h2gp</span>
+                            </a>
+                            <a href="https://discord.gg/yfaWm3K8" class="social-link">
+                                <span class="social-icon">💬</span>
+                                <span>Heritage Hydrogen Racing Discord</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <h3>Get Involved</h3>
+                        <p>Interested in joining our team? Contact Mr. Pennington to learn about membership opportunities and upcoming meetings.</p>
+                        <a href="mailto:penningtons@luhsd.net" class="cta-button">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-text">Heritage H2GP</span>
+                </div>
+                <div class="footer-text">
+                    <p>© 2024 Heritage High School H2GP Racing Team. Engineering sustainable solutions for tomorrow.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Photo Upload Modal -->
+    <div id="photoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Upload Photo</h2>
+                <span class="close" onclick="closePhotoModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <div class="upload-icon-large">📷</div>
+                        <h3>Drag & Drop your photo here</h3>
+                        <p>or click to browse files</p>
+                        <input type="file" id="photoInput" accept="image/*" multiple>
+                        <button class="browse-btn" onclick="document.getElementById('photoInput').click()">
+                            Browse Files
+                        </button>
+                    </div>
+                </div>
+                <div class="photo-details" id="photoDetails" style="display: none;">
+                    <div class="preview-container">
+                        <img id="photoPreview" src="" alt="Preview">
+                    </div>
+                    <div class="details-form">
+                        <div class="form-group">
+                            <label for="photoTitle">Photo Title</label>
+                            <input type="text" id="photoTitle" placeholder="Enter photo title">
+                        </div>
+                        <div class="form-group">
+                            <label for="photoDescription">Description</label>
+                            <textarea id="photoDescription" placeholder="Describe this photo..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="photoCategory">Category</label>
+                            <select id="photoCategory">
+                                <option value="cars">RC Cars</option>
+                                <option value="racing">Racing</option>
+                                <option value="education">Education</option>
+                                <option value="team">Team</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button class="cancel-btn" onclick="resetUploadForm()">Cancel</button>
+                            <button class="upload-submit-btn" onclick="uploadPhoto()">Upload Photo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Viewer Modal -->
+    <div id="imageViewerModal" class="modal">
+        <div class="image-viewer-content">
+            <span class="close" onclick="closeImageViewer()">&times;</span>
+            <div class="image-viewer-container">
+                <button class="nav-btn prev-btn" onclick="previousImage()">‹</button>
+                <div class="image-display">
+                    <img id="viewerImage" src="" alt="">
+                    <div class="image-info">
+                        <h3 id="viewerTitle"></h3>
+                        <p id="viewerDescription"></p>
+                        <span id="viewerCategory" class="category-tag"></span>
+                    </div>
+                </div>
+                <button class="nav-btn next-btn" onclick="nextImage()">›</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STL Upload Modal -->
+    <div id="stlModal" class="stl-modal">
+        <div class="stl-modal-content">
+            <div class="modal-header">
+                <h2>Upload 3D Model</h2>
+                <span class="close" onclick="closeSTLModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <!-- Permanent Models Section (will be populated by JavaScript) -->
+                <div id="permanentModelsSection" class="permanent-models-section">
+                    <!-- Permanent models will be inserted here by JavaScript -->
+                </div>
+                
+                <!-- Upload Section -->
+                <div class="stl-upload-section">
+                    <div class="stl-upload-area" id="stlUploadArea">
+                        <div class="stl-upload-content">
+                            <div class="stl-upload-icon">🏎️</div>
+                            <h4>Drag & Drop your STL file here</h4>
+                            <p>or click to browse files</p>
+                            <input type="file" id="stlInput" accept=".stl">
+                        </div>
+                    </div>
+                    <div class="stl-details" id="stlDetails" style="display: none;">
+                        <div class="stl-file-info">
+                            <span class="stl-file-name" id="stlFileName">model.stl</span>
+                            <span class="stl-file-size" id="stlFileSize">0 MB</span>
+                        </div>
+                        <div class="stl-form">
+                            <div class="stl-form-group">
+                                <label for="modelTitle">Model Name</label>
+                                <input type="text" id="modelTitle" placeholder="Enter model name" value="Heritage H2GP Car">
+                            </div>
+                            <div class="stl-form-group">
+                                <label for="modelDescription">Description</label>
+                                <textarea id="modelDescription" placeholder="Describe this model...">Our hydrogen-powered RC car designed for H2GP competition</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stl-modal-actions">
+                        <button class="stl-cancel-btn" onclick="resetSTLForm()">Cancel</button>
+                        <button class="stl-load-btn" onclick="loadSTLModel()">Load Model</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="attendance-script.js"></script>
+</body>
+</html>

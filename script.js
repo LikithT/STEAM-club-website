@@ -1471,7 +1471,7 @@ async function loadPermanentModels() {
             return;
         }
         
-        const response = await fetch('/assets/models/models-config.json');
+        const response = await fetch('/models-config.json');
         const config = await response.json();
         permanentModels = config.models;
         
@@ -1518,7 +1518,7 @@ function loadPermanentModel(modelId) {
         return;
     }
     
-    const modelUrl = `/assets/models/${model.filename}`;
+    const modelUrl = `/${model.filename}`;
     
     showNotification(`Loading ${model.name}...`, 'info');
     
@@ -1633,33 +1633,157 @@ function loadHeritageH2GPModel() {
             return;
         }
         
-        // Try to load the Heritage H2GP 2024 STL model
-        const modelUrl = '/assets/models/heritage-h2gp-2024.stl';
         const modelTitle = 'Heritage H2GP Car 2024';
         const modelDescription = 'Our latest hydrogen-powered RC car design for the 2024 competition season';
         
         console.log('Auto-loading Heritage H2GP model...');
         showNotification('Loading Heritage H2GP Car 2024...', 'info');
         
-        // Load the Heritage H2GP STL model
-        loadSTLFromURL(modelUrl, modelTitle, modelDescription)
-            .then(() => {
-                console.log('Heritage H2GP model loaded successfully');
-                // Save the model info for persistence
-                saveCurrentSTLModel({
-                    url: modelUrl,
-                    title: modelTitle,
-                    description: modelDescription,
-                    loadedFrom: 'permanent',
-                    modelId: 'heritage-h2gp-2024'
-                });
-            })
-            .catch(error => {
-                console.error('Error loading Heritage H2GP model:', error);
-                console.log('Heritage H2GP STL file not found, keeping default procedural model');
-                showNotification('Heritage H2GP STL model not found, using default model', 'info');
-            });
+        // Try to load compressed version first, then fallback to original
+        loadHeritageModelWithCompression(modelTitle, modelDescription);
     }, 2000); // Wait 2 seconds for scene initialization
+}
+
+// Load Heritage H2GP model with compression support
+async function loadHeritageModelWithCompression(title, description) {
+    const compressedUrl = '/heritage-h2gp-2024.stl.gz';
+    const originalUrl = '/heritage-h2gp-2024.stl';
+    
+    try {
+        // First try to load the compressed version
+        console.log('Attempting to load compressed STL model...');
+        await loadCompressedSTLFromURL(compressedUrl, title, description);
+        
+        console.log('Heritage H2GP compressed model loaded successfully');
+        showNotification('Heritage H2GP Car 2024 loaded (compressed)!', 'success');
+        
+        // Save the model info for persistence
+        saveCurrentSTLModel({
+            url: compressedUrl,
+            title: title,
+            description: description,
+            loadedFrom: 'permanent',
+            modelId: 'heritage-h2gp-2024-compressed',
+            compressed: true
+        });
+        
+    } catch (compressedError) {
+        console.log('Compressed model not available, trying original:', compressedError.message);
+        
+        try {
+            // Fallback to original uncompressed version
+            console.log('Attempting to load original STL model...');
+            await loadSTLFromURL(originalUrl, title, description);
+            
+            console.log('Heritage H2GP original model loaded successfully');
+            showNotification('Heritage H2GP Car 2024 loaded!', 'success');
+            
+            // Save the model info for persistence
+            saveCurrentSTLModel({
+                url: originalUrl,
+                title: title,
+                description: description,
+                loadedFrom: 'permanent',
+                modelId: 'heritage-h2gp-2024'
+            });
+            
+        } catch (originalError) {
+            console.error('Error loading both compressed and original Heritage H2GP model:', originalError);
+            console.log('Heritage H2GP STL file not found, keeping default procedural model');
+            showNotification('Heritage H2GP STL model not found, using default model', 'info');
+        }
+    }
+}
+
+// Load compressed STL from URL
+async function loadCompressedSTLFromURL(url, title, description) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Check if pako library is available
+            if (typeof pako === 'undefined') {
+                throw new Error('Pako compression library not loaded');
+            }
+            
+            console.log('Fetching compressed STL file:', url);
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const compressedData = await response.arrayBuffer();
+            console.log('Compressed data size:', (compressedData.byteLength / (1024 * 1024)).toFixed(2) + ' MB');
+            
+            // Decompress the data
+            console.log('Decompressing STL data...');
+            const decompressed = pako.inflate(new Uint8Array(compressedData));
+            console.log('Decompressed data size:', (decompressed.byteLength / (1024 * 1024)).toFixed(2) + ' MB');
+            
+            // Load with STLLoader
+            const loader = new THREE.STLLoader();
+            const geometry = loader.parse(decompressed.buffer);
+            
+            // Clear existing model
+            if (carModel) {
+                scene.remove(carModel);
+                originalPositions = [];
+            }
+            
+            // Create material for the STL model
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x2af0ff,
+                shininess: 100,
+                transparent: true,
+                opacity: 0.9
+            });
+            
+            // Create mesh
+            carModel = new THREE.Mesh(geometry, material);
+            carModel.castShadow = true;
+            carModel.receiveShadow = true;
+            
+            // Center and scale the model
+            const box = new THREE.Box3().setFromObject(carModel);
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+            
+            // Center the model horizontally and position on road
+            carModel.position.sub(center);
+            
+            // Scale the model to fit nicely in the viewer
+            const maxDimension = Math.max(size.x, size.y, size.z);
+            const scale = 3 / maxDimension; // Scale to fit in a 3-unit space
+            carModel.scale.setScalar(scale);
+            
+            // Position the model in the center of the road
+            carModel.position.set(0, 0.5, 0);
+            
+            // Store original position for explode effect
+            originalPositions = [{
+                object: carModel,
+                position: carModel.position.clone()
+            }];
+            
+            // Add to scene
+            scene.add(carModel);
+            
+            // Update flags
+            isSTLModel = true;
+            isWireframe = false;
+            isExploded = false;
+            
+            // Reset camera position for better view
+            camera.position.set(5, 3, 5);
+            controls.reset();
+            
+            console.log('Compressed STL model loaded successfully:', title);
+            resolve();
+            
+        } catch (error) {
+            console.error('Error loading compressed STL:', error);
+            reject(error);
+        }
+    });
 }
 
 // STL Model Persistence Functions

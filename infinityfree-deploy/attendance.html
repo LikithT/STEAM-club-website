@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage H2GP - Attendance System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="attendance-styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- SheetJS for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">H2GP</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#about" class="nav-link">About</a>
+                <a href="index.html#projects" class="nav-link">Projects</a>
+                <a href="hydrogen-fuel-cell.html" target="_blank" class="nav-link">Fuel Cell Guide</a>
+                <a href="index.html#gallery" class="nav-link">Gallery</a>
+                <a href="index.html#team" class="nav-link">Team</a>
+                <a href="index.html#model" class="nav-link">3D Model</a>
+                <a href="attendance.html" class="nav-link active">Attendance</a>
+                <a href="index.html#contact" class="nav-button">Contact</a>
+            </div>
+            <!-- Mobile Navigation Toggle -->
+            <button class="mobile-nav-toggle" id="mobileNavToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Menu -->
+    <div class="mobile-nav-menu" id="mobileNavMenu">
+        <a href="index.html" class="mobile-nav-link">Home</a>
+        <a href="index.html#about" class="mobile-nav-link">About</a>
+        <a href="index.html#projects" class="mobile-nav-link">Projects</a>
+        <a href="hydrogen-fuel-cell.html" target="_blank" class="mobile-nav-link">Fuel Cell Guide</a>
+        <a href="index.html#gallery" class="mobile-nav-link">Gallery</a>
+        <a href="index.html#team" class="mobile-nav-link">Team</a>
+        <a href="index.html#model" class="mobile-nav-link">3D Model</a>
+        <a href="attendance.html" class="mobile-nav-link active">Attendance</a>
+        <a href="index.html#contact" class="mobile-nav-link">Contact</a>
+    </div>
+
+    <!-- Attendance Hero Section -->
+    <section class="attendance-hero">
+        <div class="container">
+            <div class="attendance-hero-content">
+                <h1 class="attendance-title">Club Attendance System</h1>
+                <p class="attendance-subtitle">Heritage High School STEAM Club - Track your meeting attendance</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Attendance Main Section -->
+    <section class="attendance-main">
+        <div class="container">
+            <!-- Student Attendance Form Card -->
+            <div class="attendance-card" id="attendanceCard">
+                <div class="card-header">
+                    <h2>Record Your Attendance</h2>
+                    <p>Fill in your information to mark your attendance</p>
+                </div>
+                
+                <form class="attendance-form" id="attendanceForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentId">Student ID *</label>
+                            <input type="text" id="studentId" name="studentId" required 
+                                   placeholder="Enter your student ID" maxlength="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentName">Full Name *</label>
+                            <input type="text" id="studentName" name="studentName" required 
+                                   placeholder="Enter your full name" maxlength="50">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="meetingDate">Meeting Date</label>
+                            <input type="date" id="meetingDate" name="meetingDate" readonly>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <span class="submit-icon">✓</span>
+                        Mark Attendance
+                    </button>
+                </form>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-card" id="successCard" style="display: none;">
+                <div class="success-content">
+                    <div class="success-icon">✅</div>
+                    <h3>Attendance Recorded Successfully!</h3>
+                    <p>Your attendance has been recorded for today's meeting.</p>
+                    
+                    <!-- Yellow McLaren P1 Reward Image -->
+                    <div class="reward-image-container">
+                        <img src="assets/actual-mclaren-p1.jpg" 
+                             alt="McLaren P1 Supercar" 
+                             class="reward-car-image" 
+                             id="rewardCarImage">
+                        <div class="reward-text">
+                            <h4>🏆 Thank you for attending!</h4>
+                            <p>Keep up the great work with the STEAM club!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="attendance-details" id="attendanceDetails"></div>
+                    <button class="back-btn" id="backBtn">Record Another Attendance</button>
+                </div>
+            </div>
+
+            <!-- Master Key Access -->
+            <div class="attendance-card" id="masterKeyCard">
+                <div class="card-header">
+                    <h2>Admin Access</h2>
+                    <p>Enter master key to view attendance records</p>
+                </div>
+                <div class="master-key-form">
+                    <div class="form-group">
+                        <label for="masterKey">Master Key</label>
+                        <input type="password" id="masterKey" placeholder="Enter master key" maxlength="20">
+                    </div>
+                    <button type="button" class="submit-btn" id="masterKeyBtn">
+                        <span class="submit-icon">🔑</span>
+                        Access Admin Panel
+                    </button>
+                </div>
+            </div>
+
+            <!-- Admin Section -->
+            <div class="admin-card" id="adminCard" style="display: none;">
+                <div class="card-header">
+                    <h2>Admin Controls</h2>
+                    <p>Manage attendance records and export data</p>
+                </div>
+                <div class="admin-controls">
+                    <button class="admin-btn primary" id="downloadExcelBtn">
+                        <span class="btn-icon">📊</span>
+                        Download Excel Report
+                    </button>
+                    <button class="admin-btn secondary" id="viewRecordsBtn">
+                        <span class="btn-icon">👥</span>
+                        View All Records
+                    </button>
+                    <button class="admin-btn secondary" id="clearDataBtn">
+                        <span class="btn-icon">🗑️</span>
+                        Clear All Data
+                    </button>
+                </div>
+                
+                <!-- Records Table -->
+                <div class="records-section" id="recordsSection" style="display: none;">
+                    <h3>Attendance Records</h3>
+                    <div class="records-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="totalRecords">0</span>
+                            <span class="stat-label">Total Records</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="uniqueStudents">0</span>
+                            <span class="stat-label">Unique Students</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="thisWeekRecords">0</span>
+                            <span class="stat-label">This Week</span>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="records-table" id="recordsTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recordsTableBody">
+                                <!-- Records will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-text">Heritage H2GP</span>
+                </div>
+                <div class="footer-text">
+                    <p>© 2024 Heritage High School H2GP Racing Team. Engineering sustainable solutions for tomorrow.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="attendance-script.js"></script>
+</body>
+</html>
