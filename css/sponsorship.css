@@ -873,50 +873,371 @@ body {
 
 /* Print Styles */
 @media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
     body {
-        background: white;
-        font-size: 12pt;
-        line-height: 1.4;
-    }
-    
-    .newspaper-header,
-    .newspaper-nav,
-    .cta-button,
-    .newspaper-footer {
-        display: none;
-    }
-    
-    .newspaper-content {
-        box-shadow: none;
-        border: none;
-        max-width: none;
+        background: white !important;
+        font-size: 11pt;
+        line-height: 1.3;
         margin: 0;
         padding: 0;
     }
     
+    /* Keep simplified header for print */
+    .newspaper-header {
+        background: white !important;
+        border-bottom: 2pt solid black !important;
+        border-top: none !important;
+        box-shadow: none !important;
+        padding: 12pt 0 8pt !important;
+        margin-bottom: 12pt !important;
+        page-break-inside: avoid;
+    }
+    
+    .header-top {
+        border-bottom: 1pt solid #666 !important;
+        padding-bottom: 6pt !important;
+        margin-bottom: 8pt !important;
+        font-size: 9pt !important;
+    }
+    
+    .masthead {
+        padding: 0 12pt !important;
+    }
+    
+    .newspaper-title {
+        font-size: 28pt !important;
+        letter-spacing: 4pt !important;
+        color: black !important;
+        text-shadow: none !important;
+        background: none !important;
+        -webkit-background-clip: initial !important;
+        -webkit-text-fill-color: initial !important;
+        background-clip: initial !important;
+        filter: none !important;
+        margin-bottom: 6pt !important;
+    }
+    
+    .subtitle {
+        font-size: 11pt !important;
+        letter-spacing: 1pt !important;
+        color: #333 !important;
+    }
+    
+    .header-line {
+        background: black !important;
+        height: 1pt !important;
+        margin-top: 8pt !important;
+    }
+    
+    /* Hide navigation, CTA buttons, and footer for print */
+    .newspaper-nav,
+    .cta-button,
+    .newspaper-footer {
+        display: none !important;
+    }
+    
+    .newspaper-content {
+        box-shadow: none !important;
+        border: none !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 12pt !important;
+        background: white !important;
+    }
+    
+    .hero-article {
+        padding: 12pt !important;
+        border-bottom: 2pt solid black !important;
+        margin-bottom: 12pt !important;
+        background: white !important;
+        page-break-inside: avoid;
+    }
+    
+    .hero-article::before {
+        display: none !important;
+    }
+    
     .headline {
-        font-size: 24pt;
-        margin-bottom: 12pt;
+        font-size: 20pt !important;
+        margin-bottom: 8pt !important;
+        color: black !important;
+        text-shadow: none !important;
+        page-break-after: avoid;
     }
     
     .article-title {
-        font-size: 16pt;
-        margin-bottom: 8pt;
+        font-size: 14pt !important;
+        margin-bottom: 6pt !important;
+        color: black !important;
+        page-break-after: avoid;
+    }
+    
+    .byline {
+        border-top: 1pt solid #666 !important;
+        border-bottom: 1pt solid #666 !important;
+        padding: 6pt 0 !important;
+        margin-bottom: 12pt !important;
+        font-size: 9pt !important;
+    }
+    
+    .lead-paragraph {
+        font-size: 12pt !important;
+        margin-bottom: 12pt !important;
+        border-left: 2pt solid black !important;
+        padding-left: 12pt !important;
+        background: #f9f9f9 !important;
+        padding-top: 6pt !important;
+        padding-bottom: 6pt !important;
+    }
+    
+    .dropcap {
+        font-size: 32pt !important;
+        color: black !important;
+        text-shadow: none !important;
+    }
+    
+    .article-body p {
+        font-size: 10pt !important;
+        margin-bottom: 8pt !important;
+        text-indent: 12pt !important;
+    }
+    
+    .newspaper-columns {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 16pt !important;
+        margin: 12pt 0 !important;
+        padding: 0 !important;
+    }
+    
+    .article {
+        margin-bottom: 16pt !important;
+        padding-bottom: 12pt !important;
+        border-bottom: 1pt solid #ccc !important;
+        page-break-inside: avoid;
+    }
+    
+    .category-tag {
+        font-size: 8pt !important;
+        padding: 2pt 6pt !important;
+        border: 1pt solid black !important;
+        margin-bottom: 6pt !important;
+        background: white !important;
+        color: black !important;
+    }
+    
+    .stats-box {
+        background: #f5f5f5 !important;
+        border: 2pt solid black !important;
+        padding: 12pt !important;
+        margin: 12pt 0 !important;
+        page-break-inside: avoid;
+    }
+    
+    .stat-number {
+        font-size: 18pt !important;
+        color: black !important;
+    }
+    
+    .stat-label {
+        font-size: 8pt !important;
+        color: #333 !important;
     }
     
     .sponsorship-tier {
         page-break-inside: avoid;
-        margin-bottom: 12pt;
+        margin-bottom: 12pt !important;
+        border: 2pt solid black !important;
+        padding: 12pt !important;
+        background: white !important;
+    }
+    
+    .sponsorship-tier::before {
+        height: 2pt !important;
+        background: black !important;
+    }
+    
+    .tier-header {
+        border-bottom: 1pt solid black !important;
+        margin-bottom: 8pt !important;
+        padding-bottom: 6pt !important;
+    }
+    
+    .tier-name {
+        font-size: 12pt !important;
+        color: black !important;
+    }
+    
+    .tier-price {
+        font-size: 11pt !important;
+        color: black !important;
+        background: white !important;
+        border: 2pt solid black !important;
+        padding: 4pt 8pt !important;
+    }
+    
+    .tier-benefits li {
+        font-size: 9pt !important;
+        margin-bottom: 4pt !important;
+    }
+    
+    .tier-benefits li::before {
+        color: black !important;
+    }
+    
+    .full-width-article {
+        grid-column: 1 / -1 !important;
+        margin: 16pt 0 !important;
+        padding: 12pt !important;
+        background: #f9f9f9 !important;
+        border-top: 2pt solid black !important;
+        border-bottom: 2pt solid black !important;
+        page-break-inside: avoid;
     }
     
     .benefits-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 12pt;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12pt !important;
     }
     
     .benefit-card {
         page-break-inside: avoid;
-        box-shadow: none;
-        border: 1pt solid #1a1a1a;
+        box-shadow: none !important;
+        border: 1pt solid black !important;
+        background: white !important;
+        padding: 12pt !important;
+    }
+    
+    .benefit-card h3 {
+        font-size: 11pt !important;
+        color: black !important;
+        margin-bottom: 6pt !important;
+    }
+    
+    .benefit-card p {
+        font-size: 9pt !important;
+    }
+    
+    .benefit-icon {
+        font-size: 18pt !important;
+        margin-bottom: 6pt !important;
+    }
+    
+    .contact-section {
+        background: #f9f9f9 !important;
+    }
+    
+    .contact-info {
+        grid-template-columns: 2fr 1fr !important;
+        gap: 16pt !important;
+    }
+    
+    .contact-details h3 {
+        font-size: 14pt !important;
+        color: black !important;
+        margin-bottom: 8pt !important;
+    }
+    
+    .contact-lead {
+        font-size: 10pt !important;
+        margin-bottom: 12pt !important;
+    }
+    
+    .contact-methods {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12pt !important;
+        margin-bottom: 12pt !important;
+    }
+    
+    .contact-method {
+        background: white !important;
+        border: 1pt solid black !important;
+        padding: 8pt !important;
+        font-size: 9pt !important;
+    }
+    
+    .contact-method a {
+        color: black !important;
+        text-decoration: underline !important;
+    }
+    
+    .sponsor-testimonial {
+        background: white !important;
+        border: 2pt solid black !important;
+        padding: 12pt !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+    }
+    
+    .sponsor-testimonial blockquote {
+        font-size: 10pt !important;
+        color: black !important;
+        margin-bottom: 6pt !important;
+    }
+    
+    .sponsor-testimonial blockquote::before,
+    .sponsor-testimonial blockquote::after {
+        color: black !important;
+        font-size: 16pt !important;
+    }
+    
+    .sponsor-testimonial cite {
+        font-size: 8pt !important;
+        color: #333 !important;
+    }
+    
+    .achievement-item {
+        background: #f5f5f5 !important;
+        border-left: 2pt solid black !important;
+        padding: 8pt !important;
+        margin-bottom: 12pt !important;
+    }
+    
+    .achievement-item h4 {
+        font-size: 11pt !important;
+        color: black !important;
+        margin-bottom: 4pt !important;
+    }
+    
+    .achievement-item p {
+        font-size: 9pt !important;
+    }
+    
+    .program-features {
+        margin: 8pt 0 !important;
+        padding-left: 12pt !important;
+    }
+    
+    .program-features li {
+        font-size: 9pt !important;
+        margin-bottom: 4pt !important;
+    }
+    
+    /* Force page breaks for better organization */
+    .hero-article {
+        page-break-after: avoid;
+    }
+    
+    .newspaper-columns {
+        page-break-before: avoid;
+    }
+    
+    .full-width-article:first-of-type {
+        page-break-before: auto;
+    }
+    
+    /* Ensure no orphaned content */
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+    }
+    
+    p, li {
+        orphans: 2;
+        widows: 2;
     }
 }
