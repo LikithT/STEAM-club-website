@@ -1,0 +1,922 @@
+/* Newspaper-Style Sponsorship Page CSS */
+
+/* Import Traditional Newspaper Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Crimson+Text:wght@300;400;600&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Old+Standard+TT:wght@400;700&display=swap');
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Crimson Text', Georgia, 'Times New Roman', serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #2c2c2c;
+    background: #f5f1e8;
+    background-image: 
+        linear-gradient(45deg, rgba(139, 69, 19, 0.03) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(139, 69, 19, 0.03) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(139, 69, 19, 0.03) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(139, 69, 19, 0.03) 75%),
+        radial-gradient(circle at 25% 25%, rgba(139, 69, 19, 0.02) 2px, transparent 2px),
+        radial-gradient(circle at 75% 75%, rgba(160, 82, 45, 0.02) 1px, transparent 1px);
+    background-size: 30px 30px, 30px 30px, 30px 30px, 30px 30px, 20px 20px, 15px 15px;
+    background-position: 0 0, 0 15px, 15px -15px, -15px 0px, 0 0, 10px 10px;
+}
+
+/* Newspaper Header */
+.newspaper-header {
+    background: #fefcf7;
+    background-image: 
+        linear-gradient(90deg, rgba(139, 69, 19, 0.05) 1px, transparent 1px),
+        linear-gradient(rgba(139, 69, 19, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    border-bottom: 4px double #2c2c2c;
+    border-top: 2px solid #8b4513;
+    padding: 1.5rem 0 1rem;
+    margin-bottom: 0;
+    box-shadow: 0 3px 8px rgba(139, 69, 19, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    font-family: 'Old Standard TT', serif;
+    font-size: 0.875rem;
+    color: #666;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.weather, .edition {
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+.masthead {
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.newspaper-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 4.5rem;
+    font-weight: 900;
+    color: #2c1810;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+    margin-bottom: 0.5rem;
+    text-shadow: 3px 3px 0px rgba(139, 69, 19, 0.3), 1px 1px 0px rgba(160, 82, 45, 0.2);
+    background: linear-gradient(145deg, #2c1810, #8b4513, #2c1810);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: sepia(20%);
+}
+
+.subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #666;
+    font-style: italic;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.header-line {
+    height: 2px;
+    background: #1a1a1a;
+    margin-top: 1rem;
+}
+
+/* Navigation */
+.newspaper-nav {
+    background: #2c1810;
+    background-image: 
+        linear-gradient(90deg, rgba(139, 69, 19, 0.1) 1px, transparent 1px),
+        linear-gradient(rgba(139, 69, 19, 0.1) 1px, transparent 1px);
+    background-size: 15px 15px;
+    padding: 0.75rem 0;
+    text-align: center;
+    border-bottom: 3px solid #8b4513;
+    border-top: 1px solid #d4af8c;
+    box-shadow: inset 0 2px 4px rgba(139, 69, 19, 0.3);
+}
+
+.nav-item {
+    font-family: 'Old Standard TT', serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #f5f1e8;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 2rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.nav-item:hover {
+    background: #f5f1e8;
+    color: #2c1810;
+    border-color: #d4af8c;
+    text-shadow: none;
+}
+
+/* Main Content */
+.newspaper-content {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    background: #fefcf7;
+    background-image: 
+        linear-gradient(90deg, rgba(139, 69, 19, 0.02) 1px, transparent 1px),
+        linear-gradient(rgba(139, 69, 19, 0.02) 1px, transparent 1px);
+    background-size: 25px 25px;
+    box-shadow: 
+        0 0 25px rgba(139, 69, 19, 0.15),
+        inset 0 0 50px rgba(160, 82, 45, 0.05);
+    border: 2px solid #d4af8c;
+    border-radius: 2px;
+}
+
+/* Hero Article */
+.hero-article {
+    padding: 3rem 2rem;
+    border-bottom: 3px double #2c1810;
+    margin-bottom: 2rem;
+    background: rgba(139, 69, 19, 0.02);
+    position: relative;
+}
+
+.hero-article::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.03) 1px, transparent 1px),
+        radial-gradient(circle at 80% 20%, rgba(160, 82, 45, 0.02) 1px, transparent 1px);
+    background-size: 30px 30px, 25px 25px;
+    pointer-events: none;
+}
+
+.article-header {
+    margin-bottom: 2rem;
+}
+
+.category-tag {
+    font-family: 'Old Standard TT', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.25rem 0.75rem;
+    border: 2px solid;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.category-tag.breaking {
+    color: #d32f2f;
+    border-color: #d32f2f;
+    background: rgba(211, 47, 47, 0.1);
+}
+
+.category-tag.education {
+    color: #1976d2;
+    border-color: #1976d2;
+    background: rgba(25, 118, 210, 0.1);
+}
+
+.category-tag.achievement {
+    color: #388e3c;
+    border-color: #388e3c;
+    background: rgba(56, 142, 60, 0.1);
+}
+
+.category-tag.opportunity {
+    color: #f57c00;
+    border-color: #f57c00;
+    background: rgba(245, 124, 0, 0.1);
+}
+
+.category-tag.impact {
+    color: #7b1fa2;
+    border-color: #7b1fa2;
+    background: rgba(123, 31, 162, 0.1);
+}
+
+.category-tag.contact {
+    color: #c2185b;
+    border-color: #c2185b;
+    background: rgba(194, 24, 91, 0.1);
+}
+
+.headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #2c1810;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-shadow: 2px 2px 0px rgba(139, 69, 19, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.byline {
+    text-align: center;
+    font-family: 'Old Standard TT', serif;
+    font-size: 0.875rem;
+    color: #666;
+    margin-bottom: 2rem;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 0.75rem 0;
+}
+
+.author {
+    font-weight: 700;
+    margin-right: 2rem;
+}
+
+.date {
+    font-style: italic;
+}
+
+/* Article Content */
+.article-content {
+    line-height: 1.8;
+}
+
+.lead-paragraph {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    text-align: justify;
+    border-left: 4px solid #1a1a1a;
+    padding-left: 2rem;
+    background: rgba(26, 26, 26, 0.02);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.dropcap {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 0.8;
+    float: left;
+    margin: 0.1rem 0.5rem 0.1rem 0;
+    color: #d32f2f;
+    text-shadow: 2px 2px 0px rgba(211, 47, 47, 0.2);
+}
+
+.article-body p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: justify;
+    text-indent: 2rem;
+    hyphens: auto;
+}
+
+/* Two Column Layout */
+.newspaper-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin: 2rem 0;
+    padding: 0 2rem;
+}
+
+.left-column, .right-column {
+    padding: 0;
+}
+
+/* Articles */
+.article {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.article:last-child {
+    border-bottom: none;
+}
+
+.article-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.lead {
+    font-size: 1.125rem;
+    font-weight: 500;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    color: #333;
+    border-left: 3px solid #1a1a1a;
+    padding-left: 1rem;
+}
+
+/* Statistics Box */
+.stats-box {
+    background: rgba(26, 26, 26, 0.05);
+    border: 2px solid #1a1a1a;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #d32f2f;
+    display: block;
+    line-height: 1;
+}
+
+.stat-label {
+    font-family: 'Old Standard TT', serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #666;
+}
+
+/* Program Features */
+.program-features {
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+}
+
+.program-features li {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Achievement Items */
+.achievement-item {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(56, 142, 60, 0.05);
+    border-left: 4px solid #388e3c;
+}
+
+.achievement-item h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #388e3c;
+    margin-bottom: 0.75rem;
+}
+
+.achievement-item p {
+    font-size: 1rem;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+/* Sponsorship Tiers */
+.sponsorship-tier {
+    margin-bottom: 2rem;
+    border: 2px solid;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.sponsorship-tier::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: currentColor;
+}
+
+.sponsorship-tier.platinum {
+    border-color: #424242;
+    background: linear-gradient(135deg, rgba(66, 66, 66, 0.05), rgba(117, 117, 117, 0.05));
+}
+
+.sponsorship-tier.gold {
+    border-color: #ff8f00;
+    background: linear-gradient(135deg, rgba(255, 143, 0, 0.05), rgba(255, 193, 7, 0.05));
+}
+
+.sponsorship-tier.silver {
+    border-color: #757575;
+    background: linear-gradient(135deg, rgba(117, 117, 117, 0.05), rgba(189, 189, 189, 0.05));
+}
+
+.sponsorship-tier.bronze {
+    border-color: #8d6e63;
+    background: linear-gradient(135deg, rgba(141, 110, 99, 0.05), rgba(161, 136, 127, 0.05));
+}
+
+.sponsorship-tier.friend {
+    border-color: #1976d2;
+    background: linear-gradient(135deg, rgba(25, 118, 210, 0.05), rgba(33, 150, 243, 0.05));
+}
+
+.sponsorship-tier.diamond {
+    border-color: #e91e63;
+    background: linear-gradient(135deg, rgba(233, 30, 99, 0.05), rgba(240, 98, 146, 0.05));
+}
+
+.tier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid currentColor;
+}
+
+.tier-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: inherit;
+    margin: 0;
+}
+
+.tier-price {
+    font-family: 'Old Standard TT', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem 1rem;
+    border: 2px solid currentColor;
+}
+
+.tier-benefits h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+}
+
+.tier-benefits ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tier-benefits li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.tier-benefits li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #388e3c;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* Full Width Articles */
+.full-width-article {
+    grid-column: 1 / -1;
+    margin: 3rem 0;
+    padding: 3rem 2rem;
+    background: rgba(26, 26, 26, 0.02);
+    border-top: 3px double #1a1a1a;
+    border-bottom: 3px double #1a1a1a;
+}
+
+/* Benefits Grid */
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.benefit-card {
+    background: #ffffff;
+    border: 2px solid #1a1a1a;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 5px 5px 0px rgba(26, 26, 26, 0.1);
+    transition: all 0.3s ease;
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 8px 0px rgba(26, 26, 26, 0.15);
+}
+
+.benefit-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.benefit-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+}
+
+.benefit-card p {
+    font-size: 1rem;
+    line-height: 1.6;
+    text-align: left;
+}
+
+/* Contact Section */
+.contact-section {
+    background: rgba(194, 24, 91, 0.05);
+}
+
+.contact-info {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.contact-details h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+}
+
+.contact-lead {
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    text-align: justify;
+}
+
+.contact-methods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.contact-method {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ddd;
+    padding: 1.5rem;
+    line-height: 1.6;
+}
+
+.contact-method a {
+    color: #c2185b;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.contact-method a:hover {
+    text-decoration: underline;
+}
+
+.cta-button-container {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.cta-button {
+    font-family: 'Old Standard TT', serif;
+    font-size: 1.125rem;
+    font-weight: 700;
+    background: #c2185b;
+    color: #ffffff;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 1rem 2rem;
+    border: 3px solid #c2185b;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 3px 3px 0px rgba(194, 24, 91, 0.3);
+}
+
+.cta-button:hover {
+    background: #ffffff;
+    color: #c2185b;
+    transform: translateY(-2px);
+    box-shadow: 5px 5px 0px rgba(194, 24, 91, 0.3);
+}
+
+/* Sponsor Testimonial */
+.sponsor-testimonial {
+    background: #ffffff;
+    border: 2px solid #1a1a1a;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 5px 5px 0px rgba(26, 26, 26, 0.1);
+}
+
+.sponsor-testimonial blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.sponsor-testimonial blockquote::before {
+    content: '"';
+    font-size: 3rem;
+    color: #c2185b;
+    font-family: 'Playfair Display', serif;
+    position: relative;
+    top: 0.5rem;
+}
+
+.sponsor-testimonial blockquote::after {
+    content: '"';
+    font-size: 3rem;
+    color: #c2185b;
+    font-family: 'Playfair Display', serif;
+    position: relative;
+    top: 0.5rem;
+}
+
+.sponsor-testimonial cite {
+    font-family: 'Old Standard TT', serif;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Footer */
+.newspaper-footer {
+    background: #1a1a1a;
+    color: #ffffff;
+    padding: 3rem 0 1rem;
+    margin-top: 3rem;
+    border-top: 4px double #333;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.footer-section p {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 0.5rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-links a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid #666;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background: #ffffff;
+    color: #1a1a1a;
+}
+
+.footer-bottom {
+    border-top: 1px solid #666;
+    padding-top: 1rem;
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.footer-bottom p {
+    font-family: 'Old Standard TT', serif;
+    font-size: 0.75rem;
+    color: #999;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+    .newspaper-title {
+        font-size: 2.5rem;
+        letter-spacing: 4px;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+        letter-spacing: 1px;
+    }
+    
+    .nav-item {
+        margin: 0 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .headline {
+        font-size: 2rem;
+    }
+    
+    .newspaper-columns {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .stats-box {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .contact-info {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .contact-methods {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .benefits-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .newspaper-content,
+    .hero-article,
+    .full-width-article {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .newspaper-columns {
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-top {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    .newspaper-title {
+        font-size: 2rem;
+        letter-spacing: 2px;
+    }
+    
+    .nav-item {
+        display: block;
+        margin: 0.25rem 0;
+    }
+    
+    .headline {
+        font-size: 1.5rem;
+    }
+    
+    .lead-paragraph {
+        font-size: 1.125rem;
+        padding-left: 1rem;
+    }
+    
+    .dropcap {
+        font-size: 3rem;
+    }
+    
+    .tier-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .tier-price {
+        align-self: center;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+    
+    .newspaper-header,
+    .newspaper-nav,
+    .cta-button,
+    .newspaper-footer {
+        display: none;
+    }
+    
+    .newspaper-content {
+        box-shadow: none;
+        border: none;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .headline {
+        font-size: 24pt;
+        margin-bottom: 12pt;
+    }
+    
+    .article-title {
+        font-size: 16pt;
+        margin-bottom: 8pt;
+    }
+    
+    .sponsorship-tier {
+        page-break-inside: avoid;
+        margin-bottom: 12pt;
+    }
+    
+    .benefits-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12pt;
+    }
+    
+    .benefit-card {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1pt solid #1a1a1a;
+    }
+}
