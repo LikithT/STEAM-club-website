@@ -271,6 +271,40 @@ body {
     line-height: 1.8;
 }
 
+/* Car Image Container and Styling */
+.car-image-container {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.hero-car-image {
+    max-width: 60%;
+    height: auto;
+    border: 3px solid #2c1810;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(44, 24, 16, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.hero-car-image:hover {
+    transform: scale(1.05);
+}
+
+.image-caption {
+    font-family: 'Old Standard TT', serif;
+    font-size: 0.875rem;
+    font-style: italic;
+    color: #666;
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
+
 .lead-paragraph {
     font-size: 1.25rem;
     font-weight: 500;
