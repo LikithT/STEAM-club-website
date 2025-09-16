@@ -354,11 +354,9 @@ function initMobileNavigation() {
 
 // 3D Model Viewer Functions using Three.js
 let scene, camera, renderer, carModel, controls;
-let isWireframe = false;
-let isExploded = false;
-let originalPositions = [];
 let currentSTLFile = null;
 let isSTLModel = false;
+let originalPositions = [];
 
 function initModelViewer() {
     // Initialize Three.js scene
@@ -391,35 +389,25 @@ function loadModel() {
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     viewerContainer.appendChild(renderer.domElement);
     
-    // Add lights
+    // Simple lighting for clean model viewing
     const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
     scene.add(ambientLight);
     
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
     directionalLight.position.set(10, 10, 5);
     directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 2048;
-    directionalLight.shadow.mapSize.height = 2048;
     scene.add(directionalLight);
-    
-    const pointLight = new THREE.PointLight(0x2af0ff, 0.5, 100);
-    pointLight.position.set(-5, 5, -5);
-    scene.add(pointLight);
     
     // Create Heritage H2GP car model
     createH2GPCar();
     
-    // Add orbit controls
+    // Initialize orbit controls for free camera movement
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.screenSpacePanning = false;
-    controls.minDistance = 2;
-    controls.maxDistance = 20;
-    controls.maxPolarAngle = Math.PI / 2;
-    
-    // Add Japanese street environment
-    createJapaneseStreet();
+    controls.minDistance = 3;
+    controls.maxDistance = 50;
     
     // Start animation loop
     animate();
@@ -427,7 +415,7 @@ function loadModel() {
     // Handle window resize
     window.addEventListener('resize', onWindowResize, false);
     
-    console.log('Heritage H2GP 3D model loaded successfully');
+    console.log('Heritage H2GP 3D Model Viewer loaded successfully');
 }
 
 function createH2GPCar() {
@@ -532,181 +520,17 @@ function createH2GPCar() {
     scene.add(carModel);
 }
 
-function createJapaneseStreet() {
-    // Create Japanese street environment group
-    const streetGroup = new THREE.Group();
-    
-    // Main street surface with Japanese-style asphalt
-    const streetGeometry = new THREE.PlaneGeometry(20, 8);
-    const streetMaterial = new THREE.MeshLambertMaterial({ 
-        color: 0x2a2a2a,
-        transparent: true,
-        opacity: 0.95
-    });
-    const street = new THREE.Mesh(streetGeometry, streetMaterial);
-    street.rotation.x = -Math.PI / 2;
-    street.receiveShadow = true;
-    streetGroup.add(street);
-    
-    // Japanese-style lane markings (white dashed lines)
-    const dashGeometry = new THREE.PlaneGeometry(1, 0.08);
-    const dashMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.9
-    });
-    
-    // Center dashed line
-    for (let i = -8; i <= 8; i += 2) {
-        const dash = new THREE.Mesh(dashGeometry, dashMaterial);
-        dash.rotation.x = -Math.PI / 2;
-        dash.position.set(i, 0.01, 0);
-        streetGroup.add(dash);
-    }
-    
-    // Side lane markings
-    const sideLineGeometry = new THREE.PlaneGeometry(16, 0.1);
-    const sideLineMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.7
-    });
-    
-    const leftSideLine = new THREE.Mesh(sideLineGeometry, sideLineMaterial);
-    leftSideLine.rotation.x = -Math.PI / 2;
-    leftSideLine.position.set(0, 0.01, -3.5);
-    streetGroup.add(leftSideLine);
-    
-    const rightSideLine = new THREE.Mesh(sideLineGeometry, sideLineMaterial);
-    rightSideLine.rotation.x = -Math.PI / 2;
-    rightSideLine.position.set(0, 0.01, 3.5);
-    streetGroup.add(rightSideLine);
-    
-    // Japanese-style buildings (simplified)
-    const buildingMaterial = new THREE.MeshPhongMaterial({ color: 0x4a4a4a });
-    const buildingMaterial2 = new THREE.MeshPhongMaterial({ color: 0x5a5a5a });
-    
-    // Left side buildings
-    for (let i = 0; i < 3; i++) {
-        const buildingGeometry = new THREE.BoxGeometry(4, 6 + Math.random() * 4, 3);
-        const building = new THREE.Mesh(buildingGeometry, i % 2 === 0 ? buildingMaterial : buildingMaterial2);
-        building.position.set(-12 + i * 4, 3, -8);
-        building.castShadow = true;
-        streetGroup.add(building);
-        
-        // Add some windows (glowing rectangles)
-        const windowMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0xffff88,
-            transparent: true,
-            opacity: 0.6
-        });
-        
-        for (let j = 0; j < 3; j++) {
-            const windowGeometry = new THREE.PlaneGeometry(0.8, 1.2);
-            const window = new THREE.Mesh(windowGeometry, windowMaterial);
-            window.position.set(-12 + i * 4, 2 + j * 2, -6.5);
-            streetGroup.add(window);
-        }
-    }
-    
-    // Right side buildings
-    for (let i = 0; i < 3; i++) {
-        const buildingGeometry = new THREE.BoxGeometry(4, 5 + Math.random() * 3, 3);
-        const building = new THREE.Mesh(buildingGeometry, i % 2 === 0 ? buildingMaterial2 : buildingMaterial);
-        building.position.set(-12 + i * 4, 2.5, 8);
-        building.castShadow = true;
-        streetGroup.add(building);
-        
-        // Add windows
-        const windowMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0xffaa44,
-            transparent: true,
-            opacity: 0.5
-        });
-        
-        for (let j = 0; j < 2; j++) {
-            const windowGeometry = new THREE.PlaneGeometry(0.8, 1.2);
-            const window = new THREE.Mesh(windowGeometry, windowMaterial);
-            window.position.set(-12 + i * 4, 1.5 + j * 2, 6.5);
-            streetGroup.add(window);
-        }
-    }
-    
-    // Japanese-style street lamps
-    const lampPostMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
-    const lampLightMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0xffffaa,
-        transparent: true,
-        opacity: 0.8
-    });
-    
-    // Left side lamp
-    const lampPostGeometry = new THREE.CylinderGeometry(0.1, 0.1, 4);
-    const leftLampPost = new THREE.Mesh(lampPostGeometry, lampPostMaterial);
-    leftLampPost.position.set(-6, 2, -5);
-    streetGroup.add(leftLampPost);
-    
-    const lampGeometry = new THREE.SphereGeometry(0.3);
-    const leftLamp = new THREE.Mesh(lampGeometry, lampLightMaterial);
-    leftLamp.position.set(-6, 4, -5);
-    streetGroup.add(leftLamp);
-    
-    // Right side lamp
-    const rightLampPost = new THREE.Mesh(lampPostGeometry, lampPostMaterial);
-    rightLampPost.position.set(6, 2, 5);
-    streetGroup.add(rightLampPost);
-    
-    const rightLamp = new THREE.Mesh(lampGeometry, lampLightMaterial);
-    rightLamp.position.set(6, 4, 5);
-    streetGroup.add(rightLamp);
-    
-    // Add some Japanese-style details (vending machines)
-    const vendingMachineMaterial = new THREE.MeshPhongMaterial({ color: 0x0066cc });
-    const vendingMachineGeometry = new THREE.BoxGeometry(1, 2, 0.8);
-    const vendingMachine = new THREE.Mesh(vendingMachineGeometry, vendingMachineMaterial);
-    vendingMachine.position.set(-8, 1, -6);
-    vendingMachine.castShadow = true;
-    streetGroup.add(vendingMachine);
-    
-    // Vending machine screen
-    const screenMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0x00aaff,
-        transparent: true,
-        opacity: 0.7
-    });
-    const screenGeometry = new THREE.PlaneGeometry(0.6, 0.8);
-    const screen = new THREE.Mesh(screenGeometry, screenMaterial);
-    screen.position.set(-8, 1.5, -5.6);
-    streetGroup.add(screen);
-    
-    // Sidewalks
-    const sidewalkMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
-    const sidewalkGeometry = new THREE.PlaneGeometry(20, 1.5);
-    
-    const leftSidewalk = new THREE.Mesh(sidewalkGeometry, sidewalkMaterial);
-    leftSidewalk.rotation.x = -Math.PI / 2;
-    leftSidewalk.position.set(0, 0.02, -5.25);
-    leftSidewalk.receiveShadow = true;
-    streetGroup.add(leftSidewalk);
-    
-    const rightSidewalk = new THREE.Mesh(sidewalkGeometry, sidewalkMaterial);
-    rightSidewalk.rotation.x = -Math.PI / 2;
-    rightSidewalk.position.set(0, 0.02, 5.25);
-    rightSidewalk.receiveShadow = true;
-    streetGroup.add(rightSidewalk);
-    
-    scene.add(streetGroup);
-}
 
 function animate() {
     requestAnimationFrame(animate);
     
+    // Update orbit controls
     if (controls) {
         controls.update();
     }
     
-    // Rotate the car slightly for visual appeal (only for default model, not STL)
-    if (carModel && !isExploded && !isSTLModel) {
+    // Rotate the car slightly for visual appeal
+    if (carModel && !isSTLModel) {
         carModel.rotation.y += 0.005;
     }
     
@@ -714,6 +538,7 @@ function animate() {
         renderer.render(scene, camera);
     }
 }
+
 
 function onWindowResize() {
     const viewerContainer = document.getElementById('modelViewer');
@@ -1291,92 +1116,98 @@ async function uploadSTLToCloud(file, title, description) {
 }
 
 function loadSTLFromURL(url, title, description) {
-    const loader = new THREE.STLLoader();
-    
-    loader.load(
-        url,
-        function(geometry) {
-            // Clear existing model
-            if (carModel) {
-                scene.remove(carModel);
-                originalPositions = [];
+    return new Promise((resolve, reject) => {
+        const loader = new THREE.STLLoader();
+        
+        loader.load(
+            url,
+            function(geometry) {
+                try {
+                    // Clear existing model
+                    if (carModel) {
+                        scene.remove(carModel);
+                        originalPositions = [];
+                    }
+                    
+                    // Create material for the STL model
+                    const material = new THREE.MeshPhongMaterial({
+                        color: 0x2af0ff,
+                        shininess: 100,
+                        transparent: true,
+                        opacity: 0.9
+                    });
+                    
+                    // Create mesh
+                    carModel = new THREE.Mesh(geometry, material);
+                    carModel.castShadow = true;
+                    carModel.receiveShadow = true;
+                    
+                    // Center and scale the model
+                    const box = new THREE.Box3().setFromObject(carModel);
+                    const center = box.getCenter(new THREE.Vector3());
+                    const size = box.getSize(new THREE.Vector3());
+                    
+                    // Center the model horizontally and position on road
+                    carModel.position.sub(center);
+                    
+                    // Scale the model to fit nicely in the viewer
+                    const maxDimension = Math.max(size.x, size.y, size.z);
+                    const scale = 3 / maxDimension; // Scale to fit in a 3-unit space
+                    carModel.scale.setScalar(scale);
+                    
+                    // Position the model on the track surface (not floating in air)
+                    carModel.position.set(0, 0.1, 0);
+                    
+                    // Store original position for explode effect
+                    originalPositions = [{
+                        object: carModel,
+                        position: carModel.position.clone()
+                    }];
+                    
+                    // Add to scene
+                    scene.add(carModel);
+                    
+                    // Update flags
+                    isSTLModel = true;
+                    isWireframe = false;
+                    isExploded = false;
+                    
+                    // Reset camera position for better view
+                    camera.position.set(5, 3, 5);
+                    if (controls) {
+                        controls.reset();
+                    }
+                    
+                    // Save the current STL model info to localStorage for persistence
+                    saveCurrentSTLModel({
+                        url: url,
+                        title: title,
+                        description: description,
+                        loadedFrom: 'permanent'
+                    });
+                    
+                    showNotification(`STL model "${title}" loaded successfully!`, 'success');
+                    console.log('STL model loaded:', title, url);
+                    
+                    resolve();
+                } catch (error) {
+                    console.error('Error processing STL model:', error);
+                    reject(error);
+                }
+            },
+            function(progress) {
+                if (progress.total && progress.total > 0) {
+                    console.log('Loading progress:', (progress.loaded / progress.total * 100).toFixed(1) + '%');
+                } else {
+                    console.log('Loading progress: ' + (progress.loaded / 1024).toFixed(1) + ' KB loaded');
+                }
+            },
+            function(error) {
+                console.error('Error loading STL from URL:', error);
+                reject(error);
             }
-            
-            // Create material for the STL model
-            const material = new THREE.MeshPhongMaterial({
-                color: 0x2af0ff,
-                shininess: 100,
-                transparent: true,
-                opacity: 0.9
-            });
-            
-            // Create mesh
-            carModel = new THREE.Mesh(geometry, material);
-            carModel.castShadow = true;
-            carModel.receiveShadow = true;
-            
-            // Center and scale the model
-            const box = new THREE.Box3().setFromObject(carModel);
-            const center = box.getCenter(new THREE.Vector3());
-            const size = box.getSize(new THREE.Vector3());
-            
-            // Center the model horizontally and position on road
-            carModel.position.sub(center);
-            
-            // Scale the model to fit nicely in the viewer
-            const maxDimension = Math.max(size.x, size.y, size.z);
-            const scale = 3 / maxDimension; // Scale to fit in a 3-unit space
-            carModel.scale.setScalar(scale);
-            
-            // Position the model in the center of the road
-            carModel.position.set(0, 0.5, 0);
-            
-            // Store original position for explode effect
-            originalPositions = [{
-                object: carModel,
-                position: carModel.position.clone()
-            }];
-            
-            // Add to scene
-            scene.add(carModel);
-            
-            // Update flags
-            isSTLModel = true;
-            isWireframe = false;
-            isExploded = false;
-            
-            // Reset camera position for better view
-            camera.position.set(5, 3, 5);
-            controls.reset();
-            
-            // Save the current STL model info to localStorage for persistence
-            saveCurrentSTLModel({
-                url: url,
-                title: title,
-                description: description,
-                loadedFrom: 'cloud'
-            });
-            
-            showNotification(`STL model "${title}" loaded from cloud storage!`, 'success');
-            closeSTLModal();
-            
-            console.log('STL model loaded from cloud:', title, url);
-        },
-        function(progress) {
-            if (progress.total && progress.total > 0) {
-                console.log('Loading progress:', (progress.loaded / progress.total * 100).toFixed(1) + '%');
-            } else {
-                console.log('Loading progress: ' + (progress.loaded / 1024).toFixed(1) + ' KB loaded');
-            }
-        },
-        function(error) {
-            console.error('Error loading STL from URL:', error);
-            showNotification('Error loading STL from cloud. Trying local fallback...', 'error');
-            
-            // Fallback to local loading
-            loadSTLLocally(currentSTLFile, title, description);
-        }
-    );
+        );
+    });
 }
 
 function loadSTLLocally(file, title, description) {

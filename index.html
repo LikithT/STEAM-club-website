@@ -14,6 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <!-- Pako compression library for handling compressed STL files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 </head>
@@ -21,34 +22,6 @@
     <!-- Custom Cursor -->
     <div class="cursor"></div>
 
-    <!-- Background Music Player -->
-    <div class="music-player" id="musicPlayer">
-        <div class="music-controls">
-            <button class="music-btn" id="playPauseBtn" onclick="toggleMusic()">
-                <span class="music-icon">🎵</span>
-            </button>
-            <div class="music-info">
-                <span class="music-title">Central Cee</span>
-                <span class="music-status" id="musicStatus">Click to play</span>
-            </div>
-            <button class="music-btn volume-btn" onclick="toggleVolume()">
-                <span class="volume-icon" id="volumeIcon">🔊</span>
-            </button>
-        </div>
-        <div class="volume-slider" id="volumeSlider" style="display: none;">
-            <input type="range" id="volumeRange" min="0" max="100" value="30" onchange="setVolume(this.value)">
-        </div>
-    </div>
-
-    <!-- Hidden YouTube Player for Background Music -->
-        <div id="musicPlayerContainer" style="display: none;">
-            <iframe id="backgroundMusic" 
-                src="https://www.youtube.com/embed/u6sg2aVc3lg?enablejsapi=1&autoplay=0&loop=1&playlist=u6sg2aVc3lg&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1"
-                frameborder="0" 
-                allow="autoplay; encrypted-media" 
-                allowfullscreen>
-            </iframe>
-        </div>
 
     <!-- Navigation -->
     <nav class="nav" id="navbar">
@@ -126,16 +99,6 @@
         </div>
     </section>
 
-    <!-- H2GP Car Showcase Section -->
-    <section id="car-showcase" class="car-showcase">
-        <div class="container">
-            <div class="car-showcase-content">
-                <div class="car-image-container">
-                    <img src="assets/images/yellow-mclaren.jpg" alt="Heritage H2GP Car" class="car-image">
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- About Section -->
     <section id="about" class="about">
@@ -184,7 +147,7 @@
                 <div class="project-card">
                     <div class="project-image">
                         <div class="image-container" data-category="cars">
-                            <div class="placeholder-image">🏎️</div>
+                            <img src="assets/images/360_F_306470374_alK2zIw1Nv0sPD6kt8X4vt4nKesx7XvX.jpg" alt="Hydrogen-Powered RC Cars" class="project-img">
                             <div class="image-overlay">
                                 <button class="add-image-btn" onclick="openImageUpload('cars')">+ Add Image</button>
                             </div>
@@ -198,7 +161,7 @@
                 <div class="project-card">
                     <div class="project-image">
                         <div class="image-container" data-category="racing">
-                            <div class="placeholder-image">🏆</div>
+                            <img src="assets/images/2294986-200.png" alt="Competitive Racing" class="project-img">
                             <div class="image-overlay">
                                 <button class="add-image-btn" onclick="openImageUpload('racing')">+ Add Image</button>
                             </div>
@@ -212,7 +175,7 @@
                 <div class="project-card">
                     <div class="project-image">
                         <div class="image-container" data-category="education">
-                            <div class="placeholder-image">🔬</div>
+                            <img src="assets/images/istockphoto-1159741374-612x612.jpg" alt="STEAM Education" class="project-img">
                             <div class="image-overlay">
                                 <button class="add-image-btn" onclick="openImageUpload('education')">+ Add Image</button>
                             </div>
@@ -259,11 +222,6 @@
             </div>
             <div class="model-viewer-wrapper">
                 <div id="modelViewer" class="model-viewer-main"></div>
-                <div class="model-controls-main">
-                    <button class="model-btn-main" onclick="resetView()">Reset View</button>
-                    <button class="model-btn-main" onclick="toggleWireframe()">Wireframe</button>
-                    <button class="model-btn-main" onclick="toggleExplode()">Explode View</button>
-                </div>
             </div>
         </div>
     </section>
@@ -387,7 +345,7 @@
                     
                     <!-- Yellow McLaren P1 Reward Image -->
                     <div class="reward-image-container">
-                        <img src="assets/images/actual-mclaren-p1.jpg" 
+                        <img src="assets/images/mclarenp1.jpg" 
                              alt="McLaren P1 Supercar" 
                              class="reward-car-image" 
                              id="rewardCarImage">
@@ -428,7 +386,7 @@
                 </div>
                 <div class="admin-controls">
                     <button class="admin-btn primary" id="downloadExcelBtn">
-                        <span class="btn-icon">📊</span>
+                        <span class="btn-icon">�</span>
                         Download Excel Report
                     </button>
                     <button class="admin-btn secondary" id="viewRecordsBtn">

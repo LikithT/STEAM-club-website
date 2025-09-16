@@ -1,0 +1,8 @@
+{
+  "name": "heritage-steam-website",
+  "version": 2,
+  "public": true,
+  "github": {
+    "enabled": false
+  }
+}
