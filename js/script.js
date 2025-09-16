@@ -219,6 +219,33 @@ function initScrollAnimations() {
             }
         );
     });
+    
+    // Animated gradient background scroll effect
+    const projectsSection = document.querySelector('.projects');
+    if (projectsSection) {
+        ScrollTrigger.create({
+            trigger: projectsSection,
+            start: "top 80%",
+            end: "bottom 20%",
+            onUpdate: (self) => {
+                // Calculate scroll progress within the projects section
+                const progress = self.progress;
+                
+                // Animate the gradient background position based on scroll
+                const gradientElement = projectsSection;
+                if (gradientElement) {
+                    // Create dynamic gradient animation based on scroll position
+                    const hue1 = 210 + (progress * 30); // Blue to navy transition
+                    const hue2 = 240 + (progress * 20); // Navy to deeper blue
+                    
+                    // Update CSS custom properties for dynamic gradient
+                    gradientElement.style.setProperty('--gradient-progress', progress);
+                    gradientElement.style.setProperty('--gradient-hue1', hue1);
+                    gradientElement.style.setProperty('--gradient-hue2', hue2);
+                }
+            }
+        });
+    }
 }
 
 // Navigation
