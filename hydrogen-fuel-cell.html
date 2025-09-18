@@ -3,41 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How a Hydrogen Fuel Cell Works - Heritage H2GP</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Hydrogen Fuel Cells Explained - Heritage H2GP</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.4/pako.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
 </head>
-<body>
+<body class="fuel-cell-page">
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="nav" id="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <h2>Heritage H2GP</h2>
+                <span class="logo-text">Heritage H2GP</span>
             </div>
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="index.html" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="index.html#about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="index.html#projects" class="nav-link">Projects</a>
-                </li>
-                <li class="nav-item">
-                    <a href="index.html#gallery" class="nav-link">Gallery</a>
-                </li>
-                <li class="nav-item">
-                    <a href="index.html#team" class="nav-link">Team</a>
-                </li>
-                <li class="nav-item">
-                    <a href="hydrogen-fuel-cell.html" class="nav-link active">Fuel Cell Guide</a>
-                </li>
-                <li class="nav-item">
-                    <a href="index.html#contact" class="nav-link">Contact</a>
-                </li>
-            </ul>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#about" class="nav-link">About</a>
+                <a href="index.html#projects" class="nav-link">Projects</a>
+                <a href="hydrogen-fuel-cell.html" class="nav-link" style="color: #2AF0FF;">Fuel Cell Guide</a>
+                <a href="index.html#gallery" class="nav-link">Gallery</a>
+                <a href="index.html#team" class="nav-link">Team</a>
+                <a href="index.html#model" class="nav-link">3D Model</a>
+                <a href="sponsorship.html" target="_blank" class="nav-link">Sponsorships</a>
+                <a href="index.html#attendance" class="nav-link">Attendance</a>
+                <a href="index.html#contact" class="nav-button">Contact</a>
+            </div>
+            <!-- Mobile Navigation Toggle -->
             <button class="mobile-nav-toggle" id="mobileNavToggle">
                 <span></span>
                 <span></span>
@@ -48,83 +56,209 @@
 
     <!-- Mobile Navigation Menu -->
     <div class="mobile-nav-menu" id="mobileNavMenu">
-        <div class="mobile-nav-content">
-            <a href="index.html" class="mobile-nav-link">Home</a>
-            <a href="index.html#about" class="mobile-nav-link">About</a>
-            <a href="index.html#projects" class="mobile-nav-link">Projects</a>
-            <a href="index.html#gallery" class="mobile-nav-link">Gallery</a>
-            <a href="index.html#team" class="mobile-nav-link">Team</a>
-            <a href="hydrogen-fuel-cell.html" class="mobile-nav-link active">Fuel Cell Guide</a>
-            <a href="index.html#contact" class="mobile-nav-link">Contact</a>
-        </div>
+        <a href="index.html" class="mobile-nav-link">Home</a>
+        <a href="index.html#about" class="mobile-nav-link">About</a>
+        <a href="index.html#projects" class="mobile-nav-link">Projects</a>
+        <a href="hydrogen-fuel-cell.html" class="mobile-nav-link" style="color: #2AF0FF;">Fuel Cell Guide</a>
+        <a href="index.html#gallery" class="mobile-nav-link">Gallery</a>
+        <a href="index.html#team" class="mobile-nav-link">Team</a>
+        <a href="index.html#model" class="mobile-nav-link">3D Model</a>
+        <a href="sponsorship.html" target="_blank" class="mobile-nav-link">Sponsorships</a>
+        <a href="index.html#attendance" class="mobile-nav-link">Attendance</a>
+        <a href="index.html#contact" class="mobile-nav-link">Contact</a>
     </div>
 
-    <!-- Main Content -->
-    <main class="fuel-cell-page">
-        <!-- Hero Section -->
-        <section class="fuel-cell-hero">
-            <div class="container">
-                <div class="hero-content">
-                    <h1>How a Hydrogen Fuel Cell Works</h1>
-                    <p class="hero-subtitle">Understanding the electrochemical technology powering clean energy</p>
+    <!-- Hero Section -->
+    <section class="fuel-cell-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>
+                    <span class="title-line">Hydrogen</span>
+                    <span class="title-line">Fuel Cells</span>
+                    <span class="title-line">Explained</span>
+                </h1>
+                <p class="hero-subtitle">Understanding the electrochemical technology powering our clean energy future</p>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span class="scroll-text">Explore</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- What They Are Section -->
+    <section class="fuel-cell-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">What Are Hydrogen Fuel Cells?</h2>
+                <p class="section-description">Clean energy devices that generate electricity through chemical reactions, not combustion</p>
+            </div>
+            
+            <div class="definition-content">
+                <div class="definition-card">
+                    <div class="definition-icon">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <div class="definition-text">
+                        <h3>Chemical Electricity Generator</h3>
+                        <p>A hydrogen fuel cell is a device that generates electricity through a <strong>chemical reaction</strong>, not combustion. It combines <strong>hydrogen (H₂)</strong> and <strong>oxygen (O₂)</strong> to produce <strong>electricity, heat, and water</strong>.</p>
+                    </div>
+                </div>
+                
+                <div class="equation-showcase">
+                    <div class="equation-card">
+                        <h4>The Basic Equation</h4>
+                        <div class="chemical-equation">
+                            $$2H_2 + O_2 \rightarrow 2H_2O + \text{electricity + heat}$$
+                        </div>
+                        <p class="equation-description">Two hydrogen molecules combine with one oxygen molecule to produce two water molecules, electricity, and heat</p>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-    <!-- Basic Principle Section -->
-    <section class="basic-principle">
+    <!-- How They Work Section -->
+    <section class="how-it-works-section">
         <div class="container">
-            <h2>Basic Principle</h2>
-            <div class="principle-content">
-                <p class="principle-text">A hydrogen fuel cell generates electricity through an <strong>electrochemical reaction</strong> between hydrogen (H₂) and oxygen (O₂) <em>without combustion</em>.</p>
-                
-                <!-- Detailed Fuel Cell Cross-Section Image -->
-                <div class="fuel-cell-image-section">
-                    <div class="detailed-image-container">
-                        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAH0AfQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3+iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiig
-                
-                <div class="principle-diagram">
-                    <div class="fuel-cell-visual">
-                        <div class="fuel-cell-component anode-side">
-                            <h4>Anode Side</h4>
-                            <p>H₂ → 2H⁺ + 2e⁻</p>
-                            <div class="gas-input">Hydrogen Gas (H₂)</div>
-                        </div>
-                        <div class="fuel-cell-component membrane">
-                            <h4>PEM</h4>
-                            <p>Proton Exchange Membrane</p>
-                            <div class="proton-flow">H⁺ →</div>
-                        </div>
-                        <div class="fuel-cell-component cathode-side">
-                            <h4>Cathode Side</h4>
-                            <p>½O₂ + 2H⁺ + 2e⁻ → H₂O</p>
-                            <div class="gas-input">Oxygen (O₂)</div>
-                        </div>
-                        <div class="electron-circuit">
-                            <i class="fas fa-bolt"></i>
-                            <span>Electricity</span>
+            <div class="section-header">
+                <h2 class="section-title">How Hydrogen Fuel Cells Work</h2>
+                <p class="section-description">A step-by-step breakdown of the electrochemical process</p>
+            </div>
+
+            <!-- Interactive 3D Model Section -->
+            <div class="model-viewer-wrapper">
+                <div class="model-viewer-header">
+                    <h3 class="model-viewer-title">Interactive 3D Fuel Cell Model</h3>
+                    <p class="model-viewer-description">Explore the internal structure and components</p>
+                </div>
+                <div class="model-viewer-main" id="fuelCellModel">
+                    <div class="model-loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading 3D Fuel Cell Model...</p>
+                    </div>
+                </div>
+                <div class="model-controls-main">
+                    <button class="model-btn-main" onclick="loadFuelCellModel()">
+                        <i class="fas fa-cube"></i> Load 3D Model
+                    </button>
+                    <button class="model-btn-main" onclick="resetModelView()">
+                        <i class="fas fa-refresh"></i> Reset View
+                    </button>
+                    <button class="model-btn-main" onclick="toggleModelRotation()">
+                        <i class="fas fa-sync-alt"></i> Auto Rotate
+                    </button>
+                </div>
+            </div>
+
+            <!-- Process Steps -->
+            <div class="process-grid">
+                <div class="process-step" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Anode (negative electrode)</h3>
+                        <div class="step-details">
+                            <ul>
+                                <li>Hydrogen gas enters the anode</li>
+                                <li>A catalyst (usually platinum) splits hydrogen molecules into <strong>protons (H⁺)</strong> and <strong>electrons (e⁻)</strong></li>
+                            </ul>
+                            <div class="reaction-equation">
+                                $H_2 \rightarrow 2H^+ + 2e^-$
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Molecular Level Process Image -->
-                <div class="molecular-process-section">
-                    <div class="detailed-image-container">
-                        <img src="https://www.energy.gov/sites/default/files/2019/07/f64/fcto_h2_molecule_split.png" 
-                             alt="Molecular-level view of hydrogen molecules being split by platinum catalyst into protons and electrons" 
-                             class="molecular-diagram" 
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                        <div class="image-placeholder" style="display: none;">
-                            <div class="placeholder-content">
-                                <h4>⚛️ Molecular Level Process</h4>
-                                <p>Detailed view of the electrochemical reaction:</p>
-                                <ul>
-                                    <li>Hydrogen molecules (H₂) approaching platinum catalyst</li>
-                                    <li>Catalyst breaking H-H bonds</li>
-                                    <li>Proton (H⁺) and electron (e⁻) separation</li>
-                                    <li>Electron pathway through external circuit</li>
-                                    <li>Proton migration through membrane</li>
-                                </ul>
+                <div class="process-step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Electrolyte (proton exchange membrane, PEM)</h3>
+                        <div class="step-details">
+                            <ul>
+                                <li>Only protons can pass through the membrane</li>
+                                <li>Electrons are forced to travel through an <strong>external circuit</strong>, creating an <strong>electric current</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="process-step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Cathode (positive electrode)</h3>
+                        <div class="step-details">
+                            <ul>
+                                <li>Oxygen gas enters the cathode</li>
+                                <li>Protons, electrons, and oxygen combine to form <strong>water (H₂O)</strong> as the only emission</li>
+                            </ul>
+                            <div class="reaction-equation">
+                                $\frac{1}{2}O_2 + 2H^+ + 2e^- \rightarrow H_2O$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Diagram -->
+            <div class="fuel-cell-diagram">
+                <div class="diagram-container">
+                    <div class="fuel-cell-component anode-component">
+                        <div class="component-header">
+                            <h4>Anode</h4>
+                            <span class="component-label">H₂ Input</span>
+                        </div>
+                        <div class="component-body">
+                            <i class="fas fa-minus-circle"></i>
+                            <div class="gas-flow">
+                                <div class="gas-particle hydrogen"></div>
+                                <div class="gas-particle hydrogen"></div>
+                                <div class="gas-particle hydrogen"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fuel-cell-component membrane-component">
+                        <div class="component-header">
+                            <h4>PEM</h4>
+                            <span class="component-label">Proton Exchange</span>
+                        </div>
+                        <div class="component-body">
+                            <div class="membrane-structure">
+                                <div class="proton-path">
+                                    <span class="proton">H⁺</span>
+                                    <span class="proton">H⁺</span>
+                                    <span class="proton">H⁺</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fuel-cell-component cathode-component">
+                        <div class="component-header">
+                            <h4>Cathode</h4>
+                            <span class="component-label">O₂ Input</span>
+                        </div>
+                        <div class="component-body">
+                            <i class="fas fa-plus-circle"></i>
+                            <div class="gas-flow">
+                                <div class="gas-particle oxygen"></div>
+                                <div class="gas-particle oxygen"></div>
+                            </div>
+                            <div class="water-output">
+                                <i class="fas fa-tint"></i>
+                                <span>H₂O</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="electron-circuit">
+                        <div class="circuit-path">
+                            <i class="fas fa-bolt"></i>
+                            <span>Electricity Flow</span>
+                            <div class="electron-flow">
+                                <span class="electron">e⁻</span>
+                                <span class="electron">e⁻</span>
+                                <span class="electron">e⁻</span>
                             </div>
                         </div>
                     </div>
@@ -133,337 +267,557 @@
         </div>
     </section>
 
-        <!-- Main Components Section -->
-        <section class="main-components">
-            <div class="container">
-                <h2>Main Components</h2>
-                <div class="components-grid">
-                    <div class="component-card">
-                        <div class="component-icon anode-icon">
-                            <i class="fas fa-minus-circle"></i>
-                        </div>
-                        <h3>Anode (Negative Electrode)</h3>
-                        <p><strong>Function:</strong> Entry point for hydrogen gas (H₂)</p>
-                        <ul>
-                            <li>Where hydrogen gas enters and is <strong>split into protons and electrons</strong> (oxidized)</li>
-                            <li><strong>Catalyst layer (platinum):</strong> Breaks hydrogen molecules into protons (H⁺) and electrons (e⁻)</li>
-                            <li>Electrons go to external circuit (producing electric current)</li>
-                            <li>Protons move through the PEM</li>
-                            <li>Starts the electrochemical reaction</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="component-card">
-                        <div class="component-icon cathode-icon">
-                            <i class="fas fa-plus-circle"></i>
-                        </div>
-                        <h3>Cathode (Positive Electrode)</h3>
-                        <p><strong>Function:</strong> Where oxygen enters and combines with protons and electrons</p>
-                        <ul>
-                            <li>Entry point for <strong>oxygen (O₂) from air</strong></li>
-                            <li><strong>Catalyst layer:</strong> Facilitates reaction between protons (H⁺), electrons (e⁻), and oxygen (O₂)</li>
-                            <li>Where oxygen combines with protons and electrons to <strong>form water</strong> (reduced)</li>
-                            <li>Produces water (H₂O) and releases heat</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="component-card">
-                        <div class="component-icon electrolyte-icon">
-                            <i class="fas fa-filter"></i>
-                        </div>
-                        <h3>Electrolyte (PEM)</h3>
-                        <p><strong>Function:</strong> Selective membrane allowing only protons to pass</p>
-                        <ul>
-                            <li><strong>Allows only protons to pass through</strong>, forcing electrons to travel through a circuit</li>
-                            <li>Separates the anode and cathode</li>
-                            <li>Enables proton flow while <strong>blocking gases and electrons</strong></li>
-                            <li>Generates electricity by forcing electron flow through external circuit</li>
-                        </ul>
-                    </div>
-                </div>
+    <!-- Types of Fuel Cells Section -->
+    <section class="fuel-cell-types">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Types of Fuel Cells</h2>
+                <p class="section-description">Different fuel cell technologies for various applications</p>
             </div>
-        </section>
 
-        <!-- Detailed Components Section -->
-        <section class="detailed-components">
-            <div class="container">
-                <h2>Detailed Component Analysis</h2>
-                
-                <!-- PEM Section -->
-                <div class="component-detail">
-                    <div class="component-header">
-                        <i class="fas fa-layer-group"></i>
-                        <h3>PEM (Proton Exchange Membrane)</h3>
+            <div class="types-grid">
+                <div class="type-card">
+                    <div class="type-header">
+                        <h3>PEMFC</h3>
+                        <span class="type-full-name">Proton Exchange Membrane</span>
                     </div>
-                    <div class="component-info">
-                        <div class="info-section">
-                            <h4>What it is:</h4>
-                            <p>A <strong>polymer membrane (Nafion)</strong> that only allows protons (H⁺) to pass through</p>
-                        </div>
-                        <div class="info-section">
-                            <h4>Function:</h4>
-                            <ul>
-                                <li>Separates the anode and cathode</li>
-                                <li>Enables proton flow while blocking gases and electrons</li>
-                                <li><strong>Does not include catalysts or electrodes</strong></li>
-                            </ul>
+                    <div class="type-content">
+                        <p><strong>Application:</strong> Used in cars, quick start-up</p>
+                        <div class="type-features">
+                            <span class="feature-tag">Low Temperature</span>
+                            <span class="feature-tag">Fast Start</span>
+                            <span class="feature-tag">Automotive</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- MEA Section -->
-                <div class="component-detail">
-                    <div class="component-header">
-                        <i class="fas fa-puzzle-piece"></i>
-                        <h3>MEA (Membrane Electrode Assembly)</h3>
+                <div class="type-card">
+                    <div class="type-header">
+                        <h3>SOFC</h3>
+                        <span class="type-full-name">Solid Oxide</span>
                     </div>
-                    <div class="component-info">
-                        <div class="info-section">
-                            <h4>What it is:</h4>
-                            <p>A <strong>multi-layered assembly</strong> that includes the PEM plus electrodes and catalyst layers</p>
-                        </div>
-                        <div class="info-section">
-                            <h4>Structure:</h4>
-                            <div class="mea-structure">
-                                <div class="mea-layer">Anode catalyst layer</div>
-                                <div class="mea-layer pem-core">PEM (core membrane)</div>
-                                <div class="mea-layer">Cathode catalyst layer</div>
-                                <div class="mea-note">+ Gas Diffusion Layers (GDLs) on both sides</div>
-                            </div>
+                    <div class="type-content">
+                        <p><strong>Application:</strong> High-temperature, good for stationary power</p>
+                        <div class="type-features">
+                            <span class="feature-tag">High Temperature</span>
+                            <span class="feature-tag">High Efficiency</span>
+                            <span class="feature-tag">Stationary</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- PEM Detailed Section -->
-                <div class="component-detail">
-                    <div class="component-header">
-                        <i class="fas fa-microscope"></i>
-                        <h3>Proton Exchange Membrane (Detailed)</h3>
+                <div class="type-card">
+                    <div class="type-header">
+                        <h3>AFC</h3>
+                        <span class="type-full-name">Alkaline</span>
                     </div>
-                    <div class="component-info">
-                        <div class="info-section">
-                            <h4>Function:</h4>
-                            <p>The core layer that separates the anode and the cathode, allowing <strong>only protons (H⁺) to pass</strong></p>
+                    <div class="type-content">
+                        <p><strong>Application:</strong> Efficient but sensitive to CO₂</p>
+                        <div class="type-features">
+                            <span class="feature-tag">High Efficiency</span>
+                            <span class="feature-tag">CO₂ Sensitive</span>
+                            <span class="feature-tag">Space Applications</span>
                         </div>
-                        <div class="info-section">
-                            <h4>Structure:</h4>
-                            <ul>
-                                <li><strong>Polymer Electrolyte Membrane (usually Nafion):</strong>
-                                    <ul>
-                                        <li>Semi-permeable, only lets protons through, not gases or electrons</li>
-                                    </ul>
-                                </li>
-                                <li><strong>Gas Diffusion Layers (GDLs):</strong>
-                                    <ul>
-                                        <li>On the anode and cathode sides, helps distribute gases evenly and remove water</li>
-                                    </ul>
-                                </li>
-                                <li><strong>Catalyst Layers:</strong>
-                                    <ul>
-                                        <li>Contains platinum that triggers reactions on both sides</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="info-section">
-                            <h4>Importance:</h4>
-                            <p>Only protons move across, creates the <strong>charge separation</strong> that allows current to flow</p>
+                    </div>
+                </div>
+
+                <div class="type-card">
+                    <div class="type-header">
+                        <h3>MCFC</h3>
+                        <span class="type-full-name">Molten Carbonate</span>
+                    </div>
+                    <div class="type-content">
+                        <p><strong>Application:</strong> For large-scale power plants</p>
+                        <div class="type-features">
+                            <span class="feature-tag">Large Scale</span>
+                            <span class="feature-tag">Industrial</span>
+                            <span class="feature-tag">High Power</span>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Step by Step Process -->
-        <section class="step-process">
-            <div class="container">
-                <h2>Step-by-Step Process</h2>
-                <div class="process-steps">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h3>Hydrogen enters the anode side</h3>
-                            <p>Hydrogen gas (H₂) is supplied to the anode through fuel channels</p>
-                        </div>
-                    </div>
-                    
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h3>Hydrogen molecules split</h3>
-                            <p>Hydrogen molecules (H₂) are <strong>split into protons (H⁺) and electrons (e⁻)</strong> using a catalyst</p>
-                        </div>
-                    </div>
-                    
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h3>Protons move through the electrolyte</h3>
-                            <p><strong>Only protons pass through the membrane</strong> to the cathode</p>
-                        </div>
-                    </div>
-                    
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <div class="step-content">
-                            <h3>Electrons travel through external circuit</h3>
-                            <p>Electrons <strong>can't pass through the membrane</strong>, so they travel around it, <strong>powering a device</strong></p>
-                        </div>
-                    </div>
-                    
-                    <div class="step">
-                        <div class="step-number">5</div>
-                        <div class="step-content">
-                            <h3>Oxygen enters the cathode side</h3>
-                            <p><strong>Oxygen from the air</strong> combines with the incoming protons and electrons</p>
-                        </div>
-                    </div>
-                    
-                    <div class="step">
-                        <div class="step-number">6</div>
-                        <div class="step-content">
-                            <h3>Water formation</h3>
-                            <p>This forms <strong>water (H₂O) and releases heat</strong></p>
-                        </div>
-                    </div>
-                </div>
+    <!-- Advantages Section -->
+    <section class="advantages-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Advantages of Hydrogen Fuel Cells</h2>
+                <p class="section-description">Why hydrogen fuel cells are the future of clean energy</p>
             </div>
-        </section>
 
-        <!-- Chemical Reactions Section -->
-        <section class="chemical-reactions">
-            <div class="container">
-                <h2>Chemical Reactions</h2>
-                <div class="reactions-content">
-                    <div class="reaction-box anode-reaction">
-                        <h3>At the Anode:</h3>
-                        <div class="equation">
-                            <span class="reactant">H₂</span>
-                            <span class="arrow">→</span>
-                            <span class="product">2H⁺ + 2e⁻</span>
-                        </div>
-                        <p>Hydrogen molecules are oxidized (split into protons and electrons)</p>
-                    </div>
-                    
-                    <div class="reaction-box cathode-reaction">
-                        <h3>At the Cathode:</h3>
-                        <div class="equation">
-                            <span class="reactant">½O₂ + 2H⁺ + 2e⁻</span>
-                            <span class="arrow">→</span>
-                            <span class="product">H₂O</span>
-                        </div>
-                        <p>Oxygen is reduced (combines with protons and electrons to form water)</p>
-                    </div>
-                    
-                    <div class="reaction-box overall-reaction">
-                        <h3>Overall Chemical Reaction:</h3>
-                        <div class="equation large">
-                            <span class="reactant">2H₂ + O₂</span>
-                            <span class="arrow">→</span>
-                            <span class="product">2H₂O + Electricity + Heat</span>
-                        </div>
-                        <p>The complete fuel cell reaction produces clean energy with only water as a byproduct</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Benefits Section -->
-        <section class="benefits">
-            <div class="container">
-                <h2>Why Hydrogen Fuel Cells?</h2>
-                <div class="benefits-grid">
-                    <div class="benefit-card">
+            <div class="advantages-grid">
+                <div class="advantage-card">
+                    <div class="advantage-icon">
                         <i class="fas fa-leaf"></i>
-                        <h3>Zero Harmful Emissions</h3>
-                        <p>Only produces water vapor and heat as byproducts - completely clean energy</p>
                     </div>
-                    <div class="benefit-card">
-                        <i class="fas fa-bolt"></i>
-                        <h3>High Efficiency</h3>
-                        <p>More efficient than traditional combustion engines with direct energy conversion</p>
+                    <h3>Zero Harmful Emissions</h3>
+                    <p>Only water vapor as byproduct - completely clean energy with no pollutants or greenhouse gases</p>
+                    <div class="advantage-highlight">
+                        <span class="stat">100%</span>
+                        <span class="stat-label">Clean Output</span>
                     </div>
-                    <div class="benefit-card">
-                        <i class="fas fa-recycle"></i>
-                        <h3>Renewable Source</h3>
-                        <p>Hydrogen can be produced from renewable sources like solar and wind power</p>
-                    </div>
-                    <div class="benefit-card">
+                </div>
+
+                <div class="advantage-card">
+                    <div class="advantage-icon">
                         <i class="fas fa-tachometer-alt"></i>
-                        <h3>Quick Refueling</h3>
-                        <p>Hydrogen tanks can be refilled in minutes, unlike battery charging</p>
+                    </div>
+                    <h3>High Efficiency</h3>
+                    <p>More efficient than combustion engines with direct energy conversion from chemical to electrical</p>
+                    <div class="advantage-highlight">
+                        <span class="stat">60%</span>
+                        <span class="stat-label">Efficiency Rate</span>
+                    </div>
+                </div>
+
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <i class="fas fa-volume-off"></i>
+                    </div>
+                    <h3>Quiet Operation</h3>
+                    <p>Silent and scalable technology - can power cars, buses, buildings, even spacecraft without noise pollution</p>
+                    <div class="advantage-highlight">
+                        <span class="stat">~0dB</span>
+                        <span class="stat-label">Operation Noise</span>
+                    </div>
+                </div>
+
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <i class="fas fa-recycle"></i>
+                    </div>
+                    <h3>Renewable Potential</h3>
+                    <p>Renewable hydrogen production can make it nearly carbon-free when powered by solar or wind energy</p>
+                    <div class="advantage-highlight">
+                        <span class="stat">∞</span>
+                        <span class="stat-label">Renewable Source</span>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- H2GP Application Section -->
-        <section class="h2gp-application">
-            <div class="container">
-                <h2>Application in H2GP Racing</h2>
-                <div class="application-content">
-                    <div class="application-text">
-                        <p>In the <strong>Hydrogen Grand Prix (H2GP)</strong>, fuel cells provide the primary power source for our race cars, demonstrating the practical applications of this clean technology in transportation.</p>
-                        
-                        <div class="racing-advantages">
-                            <h3>Advantages in Racing:</h3>
-                            <ul>
-                                <li><strong>Consistent Power Output:</strong> Steady electrical supply throughout the race</li>
-                                <li><strong>Lightweight Design:</strong> More energy-dense than traditional batteries</li>
-                                <li><strong>Silent Operation:</strong> Minimal noise compared to combustion engines</li>
-                                <li><strong>Educational Value:</strong> Students learn clean energy while experiencing competitive racing</li>
-                            </ul>
+            <!-- Clean Battery Analogy -->
+            <div class="analogy-section">
+                <div class="analogy-card">
+                    <div class="analogy-icon">
+                        <i class="fas fa-battery-full"></i>
+                        <i class="fas fa-arrow-right"></i>
+                        <i class="fas fa-infinity"></i>
+                    </div>
+                    <h3>💡 Think of it This Way</h3>
+                    <p class="analogy-text">
+                        Think of hydrogen fuel cells as <strong>clean batteries that never need recharging</strong> — as long as you supply hydrogen, they keep producing power.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Challenges Section -->
+    <section class="challenges-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Current Challenges</h2>
+                <p class="section-description">Obstacles we're working to overcome in hydrogen technology</p>
+            </div>
+
+            <div class="challenges-grid">
+                <div class="challenge-card">
+                    <div class="challenge-icon">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <h3>Hydrogen Production</h3>
+                    <div class="challenge-content">
+                        <p><strong>Issue:</strong> Often comes from natural gas (not fully clean)</p>
+                        <p><strong>Solution:</strong> Green hydrogen from electrolysis using renewable energy is developing but still costly</p>
+                        <div class="progress-indicator">
+                            <div class="progress-bar" style="width: 35%"></div>
+                            <span class="progress-label">Progress: 35%</span>
                         </div>
+                    </div>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-icon">
+                        <i class="fas fa-compress-arrows-alt"></i>
+                    </div>
+                    <h3>Storage & Transport</h3>
+                    <div class="challenge-content">
+                        <p><strong>Issue:</strong> Hydrogen is light, needs compression or liquefaction</p>
+                        <p><strong>Impact:</strong> Energy-intensive storage and transportation requirements</p>
+                        <div class="progress-indicator">
+                            <div class="progress-bar" style="width: 45%"></div>
+                            <span class="progress-label">Progress: 45%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-icon">
+                        <i class="fas fa-gas-pump"></i>
+                    </div>
+                    <h3>Infrastructure</h3>
+                    <div class="challenge-content">
+                        <p><strong>Issue:</strong> Few hydrogen fueling stations compared to EV charging</p>
+                        <p><strong>Need:</strong> Widespread infrastructure development for mass adoption</p>
+                        <div class="progress-indicator">
+                            <div class="progress-bar" style="width: 25%"></div>
+                            <span class="progress-label">Progress: 25%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h3>Cost</h3>
+                    <div class="challenge-content">
+                        <p><strong>Issue:</strong> Platinum catalysts and fuel cell systems are expensive</p>
+                        <p><strong>Trend:</strong> Costs decreasing with scale and technology improvements</p>
+                        <div class="progress-indicator">
+                            <div class="progress-bar" style="width: 40%"></div>
+                            <span class="progress-label">Progress: 40%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- H2GP Application Section -->
+    <section class="h2gp-application">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">H2GP Racing Application</h2>
+                <p class="section-description">How we use hydrogen fuel cells in competitive racing</p>
+            </div>
+
+            <div class="application-content">
+                <div class="application-text">
+                    <p>In the <strong>Hydrogen Grand Prix (H2GP)</strong>, fuel cells provide the primary power source for our race cars, demonstrating the practical applications of this clean technology in high-performance transportation.</p>
+                    
+                    <div class="racing-advantages">
+                        <h3>Racing Advantages:</h3>
+                        <ul>
+                            <li><strong>Consistent Power Output:</strong> Steady electrical supply throughout the race</li>
+                            <li><strong>Lightweight Design:</strong> More energy-dense than traditional batteries</li>
+                            <li><strong>Silent Operation:</strong> Minimal noise compared to combustion engines</li>
+                            <li><strong>Educational Value:</strong> Students learn clean energy while experiencing competitive racing</li>
+                        </ul>
                     </div>
                     
-                    <div class="racing-stats">
-                        <div class="stat-card">
-                            <div class="stat-number">60%</div>
-                            <div class="stat-label">Efficiency Rate</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">0</div>
-                            <div class="stat-label">Harmful Emissions</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">3</div>
-                            <div class="stat-label">Minutes to Refuel</div>
-                        </div>
+                    <div class="telemetry-dashboard-section">
+                        <h3>🚗 Live Telemetry Dashboard</h3>
+                        <p>Experience real-time hydrogen fuel cell monitoring with our advanced telemetry system. Track battery voltage, current draw, fuel cell output, and system performance in real-time during races and testing.</p>
+                        <a href="http://localhost:8081" class="dashboard-link" target="_blank">
+                            <i class="fas fa-chart-line"></i>
+                            Launch Live Dashboard
+                            <span class="link-description">Real-time fuel cell telemetry</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="racing-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">60%</div>
+                        <div class="stat-label">Efficiency Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Harmful Emissions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Minutes to Refuel</div>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+
+            <!-- Car Showcase -->
+            <div class="car-showcase">
+                <div class="car-showcase-content">
+                    <div class="car-background-text">H2GP</div>
+                    <div class="car-image-container">
+                        <img src="assets/images/STEAMCar.jpg" alt="Heritage H2GP Racing Car" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive 3D Models Section -->
+    <section class="models-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">3D Model Gallery</h2>
+                <p class="section-description">Explore detailed CAD models of hydrogen fuel cell components</p>
+            </div>
+
+            <div class="models-grid">
+                <div class="model-showcase-card">
+                    <div class="model-thumbnail">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <div class="model-info">
+                        <h3>Fuel Cell Stack</h3>
+                        <p>Complete fuel cell assembly with multiple cells</p>
+                        <button class="model-load-btn" onclick="loadModel('fuel-cell-stack')">
+                            <i class="fas fa-play"></i> Load 3D Model
+                        </button>
+                    </div>
+                </div>
+
+                <div class="model-showcase-card">
+                    <div class="model-thumbnail">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="model-info">
+                        <h3>PEM Membrane</h3>
+                        <p>Proton exchange membrane cross-section</p>
+                        <button class="model-load-btn" onclick="loadModel('pem-membrane')">
+                            <i class="fas fa-play"></i> Load 3D Model
+                        </button>
+                    </div>
+                </div>
+
+                <div class="model-showcase-card">
+                    <div class="model-thumbnail">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="model-info">
+                        <h3>H2GP Racing Car</h3>
+                        <p>Complete hydrogen-powered racing vehicle</p>
+                        <button class="model-load-btn" onclick="loadModel('h2gp-car')">
+                            <i class="fas fa-play"></i> Load 3D Model
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Heritage H2GP</h3>
-                    <p>Advancing STEAM education through hydrogen-powered racing and sustainable technology.</p>
+                <div class="footer-logo">
+                    <span class="logo-text">Heritage H2GP</span>
                 </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="index.html#about">About</a></li>
-                        <li><a href="index.html#projects">Projects</a></li>
-                        <li><a href="hydrogen-fuel-cell.html">Fuel Cell Guide</a></li>
-                    </ul>
+                <div class="footer-text">
+                    <p>&copy; 2024 Heritage H2GP STEAM Club. Powering the future with clean hydrogen technology.</p>
                 </div>
-                <div class="footer-section">
-                    <h4>Contact</h4>
-                    <p>Email: info@heritageh2gp.org</p>
-                    <p>Phone: (555) 123-4567</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Heritage H2GP. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- 3D Model Viewer (Fixed Position) -->
+    <div class="model-viewer-container" id="modelViewer">
+        <div class="model-viewer-header">
+            <h4 class="model-viewer-title">3D Model Viewer</h4>
+            <div class="model-controls">
+                <button class="control-btn" onclick="toggleModelSize()" title="Minimize/Maximize">
+                    <i class="fas fa-window-minimize"></i>
+                </button>
+                <button class="control-btn" onclick="closeModelViewer()" title="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="model-viewer" id="modelViewerFrame">
+            <div class="model-placeholder">
+                <i class="fas fa-cube"></i>
+                <p>Click a 3D model button to load</p>
+            </div>
+        </div>
+        <button class="model-toggle-btn" onclick="toggleModelSize()">
+            <i class="fas fa-expand"></i>
+        </button>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Enhanced Fuel Cell 3D Model Functions
+        let fuelCellScene, fuelCellCamera, fuelCellRenderer, fuelCellControls;
+        let modelRotating = false;
+
+        function loadFuelCellModel() {
+            const modelContainer = document.getElementById('fuelCellModel');
+            modelContainer.innerHTML = '';
+
+            // Initialize Three.js scene
+            fuelCellScene = new THREE.Scene();
+            fuelCellScene.background = new THREE.Color(0x1a1a1a);
+
+            fuelCellCamera = new THREE.PerspectiveCamera(75, modelContainer.offsetWidth / modelContainer.offsetHeight, 0.1, 1000);
+            fuelCellRenderer = new THREE.WebGLRenderer({ antialias: true });
+            fuelCellRenderer.setSize(modelContainer.offsetWidth, modelContainer.offsetHeight);
+            fuelCellRenderer.shadowMap.enabled = true;
+            fuelCellRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            modelContainer.appendChild(fuelCellRenderer.domElement);
+
+            // Add orbit controls
+            fuelCellControls = new THREE.OrbitControls(fuelCellCamera, fuelCellRenderer.domElement);
+            fuelCellControls.enableDamping = true;
+            fuelCellControls.dampingFactor = 0.05;
+
+            // Create fuel cell model
+            createFuelCellModel();
+
+            // Add lighting
+            const ambientLight = new THREE.AmbientLight(0x2af0ff, 0.4);
+            fuelCellScene.add(ambientLight);
+
+            const spotLight = new THREE.SpotLight(0xffffff, 1);
+            spotLight.position.set(10, 10, 10);
+            spotLight.castShadow = true;
+            fuelCellScene.add(spotLight);
+
+            const blueLight = new THREE.PointLight(0x2af0ff, 0.8, 100);
+            blueLight.position.set(-5, 5, 5);
+            fuelCellScene.add(blueLight);
+
+            fuelCellCamera.position.set(5, 5, 8);
+            fuelCellControls.target.set(0, 0, 0);
+
+            animate();
+        }
+
+        function createFuelCellModel() {
+            // Create anode (red/orange)
+            const anodeGeometry = new THREE.BoxGeometry(1, 3, 0.2);
+            const anodeMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xff6b6b,
+                transparent: true,
+                opacity: 0.8
+            });
+            const anode = new THREE.Mesh(anodeGeometry, anodeMaterial);
+            anode.position.set(-2, 0, 0);
+            anode.castShadow = true;
+            fuelCellScene.add(anode);
+
+            // Create PEM membrane (green)
+            const membraneGeometry = new THREE.BoxGeometry(0.1, 3, 2);
+            const membraneMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x4ecdc4,
+                transparent: true,
+                opacity: 0.6
+            });
+            const membrane = new THREE.Mesh(membraneGeometry, membraneMaterial);
+            membrane.position.set(0, 0, 0);
+            fuelCellScene.add(membrane);
+
+            // Create cathode (blue)
+            const cathodeGeometry = new THREE.BoxGeometry(1, 3, 0.2);
+            const cathodeMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x4a90e2,
+                transparent: true,
+                opacity: 0.8
+            });
+            const cathode = new THREE.Mesh(cathodeGeometry, cathodeMaterial);
+            cathode.position.set(2, 0, 0);
+            cathode.castShadow = true;
+            fuelCellScene.add(cathode);
+
+            // Add labels
+            const loader = new THREE.FontLoader();
+            // Add gas flow indicators
+            createParticleSystem();
+        }
+
+        function createParticleSystem() {
+            // Hydrogen particles
+            const hydrogenGeometry = new THREE.SphereGeometry(0.05, 8, 8);
+            const hydrogenMaterial = new THREE.MeshBasicMaterial({ color: 0xff6b6b });
+            
+            for (let i = 0; i < 5; i++) {
+                const particle = new THREE.Mesh(hydrogenGeometry, hydrogenMaterial);
+                particle.position.set(-3 + Math.random() * 0.5, -1 + Math.random() * 2, -0.5 + Math.random());
+                fuelCellScene.add(particle);
+            }
+
+            // Oxygen particles
+            const oxygenGeometry = new THREE.SphereGeometry(0.08, 8, 8);
+            const oxygenMaterial = new THREE.MeshBasicMaterial({ color: 0x4a90e2 });
+            
+            for (let i = 0; i < 3; i++) {
+                const particle = new THREE.Mesh(oxygenGeometry, oxygenMaterial);
+                particle.position.set(3 + Math.random() * 0.5, -1 + Math.random() * 2, -0.5 + Math.random());
+                fuelCellScene.add(particle);
+            }
+
+            // Water output
+            const waterGeometry = new THREE.SphereGeometry(0.06, 8, 8);
+            const waterMaterial = new THREE.MeshBasicMaterial({ color: 0x87ceeb });
+            
+            const water = new THREE.Mesh(waterGeometry, waterMaterial);
+            water.position.set(2.5, -2, 0);
+            fuelCellScene.add(water);
+        }
+
+        function animate() {
+            if (fuelCellRenderer && fuelCellScene && fuelCellCamera) {
+                requestAnimationFrame(animate);
+                
+                if (modelRotating) {
+                    fuelCellScene.rotation.y += 0.005;
+                }
+                
+                fuelCellControls.update();
+                fuelCellRenderer.render(fuelCellScene, fuelCellCamera);
+            }
+        }
+
+        function resetModelView() {
+            if (fuelCellCamera && fuelCellControls) {
+                fuelCellCamera.position.set(5, 5, 8);
+                fuelCellControls.target.set(0, 0, 0);
+                fuelCellControls.update();
+            }
+        }
+
+        function toggleModelRotation() {
+            modelRotating = !modelRotating;
+        }
+
+        // Generic model loading functions for 3D gallery
+        function loadModel(modelType) {
+            const viewer = document.getElementById('modelViewer');
+            const frame = document.getElementById('modelViewerFrame');
+            
+            viewer.classList.add('active');
+            
+            // Clear previous content
+            frame.innerHTML = '<div class="model-loading"><i class="fas fa-spinner fa-spin"></i><p>Loading ' + modelType + '...</p></div>';
+            
+            // Simulate loading with different models
+            setTimeout(() => {
+                frame.innerHTML = '<div class="model-placeholder active"><i class="fas fa-cube"></i><p>' + modelType + ' loaded successfully!<br>Use mouse to rotate and zoom.</p></div>';
+            }, 2000);
+        }
+
+        function toggleModelSize() {
+            const viewer = document.getElementById('modelViewer');
+            viewer.classList.toggle('minimized');
+        }
+
+        function closeModelViewer() {
+            const viewer = document.getElementById('modelViewer');
+            viewer.classList.remove('active');
+        }
+
+        // Window resize handler
+        window.addEventListener('resize', () => {
+            if (fuelCellRenderer && fuelCellCamera) {
+                const container = document.getElementById('fuelCellModel');
+                if (container) {
+                    fuelCellCamera.aspect = container.offsetWidth / container.offsetHeight;
+                    fuelCellCamera.updateProjectionMatrix();
+                    fuelCellRenderer.setSize(container.offsetWidth, container.offsetHeight);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

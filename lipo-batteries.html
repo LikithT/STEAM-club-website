@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiPo Battery Specifications - STEAM Club</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .specs-table {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .specs-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .specs-table th {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            padding: 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .specs-table td {
+            padding: 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .specs-table tr:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: scale(1.01);
+        }
+
+        .specs-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .config-col {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .voltage-col {
+            font-weight: 500;
+        }
+
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .specs-table th,
+            .specs-table td {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+            
+            body {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .specs-table th,
+            .specs-table td {
+                padding: 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">LiPo Battery Specifications</h1>
+        <div class="specs-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Configuration</th>
+                        <th>Nominal Voltage</th>
+                        <th>Fully Charged</th>
+                        <th>Discharged</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="config-col">1S</td>
+                        <td class="voltage-col">3.7V</td>
+                        <td class="voltage-col">4.2V</td>
+                        <td class="voltage-col">3.0V</td>
+                    </tr>
+                    <tr>
+                        <td class="config-col">2S</td>
+                        <td class="voltage-col">7.4V</td>
+                        <td class="voltage-col">8.4V</td>
+                        <td class="voltage-col">6.0V</td>
+                    </tr>
+                    <tr>
+                        <td class="config-col">3S</td>
+                        <td class="voltage-col">11.1V</td>
+                        <td class="voltage-col">12.6V</td>
+                        <td class="voltage-col">9.0V</td>
+                    </tr>
+                    <tr>
+                        <td class="config-col">4S</td>
+                        <td class="voltage-col">14.8V</td>
+                        <td class="voltage-col">16.8V</td>
+                        <td class="voltage-col">12.0V</td>
+                    </tr>
+                    <tr>
+                        <td class="config-col">5S</td>
+                        <td class="voltage-col">18.5V</td>
+                        <td class="voltage-col">21.0V</td>
+                        <td class="voltage-col">15.0V</td>
+                    </tr>
+                    <tr>
+                        <td class="config-col">6S</td>
+                        <td class="voltage-col">22.2V</td>
+                        <td class="voltage-col">25.2V</td>
+                        <td class="voltage-col">18.0V</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

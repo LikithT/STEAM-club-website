@@ -18,7 +18,7 @@ body {
     font-weight: 400;
     line-height: 1.6;
     color: #F5F5F5;
-    background: #000000;
+    background: #1e3a8a;
     overflow-x: hidden;
     cursor: auto;
     position: relative;
@@ -594,6 +594,25 @@ section {
     overflow: hidden;
 }
 
+/* New Gradient Background Animation */
+.gradient-background {
+    background: linear-gradient(350deg, #0005f1, #2354c2);
+    background-size: 120% 120%;
+    animation: gradient-animation 16s ease infinite;
+}
+
+@keyframes gradient-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 /* Animated Gradient Background below video */
 .projects::before {
     content: '';
@@ -1141,6 +1160,19 @@ section {
 
 .social-icon {
     font-size: 1.5rem;
+}
+
+.social-icon-img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.social-link:hover .social-icon-img {
+    transform: scale(1.1);
+    filter: brightness(1.2);
 }
 
 .contact-item p {
@@ -3563,5 +3595,115 @@ section {
     
     .featured-video {
         border-radius: 8px;
+    }
+}
+
+/* Telemetry Dashboard Section Styles */
+.telemetry-dashboard-section {
+    margin: 2rem 0;
+    background: rgba(17, 18, 21, 0.6);
+    border: 1px solid #1C1D21;
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.telemetry-dashboard-section:hover {
+    border-color: rgba(42, 240, 255, 0.3);
+    background: rgba(17, 18, 21, 0.8);
+}
+
+.telemetry-dashboard-section h3 {
+    color: #2AF0FF;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+}
+
+.telemetry-dashboard-section p {
+    color: #F5F5F5;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(42, 240, 255, 0.1);
+    color: #2AF0FF;
+    border: 1px solid rgba(42, 240, 255, 0.3);
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(42, 240, 255, 0.1) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.dashboard-link:hover::before {
+    opacity: 1;
+}
+
+.dashboard-link:hover {
+    background: rgba(42, 240, 255, 0.2);
+    border-color: rgba(42, 240, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(42, 240, 255, 0.2);
+    color: #F5F5F5;
+}
+
+.dashboard-link i {
+    font-size: 1.2rem;
+}
+
+.link-description {
+    display: block;
+    font-size: 0.75rem;
+    color: #B9BDC7;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+}
+
+.dashboard-link:hover .link-description {
+    color: #B9BDC7;
+}
+
+/* Mobile responsive for telemetry dashboard */
+@media (max-width: 768px) {
+    .telemetry-dashboard-section {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+    }
+    
+    .dashboard-link {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        padding: 1.25rem;
+    }
+    
+    .telemetry-dashboard-section h3 {
+        font-size: 1.2rem;
     }
 }
