@@ -9,320 +9,237 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Crimson+Text:wght@300;400;600&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Old+Standard+TT:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Newspaper Header -->
-    <header class="newspaper-header">
-        <div class="header-top">
-            <div class="weather">Brentwood, CA • Friday, September 14, 2025</div>
-            <div class="edition">Special Sponsorship Edition • Volume 1, Issue 1</div>
-        </div>
-        <div class="masthead">
-            <h1 class="newspaper-title">The STEAM Press</h1>
-            <div class="subtitle">Heritage High School's Premier STEAM Publication</div>
-        </div>
-        <div class="header-line"></div>
-    </header>
 
-    <!-- Navigation Bar -->
-    <nav class="newspaper-nav">
-        <a href="index.html" class="nav-item">HOME</a>
-        <a href="#about" class="nav-item">ABOUT</a>
-        <a href="#sponsorship-tiers" class="nav-item">SPONSORSHIP LEVELS</a>
-        <a href="#benefits" class="nav-item">BENEFITS</a>
-        <a href="#contact" class="nav-item">CONTACT</a>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="newspaper-content">
-        <!-- Hero Article -->
-        <article class="hero-article">
-            <div class="article-header">
-                <div class="category-tag breaking">BREAKING</div>
-                <h1 class="headline">Heritage H2GP Seeks Strategic Partners for Hydrogen Racing Program</h1>
-                <div class="byline">
-                    <span class="author">By Likith Tatini</span>
-                    <span class="date">September 13, 2025</span>
-                </div>
-            </div>
-            
-            <div class="article-content">
-                <!-- Car Image -->
-                <div class="car-image-container">
-                    <img src="assets/images/STEAMCar.jpg" alt="Heritage H2GP Hydrogen Fuel Cell RC Car" class="hero-car-image">
-                    <div class="image-caption">Heritage H2GP's hydrogen fuel cell RC car featuring advanced carbon fiber chassis and LED power indicators</div>
-                </div>
-                
-                <div class="lead-paragraph">
-                    <span class="dropcap">H</span>eritage High School's acclaimed H2GP (Hydrogen Grand Prix) racing team is revolutionizing sustainable transportation education through hydrogen-powered RC car competition. With over 50 active members and 15+ competition victories, our STEAM club represents the future of clean energy innovation.
-                </div>
-                
-                <div class="article-body">
-                    <p>Led by faculty advisor Mr. Pennington, the Heritage H2GP team has established itself as a powerhouse in the H2GP competition, consistently achieving top rankings at regional, state, and international levels. Our comprehensive STEAM education program integrates Science, Technology, Engineering, Arts, and Mathematics through practical application of sustainable energy systems.</p>
-                    
-                    <p>"We're not just racing cars – we're engineering the future of sustainable transportation," says Mr. Pennington. "Our students gain hands-on experience with hydrogen fuel cell technology while developing critical thinking, problem-solving, and teamwork skills essential for 21st-century careers."</p>
-                </div>
-            </div>
-        </article>
-
-        <!-- Two Column Layout -->
-        <div class="newspaper-columns">
-            <!-- Left Column -->
-            <div class="left-column">
-                <!-- About Section -->
-                <article class="article" id="about">
-                    <div class="article-header">
-                        <div class="category-tag education">EDUCATION</div>
-                        <h2 class="article-title">Engineering Tomorrow's Leaders</h2>
+    <!-- PAGE 1: Main Sponsorship Information -->
+    <section id="page1" class="page-section">
+        <main class="newspaper-content">
+            <!-- Hero Article with QR Integration -->
+            <article class="hero-article">
+                <div class="article-header">
+                    <div class="category-tag breaking">BREAKING</div>
+                    <h1 class="headline">Heritage H2GP Seeks Strategic Partners</h1>
+                    <div class="byline">
+                        <span class="author">By Likith Tatini</span>
+                        <span class="date">September 13, 2025</span>
                     </div>
-                    <div class="article-content">
-                        <p class="lead">Heritage H2GP transforms theoretical STEAM concepts into practical, competition-ready applications that prepare students for successful careers in emerging technology sectors.</p>
-                        
-                        <div class="stats-box">
-                            <div class="stat">
-                                <span class="stat-number">6+</span>
-                                <span class="stat-label">Years of Experience</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-number">10+</span>
-                                <span class="stat-label">Active Members</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-number">15+</span>
-                                <span class="stat-label">Competitions Won</span>
-                            </div>
+                </div>
+                
+                <div class="hero-content-single">
+                    <div class="car-image-container">
+                        <img src="assets/images/STEAMCar.jpg" alt="Heritage H2GP Hydrogen RC Car" class="hero-car-image">
+                        <div class="image-caption">Heritage H2GP's hydrogen fuel cell RC car</div>
+                    </div>
+                </div>
+                
+                <div class="article-content">
+                    <div class="lead-paragraph">
+                        <span class="dropcap">H</span>eritage High School's H2GP racing team revolutionizes STEAM education through hydrogen-powered RC car competition. With 10+ active members and 15+ victories, we're engineering tomorrow's clean energy leaders.
+                    </div>
+                </div>
+            </article>
+
+            <!-- About & Stats Section -->
+            <article class="compact-about">
+                <div class="article-header">
+                    <div class="category-tag education">EDUCATION</div>
+                    <h2 class="article-title">Engineering Excellence</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number">6+</span>
+                        <span class="stat-label">Years Experience</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">10+</span>
+                        <span class="stat-label">Active Members</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">15+</span>
+                        <span class="stat-label">Competitions Won</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">5th</span>
+                        <span class="stat-label">International Rank</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Sponsorship Tiers -->
+            <article class="sponsorship-tiers" id="sponsorship-tiers">
+                <div class="article-header">
+                    <div class="category-tag opportunity">OPPORTUNITY</div>
+                    <h2 class="article-title">Partnership Investment Levels</h2>
+                </div>
+                <div class="tiers-grid">
+                    <!-- Octane Tier -->
+                    <div class="tier-card octane">
+                        <div class="tier-header">
+                            <h3>Octane</h3>
+                            <div class="tier-price">$25</div>
                         </div>
-                        
-                        <p>Our comprehensive program develops technical expertise in:</p>
-                        <ul class="program-features">
-                            <li>Hydrogen fuel cell technology and optimization</li>
-                            <li>Aerodynamic design and 3D modeling</li>
-                            <li>Electronics and energy management</li>
-                            <li>Data analysis and performance tracking</li>
-                            <li>Project management and collaboration</li>
+                        <ul class="tier-benefits">
+                            <li>Support our mission</li>
+                            <li>Team recognition</li>
                         </ul>
                     </div>
-                </article>
 
-                <!-- Success Stories -->
-                <article class="article">
-                    <div class="article-header">
-                        <div class="category-tag achievement">ACHIEVEMENT</div>
-                        <h2 class="article-title">Track Record of Excellence</h2>
+                    <!-- Nitro Tier -->
+                    <div class="tier-card nitro">
+                        <div class="tier-header">
+                            <h3>Nitro</h3>
+                            <div class="tier-price">$100</div>
+                        </div>
+                        <ul class="tier-benefits">
+                            <li>Logo on banners</li>
+                            <li>Logo on team shirt</li>
+                            <li>Social media story</li>
+                        </ul>
                     </div>
-                    <div class="article-content">
-                        <div class="achievement-item">
-                            <h4>5th at an International Competition</h4>
-                            <p>Our team consistently ranks among the top performers at H2GP World Finals, showcasing innovative engineering solutions and sustainable design principles.</p>
+
+                    <!-- Turbo Tier -->
+                    <div class="tier-card turbo">
+                        <div class="tier-header">
+                            <h3>Turbo</h3>
+                            <div class="tier-price">$500</div>
                         </div>
-                        
-                        <div class="achievement-item">
-                            <h4>STEM Career Pipeline</h4>
-                            <p>Our program inspires students to pursue STEM fields in college, with many continuing to work in renewable energy, automotive engineering, and clean technology sectors.</p>
-                        </div>
-                        
-                        <div class="achievement-item">
-                            <h4>Community Impact</h4>
-                            <p>We engage the community through hydrogen technology demonstrations and STEAM outreach programs, inspiring the next generation of innovators.</p>
-                        </div>
+                        <ul class="tier-benefits">
+                            <li>Logo on car</li>
+                            <li>Website recognition</li>
+                            <li>Progress updates</li>
+                            <li>Social media video</li>
+                        </ul>
                     </div>
-                </article>
-            </div>
 
-            <!-- Right Column -->
-            <div class="right-column">
-                <!-- Sponsorship Tiers -->
-                <article class="article" id="sponsorship-tiers">
-                    <div class="article-header">
-                        <div class="category-tag opportunity">OPPORTUNITY</div>
-                        <h2 class="article-title">Partnership Investment Levels</h2>
+                    <!-- Overdrive Tier -->
+                    <div class="tier-card overdrive">
+                        <div class="tier-header">
+                            <h3>Overdrive</h3>
+                            <div class="tier-price">$1000+</div>
+                        </div>
+                        <ul class="tier-benefits">
+                            <li>Large logo placement</li>
+                            <li>Workshop tour</li>
+                            <li>Priority recognition</li>
+                            <li>Custom opportunities</li>
+                        </ul>
                     </div>
-                    <div class="article-content">
-                        <!-- Octane Tier -->
-                        <div class="sponsorship-tier friend">
-                            <div class="tier-header">
-                                <h3 class="tier-name">Octane</h3>
-                                <div class="tier-price">$25</div>
-                            </div>
-                            <div class="tier-benefits">
-                                <ul>
-                                    <li>A chance to support our team!</li>
-                                </ul>
-                            </div>
-                        </div>
+                </div>
+            </article>
+        </main>
+    </section>
 
-                        <!-- Nitro Tier -->
-                        <div class="sponsorship-tier bronze">
-                            <div class="tier-header">
-                                <h3 class="tier-name">Nitro</h3>
-                                <div class="tier-price">$100</div>
-                            </div>
-                            <div class="tier-benefits">
-                                <ul>
-                                    <li>All of the above plus</li>
-                                    <li>Logo on Banners</li>
-                                    <li>Logo on Team Shirt</li>
-                                    <li>Medium Logo Size on Banners</li>
-                                    <li>Social Media Story</li>
-                                </ul>
-                            </div>
-                        </div>
+    <!-- PAGE BREAK -->
+    <div class="page-break">
+        <div class="page-indicator">Page 1 of 2</div>
+    </div>
 
-                        <!-- Turbo Tier -->
-                        <div class="sponsorship-tier silver">
-                            <div class="tier-header">
-                                <h3 class="tier-name">Turbo</h3>
-                                <div class="tier-price">$500</div>
-                            </div>
-                            <div class="tier-benefits">
-                                <ul>
-                                    <li>All of above plus</li>
-                                    <li>Social Media Post</li>
-                                    <li>Logo on Car</li>
-                                    <li>Logo on Team Website</li>
-                                    <li>Bimonthly emails about progress/events</li>
-                                    <li>Social Media Video Feature</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Overdrive Tier -->
-                        <div class="sponsorship-tier gold">
-                            <div class="tier-header">
-                                <h3 class="tier-name">Overdrive</h3>
-                                <div class="tier-price">$1000+</div>
-                            </div>
-                            <div class="tier-benefits">
-                                <ul>
-                                    <li>All of Above plus</li>
-                                    <li>Large Logo Size on Banners</li>
-                                    <li>Workshop Tour / Team Visit</li>
-                                    <li>Priority recognition at competitions</li>
-                                    <li>Custom partnership opportunities</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-
-        <!-- Benefits Section -->
-        <article class="full-width-article" id="benefits">
-            <div class="article-header">
-                <div class="category-tag impact">IMPACT</div>
-                <h2 class="article-title">Your Investment Creates Lasting Impact</h2>
-            </div>
-            <div class="article-content">
-                <div class="benefits-grid">
+    <!-- PAGE 2: Benefits and Call-to-Action -->
+    <section id="page2" class="page-section">
+        <main class="newspaper-content">
+            <!-- Key Benefits -->
+            <article class="benefits-section" id="benefits">
+                <div class="article-header">
+                    <div class="category-tag impact">IMPACT</div>
+                    <h2 class="article-title">Your Investment Creates Lasting Impact</h2>
+                </div>
+                <div class="benefits-compact">
                     <div class="benefit-card">
                         <div class="benefit-icon">
-                            <img src="assets/images/istockphoto-1159741374-612x612.jpg" alt="Educational Excellence" class="benefit-image">
+                            <img src="assets/images/istockphoto-1159741374-612x612.jpg" alt="Education" class="benefit-image">
                         </div>
-                        <h3>Educational Excellence</h3>
-                        <p>Support cutting-edge STEAM education that prepares students for high-demand careers in clean technology and sustainable engineering.</p>
+                        <h3>STEAM Education Excellence</h3>
+                        <p>Prepare students for high-demand careers in clean technology and sustainable engineering.</p>
                     </div>
                     
                     <div class="benefit-card">
                         <div class="benefit-icon">
-                            <img src="assets/images/360_F_306470374_alK2zIw1Nv0sPD6kt8X4vt4nKesx7XvX.jpg" alt="Innovation Leadership" class="benefit-image">
+                            <img src="assets/images/360_F_306470374_alK2zIw1Nv0sPD6kt8X4vt4nKesx7XvX.jpg" alt="Innovation" class="benefit-image">
                         </div>
                         <h3>Innovation Leadership</h3>
-                        <p>Partner with pioneering hydrogen technology education and development, positioning your organization at the forefront of clean energy advancement.</p>
+                        <p>Partner with pioneering hydrogen technology education and position your brand at the forefront.</p>
                     </div>
                     
                     <div class="benefit-card">
                         <div class="benefit-icon">
-                            <img src="assets/images/2294986-200.png" alt="Environmental Stewardship" class="benefit-image">
+                            <img src="assets/images/2294986-200.png" alt="Environment" class="benefit-image">
                         </div>
-                        <h3>Environmental Stewardship</h3>
-                        <p>Demonstrate commitment to sustainability by supporting zero-emission hydrogen technology education and competition.</p>
-                    </div>
-                    
-                    <div class="benefit-card">
-                        <div class="benefit-icon">
-                            <img src="assets/images/leadership-people-png-favpng-vAJ8ddVdqij6fhDk6NBE4six0.jpg" alt="Community Engagement" class="benefit-image">
-                        </div>
-                        <h3>Community Engagement</h3>
-                        <p>Build meaningful connections with the next generation of engineers, scientists, and innovators while strengthening community ties.</p>
-                    </div>
-                    
-                    <div class="benefit-card">
-                        <div class="benefit-icon">
-                            <img src="assets/images/speaker-icon-speaker-sound-icon-speaker-sound-icon-speaker-sound-icon-speaker-sound-icon-vector.jpg" alt="Talent Pipeline" class="benefit-image">
-                        </div>
-                        <h3>Talent Pipeline</h3>
-                        <p>Access to exceptional student talent pool for internships, apprenticeships, and future employment opportunities in STEM fields.</p>
-                    </div>
-                    
-                    <div class="benefit-card">
-                        <div class="benefit-icon">
-                            <img src="assets/images/mclarenp1.jpg" alt="Brand Recognition" class="benefit-image">
-                        </div>
-                        <h3>Brand Recognition</h3>
-                        <p>Associate your brand with excellence, innovation, and educational leadership through our award-winning hydrogen competition program.</p>
+                        <h3>Environmental Impact</h3>
+                        <p>Support zero-emission hydrogen technology education and sustainable transportation solutions.</p>
                     </div>
                 </div>
-            </div>
-        </article>
+            </article>
 
-        <!-- Contact Section -->
-        <article class="full-width-article contact-section" id="contact">
-            <div class="article-header">
-                <div class="category-tag contact">CONTACT</div>
-                <h2 class="article-title">Partner With Us Today</h2>
-            </div>
-            <div class="article-content">
-                <div class="contact-info">
-                    <div class="contact-details">
-                        <h3>Ready to Invest in Tomorrow's Engineers?</h3>
-                        <p class="contact-lead">Join Heritage H2GP's mission to revolutionize sustainable transportation education. Your partnership investment directly supports student learning, competition participation, and the development of clean energy technology solutions.</p>
-                        
-                        <div class="contact-methods">
-                            <div class="contact-method">
-                                <strong>Faculty Advisor:</strong> Mr. Pennington<br>
-                                <strong>Room:</strong> A112<br>
-                                <strong>Email:</strong> <a href="mailto:penningtons@luhsd.net">penningtons@luhsd.net</a>
-                            </div>
-                            
-                            <div class="contact-method">
-                                <strong>Follow Our Journey:</strong><br>
-                                <a href="https://www.instagram.com/heritage.h2gp/" target="_blank">@heritage.h2gp</a><br>
-                                <a href="https://discord.gg/yfaWm3K8" target="_blank">Heritage Hydrogen Racing Discord</a>
-                            </div>
-                        </div>
-                        
-                        <div class="cta-button-container">
-                            <a href="mailto:penningtons@luhsd.net?subject=Sponsorship Inquiry - Heritage H2GP" class="cta-button">
-                                Start Your Partnership Today
-                            </a>
-                        </div>
+            <!-- Success Highlights -->
+            <article class="success-highlights">
+                <div class="article-header">
+                    <div class="category-tag achievement">ACHIEVEMENT</div>
+                    <h2 class="article-title">Track Record of Excellence</h2>
+                </div>
+                <div class="highlights-grid">
+                    <div class="highlight-item">
+                        <h4>🏆 5th International Ranking</h4>
+                        <p>Consistent top performance at H2GP World Finals</p>
                     </div>
-                    
-                    <div class="sponsor-testimonial">
-                        <blockquote>
-                            "Supporting Heritage H2GP has been one of our most rewarding community investments. Watching these students develop real-world engineering skills while competing at the highest levels has been truly inspiring."
-                        </blockquote>
-                        <cite>— Previous Sponsor Representative</cite>
+                    <div class="highlight-item">
+                        <h4>🎓 STEM Career Pipeline</h4>
+                        <p>Alumni pursuing renewable energy and engineering careers</p>
+                    </div>
+                    <div class="highlight-item">
+                        <h4>🌟 Community Impact</h4>
+                        <p>Hydrogen technology demonstrations inspiring next generation</p>
                     </div>
                 </div>
-            </div>
-        </article>
-    </main>
+            </article>
+
+            <!-- Final Call-to-Action with QR -->
+            <article class="cta-section" id="contact">
+                <div class="article-header">
+                    <div class="category-tag contact">CONTACT</div>
+                    <h2 class="article-title">Partner With Us Today</h2>
+                </div>
+                <div class="cta-content">
+                    <div class="cta-left">
+                        <h3>Ready to Invest in Tomorrow's Engineers?</h3>
+                        <p>Join Heritage H2GP's mission to revolutionize sustainable transportation education. Your partnership directly supports student learning and clean energy innovation.</p>
+                        
+                        <div class="contact-methods-print">
+                            <div class="contact-item-print">
+                                <strong>Contact Mr. Pennington:</strong> Room A112 • penningtons@luhsd.net
+                            </div>
+                            <div class="contact-item-print">
+                                <strong>Follow Us:</strong> @heritage.h2gp (Instagram) • Discord: yfaWm3K8
+                            </div>
+                        </div>
+                        
+                        <a href="mailto:penningtons@luhsd.net?subject=Sponsorship Inquiry - Heritage H2GP" class="cta-button">
+                            Start Your Partnership Today
+                        </a>
+                    </div>
+                    
+                    <div class="cta-right">
+                        <div class="final-qr-box">
+                            <h3>Scan to Partner</h3>
+                            <img src="assets/images/qrcode.avif" alt="Partnership QR Code" class="qr-code-large">
+                            <p>Quick contact for sponsorship opportunities</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </main>
+    </section>
 
     <!-- Footer -->
     <footer class="newspaper-footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>The STEAM Hydrogen Press</h4>   
-                <p>Heritage High School's premier publication dedicated to Science, Technology, Engineering, Arts, and Mathematics excellence.</p>
+        <div class="footer-content-compact">
+            <div class="footer-left">
+                <h4>The STEAM Press</h4>   
+                <p>Heritage High School's premier STEAM publication</p>
             </div>
-            <div class="footer-section">
+            <div class="footer-center">
                 <h4>Heritage H2GP Team</h4>
-                <p>Advancing sustainable transportation through hydrogen-powered racing and comprehensive STEAM education.</p>
-                <p><strong>Contact:</strong> penningtons@luhsd.net</p>
+                <p>Engineering sustainable transportation • <strong>penningtons@luhsd.net</strong></p>
             </div>
-            <div class="footer-section">
-                <h4>Follow Us</h4>
-                <p>Stay connected with our latest achievements and upcoming competitions.</p>
+            <div class="footer-right">
                 <div class="social-links">
                     <a href="https://www.instagram.com/heritage.h2gp/">Instagram</a>
                     <a href="https://discord.gg/yfaWm3K8">Discord</a>
@@ -330,7 +247,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Heritage High School H2GP Team. All rights reserved. | Special Sponsorship Edition</p>
+            <p>&copy; 2024 Heritage High School H2GP Team • Special Sponsorship Edition</p>
         </div>
     </footer>
 
